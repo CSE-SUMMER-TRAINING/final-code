@@ -1,7 +1,9 @@
 from calendar import c
+
 import sys
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWidget, QCheckBox, QApplication, QLabel, QPushButton, QFileDialog, QComboBox,  QTableWidget, QTableWidgetItem, QVBoxLayout
+from PyQt5 import QtWidgets,QtPrintSupport, QtGui, QtCore
+from  PyQt5.QtPrintSupport import QPrinter ,QPrintDialog
+from PyQt5.QtWidgets import QWidget, QCheckBox, QApplication, QLabel, QPushButton, QFileDialog, QComboBox,  QTableWidget, QTableWidgetItem, QVBoxLayout,QFrame,QDialog,QMessageBox
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QLineEdit
@@ -88,26 +90,31 @@ class invScreen1(QWidget):
         self.label = self.findChild(QLabel, "lineEdit")
         self.help = self.findChild(QPushButton, "help")
         self.help.clicked.connect(self.help_func)
-
+        self.label_not_enough = self.findChild(QLabel, "label_not_enough")
         self.browse.clicked.connect(self.browsefiles)
         self.generate.clicked.connect(self.generateTables)
         self.back.clicked.connect(self.goBack)
-
+        self.linefileedit = self.findChild(QLineEdit,"lineEdit")
         self.txt = ""
         self.file_name = ""
+
+
+
+
 
     def browsefiles(self):
         fname = QFileDialog.getOpenFileName(
             self, 'Open file', '', 'Excel (*.csv *xls *xlsx )')
-        self.lineEdit.setText(fname[0])
         self.txt = fname
         self.file_name = fname[0]
-
+        self.linefileedit.setText(fname[0])
     def help_func(self):
         widget.setCurrentWidget(helpinv)
 
     def goBack(self):
         widget.setCurrentWidget(mainwindow)
+
+        self.label_not_enough.setText("")
 
     def generateTables(self):
 
@@ -116,28 +123,23 @@ class invScreen1(QWidget):
             ok = process(monitors, days)
             print(good_data)
             if not good_data:
-                self.label_not_enough = self.findChild(QLabel, "label_not_enough")
+
                 self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
             elif not ok :
-                self.label_not_enough = self.findChild(QLabel, "label_not_enough")
+
                 self.label_not_enough.setText("عدد الموظفين غير كافي")
             else:
-                
-                # عايزين الكود ده يتنفذ لما اليوزر يدوس على زرار تنزيل
-                cnt = 1
-                for mon in monitors:
-                    mon.push_info(observser_data_lst, cnt)
-                    cnt = cnt + 1
-                dataframeout = pd.DataFrame(observser_data_lst)
-                dataframeout.to_excel("observer_output.xlsx")
-                #نهاية الكود المقصود 
+                self.label_not_enough.setText("")
+
                 s2 = invScreen2()
                 widget.addWidget(s2)
                 widget.setCurrentWidget(s2)
 
 
+current_index = -1
 # 3
 class invScreen2(QWidget):
+
     def __init__(self):
         super(invScreen2, self).__init__()
         loadUi("screenInv2.ui", self)
@@ -149,8 +151,8 @@ class invScreen2(QWidget):
 
         self.combox.addItems(self.list)
 
-        self.select = self.findChild(QPushButton, "select")
-        self.select.clicked.connect(self.valueOfCombo)
+        self.combox.currentIndexChanged.connect(self.valueOfCombo)
+
 
         self.label_name = self.findChild(QLabel, "label_4")
         self.label_dep = self.findChild(QLabel, "label_6")
@@ -158,28 +160,62 @@ class invScreen2(QWidget):
         self.table_widget = self.findChild(QTableWidget, "tableWidget")
 
         self.lineEdit = self.findChild(QLineEdit, "lineEdit")
-        #self.search_value = self.lineEdit.text()
+
         self.searchButton = self.findChild(QPushButton, "searchButton")
         self.searchButton.clicked.connect(self.search_fun)
 
-    def search_fun(self):
+        self.next = self.findChild(QPushButton, "next")
+        self.next.clicked.connect(self.next_function)
+        self.prev = self.findChild(QPushButton, "prev")
+        self.prev.clicked.connect(self.prev_function)
 
-        if self.lineEdit.text() in self.list:
+        self.back = self.findChild(QPushButton,"back")
+        self.back.clicked.connect(self.backfrominv_fun)
 
-            self.index = self.list.index(self.lineEdit.text())-1
-            self.load_data_search()
+        self.download = self.findChild(QPushButton,"download")
+        self.download.clicked.connect(self.download_function)
 
-        else:
-            self.lineEdit.setText("غير موجود")
+        self.frame = self.findChild(QFrame,"frame")
 
-        # clear combo
-        self.combox.setCurrentIndex(0)
+        # print one
+        self.printone = self.findChild(QPushButton,"printone")
+        self.printone.clicked.connect(self.printone_function)
 
-    def browsefiles(self):
-        QFileDialog.getOpenFileName(
-            self, 'Open file', '', 'Excel (*.csv *xls *xlsx )')
+        # print all not comp
+        #self.printall = self.findChild(QPushButton,"print")
+        #self.printall.clicked.connect(self.printall_function)
+
+    def printone_function(self):
+            # pdf
+
+
+        printer = QtPrintSupport.QPrinter()
+        painter = QtGui.QPainter()
+        painter.begin(printer)
+        screen = self.frame.grab()
+        painter.drawPixmap(100, 100, screen)
+        painter.end()
+
+
+
+
+
+    def download_function(self):
+        cnt = 1
+        for mon in monitors:
+            mon.push_info(observser_data_lst, cnt)
+            cnt = cnt + 1
+        dataframeout = pd.DataFrame(observser_data_lst)
+        dataframeout.to_excel("observer_output.xlsx")
+
+        QMessageBox.about(self, "", "تم التنزيل                   ")
+
+
+
+
 
     def valueOfCombo(self):
+        global current_index
         # clear table rows
         for i in range(self.table_widget.rowCount()):
             self.table_widget.removeRow(self.table_widget.rowCount()-1)
@@ -191,21 +227,44 @@ class invScreen2(QWidget):
         # print(self.combox.currentIndex())
         if (self.combox.currentIndex()):
 
-            self.load_data()   # add combobox value
+            current_index = self.combox.currentIndex() -1
 
-    def load_data(self):
-        mon = monitors[self.combox.currentIndex()-1]
-        self.label_name.setText(mon.user_name)
-        self.label_dep.setText(mon.title)
-        for ts in mon.task:
+            # self.load_data()   # add combobox value
+            mon = monitors[self.combox.currentIndex() - 1]
+            self.label_name.setText(mon.user_name)
+            self.label_dep.setText(mon.branch)
+            for ts in mon.task:
+                row = self.table_widget.rowCount()
+                self.table_widget.setRowCount(row + 1)
 
-            row = self.table_widget.rowCount()
-            self.table_widget.setRowCount(row+1)
 
-            self.table_widget.setItem(row, 0, QTableWidgetItem(str(ts.day)))
-            self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
-            self.table_widget.setItem(
-                row, 2, QTableWidgetItem(str(ts.building)))
+                self.table_widget.setItem(row, 0, QTableWidgetItem(str(ts.day)))
+                self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
+                self.table_widget.setItem(
+                    row, 2, QTableWidgetItem(str(ts.building)))
+
+    def search_fun(self):
+        global current_index
+        if self.lineEdit.text() in self.list:
+
+            self.index = self.list.index(self.lineEdit.text())-1
+            current_index = self.index
+            self.load_data_search()
+
+        else:
+            self.combox.setCurrentIndex(0)
+            self.lineEdit.setText("غير موجود")
+            current_index = -1
+
+            # clear table
+            for i in range(self.table_widget.rowCount()):
+                self.table_widget.removeRow(self.table_widget.rowCount()-1)
+            # clear labels
+            self.label_name.setText("")
+            self.label_dep.setText("")
+
+
+
 
     def load_data_search(self):
         # clear table rows
@@ -214,9 +273,12 @@ class invScreen2(QWidget):
         # clear labels
         self.label_name.setText("")
         self.label_dep.setText("")
+
+        self.combox.setCurrentIndex(0)
+
         mon = monitors[self.index]
         self.label_name.setText(mon.user_name)
-        self.label_dep.setText(mon.title)
+        self.label_dep.setText(mon.branch)
         for ts in mon.task:
 
             row = self.table_widget.rowCount()
@@ -226,8 +288,67 @@ class invScreen2(QWidget):
             self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
             self.table_widget.setItem(
                 row, 2, QTableWidgetItem(str(ts.building)))
+
     def backfrominv_fun(self):
         widget.setCurrentWidget(invscreen1)
+
+    def next_function(self):
+        global current_index
+        if current_index + 1 == len(self.list) - 1:
+            return
+        current_index += 1
+        # clear table rows
+        for i in range(self.table_widget.rowCount()):
+            self.table_widget.removeRow(self.table_widget.rowCount() - 1)
+        # clear labels
+        self.label_name.setText("")
+        self.label_dep.setText("")
+
+        self.combox.setCurrentIndex(0)
+        self.lineEdit.setText("")
+
+        mon = monitors[current_index]
+        self.label_name.setText(mon.user_name)
+        self.label_dep.setText(mon.branch)
+        for ts in mon.task:
+            row = self.table_widget.rowCount()
+            self.table_widget.setRowCount(row + 1)
+
+            self.table_widget.setItem(row, 0, QTableWidgetItem(str(ts.day)))
+            self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
+            self.table_widget.setItem(
+                row, 2, QTableWidgetItem(str(ts.building)))
+
+
+    def prev_function(self):
+        global current_index
+
+        if current_index == 0:
+            return
+        current_index -= 1
+        # clear table rows
+        for i in range(self.table_widget.rowCount()):
+            self.table_widget.removeRow(self.table_widget.rowCount() - 1)
+        # clear labels
+        self.label_name.setText("")
+        self.label_dep.setText("")
+
+        self.combox.setCurrentIndex(0)
+        self.lineEdit.setText("")
+
+        mon = monitors[current_index]
+        self.label_name.setText(mon.user_name)
+        self.label_dep.setText(mon.branch)
+        for ts in mon.task:
+            row = self.table_widget.rowCount()
+            self.table_widget.setRowCount(row + 1)
+
+            self.table_widget.setItem(row, 0, QTableWidgetItem(str(ts.day)))
+            self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
+            self.table_widget.setItem(
+                row, 2, QTableWidgetItem(str(ts.building)))
+
+
 
 ###############################################################################################################
 
@@ -436,6 +557,6 @@ widget.addWidget(invscreen1)
 widget.addWidget(helpinv)
 widget.addWidget(helpexam)
 
-
+widget.move(2,2)
 widget.show()
 sys.exit(app.exec_())
