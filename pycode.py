@@ -64,6 +64,7 @@ class Monitor:
         title="employee",
         work_place="college",
         branch="main",
+        mail="m@m",
         max_days=0,
     ):
         self.user_name = user_name
@@ -71,6 +72,7 @@ class Monitor:
         self.work_place = work_place
         self.branch = branch
         self.max_days = max_days
+        self.email=mail
         self.task = []
         self.accupied_days = {}
 
@@ -289,10 +291,14 @@ def read_input(exel_name):
     observser_data_lst.clear()
     # check weather the sheet name exist
     try:
+        allExcelFile= pd.ExcelFile(exel_name)
+        sheets=allExcelFile.sheet_names
+        if len(sheets)!=2:return 0
+        
         pd.read_excel(exel_name, na_values="E", sheet_name="Sheet1")
     except:
         return False
-    dataframe1 = pd.read_excel(exel_name, na_values="E", sheet_name="Sheet1")
+    dataframe1 = allExcelFile.parse(sheets[0])
     col = ["الاسم", "المسمى الوظيفى", "مكان العمل", "المبنى", "التكليف الحالي"]
     for i in range(50):
         if not i:
@@ -304,9 +310,9 @@ def read_input(exel_name):
     observser_data_lst.append(col)
     ok = True
     values = []
-    for i in range(5):
+    for i in range(6):
         values.append(dataframe1.columns[i])
-    ok &= values == ["nameNN", "nik", "job", "place", "num"]
+    ok &= values == ["nameNN", "nik", "job", "place","email", "num"]
     if not ok:
         return False
     for index, rows in dataframe1.iterrows():
@@ -319,7 +325,7 @@ def read_input(exel_name):
     def srt(elem):
         return (elem[2], elem[1], elem[0])
 
-    dataframe2 = pd.read_excel(exel_name, sheet_name="days")
+    dataframe2 = allExcelFile.parse(sheets[1])
     temp = []
     day = []
     cnt = 0
