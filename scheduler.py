@@ -1,5 +1,4 @@
 from calendar import c
-
 import sys
 from PyQt5 import QtWidgets,QtPrintSupport, QtGui, QtCore
 from  PyQt5.QtPrintSupport import QPrinter ,QPrintDialog
@@ -9,7 +8,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QLineEdit
 import pandas as pd
 from xml.etree.ElementTree import tostring
-from solver import buildDp, solve, uniqueGroups, mem, toPrint
+from solver import buildDp, solve, mem, toPrint
 from college import *
 from display import *
 from groups_input import *
@@ -422,10 +421,10 @@ class exScreen2(QWidget):
         self.comboxfl.clear()
         self.comboxfl.addItem('choose')
         cnt = 1
-        for group in uniqueGroups:
-            self.comboxfl.addItem(f"{cnt}")
-            # print(f"{cnt}.")
-            cnt += 1
+        # for group in uniqueGroups:
+        #     self.comboxfl.addItem(f"{cnt}")
+        #     # print(f"{cnt}.")
+        #     cnt += 1
 
         self.comboxfl.currentTextChanged.connect(self.change_table)
 
