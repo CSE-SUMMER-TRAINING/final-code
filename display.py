@@ -2,7 +2,7 @@ from secrets import choice
 from xml.etree.ElementTree import tostring
 import xlsxwriter
 from data_input import *
-from solver import buildDp, solve, uniqueGroups, mem, toPrint
+from solver import buildDp, solve, mem, toPrint
 
 to_print1 = []
 to_print2 = []
@@ -23,21 +23,21 @@ def DISPLAY(branch_num, num_of_branches):
     print("\n\n\t\t >> valid options << \n")
 
     cnt = 1
-    for group in uniqueGroups:
-        print(f"{cnt}.")
-        print("\tDay 1.   ", end=' ')
-        for g in group[0]:
-            print(g, end=' ')
-        print()
-        print("\tDay 2.   ", end=' ')
-        for g in group[1]:
-            print(g, end=' ')
-        print()
-        print("\tDay 3.   ", end=' ')
-        for g in group[2]:
-            print(g, end=' ')
-        print()
-        cnt += 1
+    # for group in uniqueGroups:
+    #     print(f"{cnt}.")
+    #     print("\tDay 1.   ", end=' ')
+    #     for g in group[0]:
+    #         print(g, end=' ')
+    #     print()
+    #     print("\tDay 2.   ", end=' ')
+    #     for g in group[1]:
+    #         print(g, end=' ')
+    #     print()
+    #     print("\tDay 3.   ", end=' ')
+    #     for g in group[2]:
+    #         print(g, end=' ')
+    #     print()
+    #     cnt += 1
 
     #choice2 = input("\nChoose Distribution: ")
     # while choice2.isnumeric() == False or int(choice2) < 1 or int(choice2) >= cnt:
@@ -52,28 +52,28 @@ def options(choice, choice2):
 def print_output(choice1, choice2):
     cnt, R = 1, 2
 
-    for group in uniqueGroups:
-        if cnt < choice2:
-            cnt += 1
-            continue
-        print("\n\n")
-        mem.clear()
-        buildDp(0, 0, group[0], branch[choice1].hallsInBranch)
-        to_print1.extend(list(toPrint))
-        print("\n")
-        toPrint.clear()
-        mem.clear()
-        buildDp(0, 0, group[1], branch[choice1].hallsInBranch)
-        to_print2.extend(list(toPrint))
-        print("\n")
-        toPrint.clear()
-        mem.clear()
-        buildDp(0, 0, group[2], branch[choice1].hallsInBranch)
-        to_print3.extend(list(toPrint))
-        print("\n")
-        toPrint.clear()
-        mem.clear()
-        break
+    # for group in uniqueGroups:
+    #     if cnt < choice2:
+    #         cnt += 1
+    #         continue
+    #     print("\n\n")
+    #     mem.clear()
+    #     buildDp(0, 0, group[0], branch[choice1].hallsInBranch)
+    #     to_print1.extend(list(toPrint))
+    #     print("\n")
+    #     toPrint.clear()
+    #     mem.clear()
+    #     buildDp(0, 0, group[1], branch[choice1].hallsInBranch)
+    #     to_print2.extend(list(toPrint))
+    #     print("\n")
+    #     toPrint.clear()
+    #     mem.clear()
+    #     buildDp(0, 0, group[2], branch[choice1].hallsInBranch)
+    #     to_print3.extend(list(toPrint))
+    #     print("\n")
+    #     toPrint.clear()
+    #     mem.clear()
+        # break
 
 
 def output_the_distribution(choice1, choice2):
@@ -128,37 +128,37 @@ def output_the_distribution(choice1, choice2):
 
     cnt, R = 1, 2
 
-    for group in uniqueGroups:
-        if cnt < choice2:
-            cnt += 1
-            continue
-        print("\n\n")
-        mem.clear()
-        buildDp(0, 0, group[0], branch[choice1].hallsInBranch)
-        # to_print1.extend(list(toPrint))
-        for i in range(len(toPrint)):
-            worksheet.write(R + i, 0, toPrint[i][0], sub_header_format)
-            worksheet.write(R + i, 1, toPrint[i][1], general_format)
-            worksheet.write(R + i, 2, toPrint[i][2], general_format)
-            worksheet.write(R + i, 3, toPrint[i][3], general_format)
-        toPrint.clear()
-        mem.clear()
-        buildDp(0, 0, group[1], branch[choice1].hallsInBranch)
-        # to_print2.extend(list(toPrint))
+    # for group in uniqueGroups:
+    #     if cnt < choice2:
+    #         cnt += 1
+    #         continue
+    #     print("\n\n")
+    #     mem.clear()
+    #     buildDp(0, 0, group[0], branch[choice1].hallsInBranch)
+    #     # to_print1.extend(list(toPrint))
+    #     for i in range(len(toPrint)):
+    #         worksheet.write(R + i, 0, toPrint[i][0], sub_header_format)
+    #         worksheet.write(R + i, 1, toPrint[i][1], general_format)
+    #         worksheet.write(R + i, 2, toPrint[i][2], general_format)
+    #         worksheet.write(R + i, 3, toPrint[i][3], general_format)
+    #     toPrint.clear()
+    #     mem.clear()
+    #     buildDp(0, 0, group[1], branch[choice1].hallsInBranch)
+    #     # to_print2.extend(list(toPrint))
 
-        for i in range(len(toPrint)):
-            worksheet.write(R + i, 4, toPrint[i][1], general_format)
-            worksheet.write(R + i, 5, toPrint[i][2], general_format)
-            worksheet.write(R + i, 6, toPrint[i][3], general_format)
-        toPrint.clear()
-        mem.clear()
-        buildDp(0, 0, group[2], branch[choice1].hallsInBranch)
-        # to_print3.extend(list(toPrint))
-        for i in range(len(toPrint)):
-            worksheet.write(R + i, 7, toPrint[i][1], general_format)
-            worksheet.write(R + i, 8, toPrint[i][2], general_format)
-            worksheet.write(R + i, 9, toPrint[i][3], general_format)
-        toPrint.clear()
-        break
+    #     for i in range(len(toPrint)):
+    #         worksheet.write(R + i, 4, toPrint[i][1], general_format)
+    #         worksheet.write(R + i, 5, toPrint[i][2], general_format)
+    #         worksheet.write(R + i, 6, toPrint[i][3], general_format)
+    #     toPrint.clear()
+    #     mem.clear()
+    #     buildDp(0, 0, group[2], branch[choice1].hallsInBranch)
+    #     # to_print3.extend(list(toPrint))
+    #     for i in range(len(toPrint)):
+    #         worksheet.write(R + i, 7, toPrint[i][1], general_format)
+    #         worksheet.write(R + i, 8, toPrint[i][2], general_format)
+    #         worksheet.write(R + i, 9, toPrint[i][3], general_format)
+    #     toPrint.clear()
+    #     break
 
-    workbook.close()
+    # workbook.close()
