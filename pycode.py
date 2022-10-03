@@ -1,6 +1,7 @@
 from sre_compile import isstring
 import pandas as pd
 import arabic_reshaper
+from os import startfile
 
 
 def arabic(str):
@@ -64,7 +65,7 @@ class Monitor:
         title="employee",
         work_place="college",
         branch="main",
-        mail="m@m",
+        employee_mail = "employee@example.com"
         max_days=0,
     ):
         self.user_name = user_name
@@ -72,7 +73,7 @@ class Monitor:
         self.work_place = work_place
         self.branch = branch
         self.max_days = max_days
-        self.email=mail
+        self.employee_mail = employee_mail
         self.task = []
         self.accupied_days = {}
 
@@ -346,3 +347,17 @@ def read_input(exel_name):
         days[i] = Day(*days[i])
     return True
 
+# function to send email and takes the mail adsress of the employee as a parameter 
+def send_email(address):
+    outlook = client.Dispatch('outlook.application')            #create a Outlook instance
+    mail = outlook.CreateItem(0)                                #create Mail Message item
+    mail.To = address
+    mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
+    mail.HTMLBody = '''
+                        <h2> ...تحية طيبة وبعد </h2>
+                        <p style = "color:red; font-size:150%;">تكليف بالحضور لملاحظة لجان امتحانات  دور يناير لعام 2023</p>
+                        <p style="font-size:160%; font-weight:bold;">********************************************</p>
+                        <p style="color:blue; font-size:150%;"> هنا مكان وضع جدول التكليف </p>
+                    '''
+    startfile("outlook.exe")
+    mail.send
