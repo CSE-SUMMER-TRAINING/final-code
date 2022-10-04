@@ -1,0 +1,1 @@
+tuple(x.split(".")[0].split("/"))

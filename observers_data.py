@@ -142,10 +142,13 @@ class Day:
 
 # from exam table
 class ExamDay: # str - list of classes have exam => ["e3dady","1st etisalat"] O(days*classes)
-    def __init__(self,day_number, date, study_class_list):
+    def __init__(self,date, study_class_list):
         self.date = date
         self.study_class_list = study_class_list
-        self.day_number = day_number
+    def day_number(self):
+        return daynumber[tuple(self.date.split(".")[0].split("/"))]
+    def date(self):
+        return self.date
 
 #solution from hawara
 class collageDay:   # dict of list {"e3dady":[sb4-1,sb4-2]}

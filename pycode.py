@@ -66,7 +66,7 @@ class Monitor:
         title="employee",
         work_place="college",
         branch="main",
-        employee_mail = "employee@example.com"
+        employee_mail = "employee@example.com",
         max_days=0,
     ):
         self.user_name = user_name
