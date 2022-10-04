@@ -79,6 +79,7 @@ class MainWindow(QWidget):
 ###############################################################################################################
 
 
+
 class invScreen1(QWidget):
     def __init__(self):
         super(invScreen1, self).__init__()
@@ -184,8 +185,12 @@ class invScreen2(QWidget):
         #self.printall = self.findChild(QPushButton,"print")
         #self.printall.clicked.connect(self.printall_function)
 
+        self.changes = self.findChild(QPushButton,"changes")
+
+    ##############################################
     def printone_function(self):
             # pdf
+        self.changes.setText("")
 
 
         printer = QtPrintSupport.QPrinter()
@@ -195,9 +200,9 @@ class invScreen2(QWidget):
         painter.drawPixmap(100, 100, screen)
         painter.end()
 
+        self.changes.setText("هل تريد حفظ التغيرات")
 
-
-
+    ##############################################
 
     def download_function(self):
         cnt = 1
@@ -209,46 +214,66 @@ class invScreen2(QWidget):
 
         QMessageBox.about(self, "", "تم التنزيل                   ")
 
+    ##############################################
 
-
-
-
-    def valueOfCombo(self):
-        global current_index
+    def set_items(self,index):
         # clear table rows
         for i in range(self.table_widget.rowCount()):
-            self.table_widget.removeRow(self.table_widget.rowCount()-1)
+            self.table_widget.removeRow(self.table_widget.rowCount() - 1)
         # clear labels
         self.label_name.setText("")
         self.label_dep.setText("")
+        index_load_function = index
+        # load data
+        mon = monitors[index_load_function]
+        self.label_name.setText(mon.user_name)
+        self.label_dep.setText(mon.branch)
+
+        for ts in mon.task:
+            row = self.table_widget.rowCount()
+            self.table_widget.setRowCount(row + 1)
+            # item 1
+            item = QtWidgets.QTableWidgetItem(str(ts.day))
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.table_widget.setItem(row, 0, item)
+            # item 2
+            item = QtWidgets.QTableWidgetItem(str(ts.type))
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.table_widget.setItem(row, 1, item)
+            # item 3
+            item = QtWidgets.QTableWidgetItem(str(ts.building))
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.table_widget.setItem(
+                row, 2, item)
+
+    ##############################################
+
+    def valueOfCombo(self):
+        global current_index
+
         # clear search input
         self.lineEdit.setText("")
         # print(self.combox.currentIndex())
         if (self.combox.currentIndex()):
 
             current_index = self.combox.currentIndex() -1
+            self.set_items(self.combox.currentIndex() -1)
 
-            # self.load_data()   # add combobox value
-            mon = monitors[self.combox.currentIndex() - 1]
-            self.label_name.setText(mon.user_name)
-            self.label_dep.setText(mon.branch)
-            for ts in mon.task:
-                row = self.table_widget.rowCount()
-                self.table_widget.setRowCount(row + 1)
+            self.changes.clicked.connect(lambda :self.changes_function(self.combox.currentIndex() -1))
 
-
-                self.table_widget.setItem(row, 0, QTableWidgetItem(str(ts.day)))
-                self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
-                self.table_widget.setItem(
-                    row, 2, QTableWidgetItem(str(ts.building)))
-
+    ##############################################
     def search_fun(self):
         global current_index
         if self.lineEdit.text() in self.list:
 
             self.index = self.list.index(self.lineEdit.text())-1
             current_index = self.index
-            self.load_data_search()
+            self.combox.setCurrentIndex(0)
+
+            self.set_items(self.index)
+
+            self.changes.clicked.connect(lambda :self.changes_function(self.index))
+
 
         else:
             self.combox.setCurrentIndex(0)
@@ -262,90 +287,69 @@ class invScreen2(QWidget):
             self.label_name.setText("")
             self.label_dep.setText("")
 
-
-
-
-    def load_data_search(self):
-        # clear table rows
-        for i in range(self.table_widget.rowCount()):
-            self.table_widget.removeRow(self.table_widget.rowCount() - 1)
-        # clear labels
-        self.label_name.setText("")
-        self.label_dep.setText("")
-
-        self.combox.setCurrentIndex(0)
-
-        mon = monitors[self.index]
-        self.label_name.setText(mon.user_name)
-        self.label_dep.setText(mon.branch)
-        for ts in mon.task:
-
-            row = self.table_widget.rowCount()
-            self.table_widget.setRowCount(row+1)
-
-            self.table_widget.setItem(row, 0, QTableWidgetItem(str(ts.day)))
-            self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
-            self.table_widget.setItem(
-                row, 2, QTableWidgetItem(str(ts.building)))
-
-    def backfrominv_fun(self):
-        widget.setCurrentWidget(invscreen1)
+    ##############################################
 
     def next_function(self):
         global current_index
         if current_index + 1 == len(self.list) - 1:
             return
         current_index += 1
-        # clear table rows
-        for i in range(self.table_widget.rowCount()):
-            self.table_widget.removeRow(self.table_widget.rowCount() - 1)
-        # clear labels
-        self.label_name.setText("")
-        self.label_dep.setText("")
 
         self.combox.setCurrentIndex(0)
         self.lineEdit.setText("")
+        self.set_items(current_index)
 
-        mon = monitors[current_index]
-        self.label_name.setText(mon.user_name)
-        self.label_dep.setText(mon.branch)
-        for ts in mon.task:
-            row = self.table_widget.rowCount()
-            self.table_widget.setRowCount(row + 1)
+        self.changes.clicked.connect(lambda: self.changes_function(current_index))
 
-            self.table_widget.setItem(row, 0, QTableWidgetItem(str(ts.day)))
-            self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
-            self.table_widget.setItem(
-                row, 2, QTableWidgetItem(str(ts.building)))
-
-
+    ##############################################
     def prev_function(self):
         global current_index
 
         if current_index == 0:
             return
         current_index -= 1
-        # clear table rows
-        for i in range(self.table_widget.rowCount()):
-            self.table_widget.removeRow(self.table_widget.rowCount() - 1)
-        # clear labels
-        self.label_name.setText("")
-        self.label_dep.setText("")
+
 
         self.combox.setCurrentIndex(0)
         self.lineEdit.setText("")
 
-        mon = monitors[current_index]
-        self.label_name.setText(mon.user_name)
-        self.label_dep.setText(mon.branch)
-        for ts in mon.task:
-            row = self.table_widget.rowCount()
-            self.table_widget.setRowCount(row + 1)
 
-            self.table_widget.setItem(row, 0, QTableWidgetItem(str(ts.day)))
-            self.table_widget.setItem(row, 1, QTableWidgetItem(str(ts.type)))
-            self.table_widget.setItem(
-                row, 2, QTableWidgetItem(str(ts.building)))
+        self.set_items(current_index)
+
+        self.changes.clicked.connect(lambda: self.changes_function(current_index))
+
+    ##############################################
+    def backfrominv_fun(self):
+        widget.setCurrentWidget(invscreen1)
+
+
+    def changes_function(self,index):
+        index_change_function = index
+        # load data
+        mon = monitors[index_change_function]
+        irow = 0
+        for ts in mon.task:
+            item = self.table_widget.item(irow,0)
+            ts.day = item.text()
+
+            item = self.table_widget.item(irow, 1)
+            ts.type = item.text()
+
+            item = self.table_widget.item(irow, 2)
+            ts.building = item.text()
+            irow += 1
+
+        # # ask for download
+        # dlg = QMessageBox(self)
+        # dlg.setWindowTitle("تم حفظ التغيرات")
+        # dlg.setText("هل تريد اعادة تنزيل الملف")
+        # dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        # button = dlg.exec()
+        #
+        # if button == QMessageBox.Yes:
+        #     self.download_function()
+        QMessageBox.about(self, "", "تم حفظ التغيرات                  ")
+
 
 
 
