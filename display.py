@@ -10,8 +10,8 @@ to_print3 = []
 
 
 def DISPLAY(branch_num, num_of_branches):
-    for i in range(num_of_branches):
-        print(f"\t\t\t{i + 1}. {branch_name[i]}")
+    # for i in range(num_of_branches):
+    #     print(f"\t\t\t{i + 1}. {branch_name[i]}")
 
     choice = branch_num
     # while choice.isnumeric() == False or int(choice) < 1 or int(choice) > num_of_branches:
@@ -19,30 +19,7 @@ def DISPLAY(branch_num, num_of_branches):
     #choice = int(choice)
 
     solve(branch[choice - 1])
-
-    print("\n\n\t\t >> valid options << \n")
-
-    cnt = 1
-    # for group in uniqueGroups:
-    #     print(f"{cnt}.")
-    #     print("\tDay 1.   ", end=' ')
-    #     for g in group[0]:
-    #         print(g, end=' ')
-    #     print()
-    #     print("\tDay 2.   ", end=' ')
-    #     for g in group[1]:
-    #         print(g, end=' ')
-    #     print()
-    #     print("\tDay 3.   ", end=' ')
-    #     for g in group[2]:
-    #         print(g, end=' ')
-    #     print()
-    #     cnt += 1
-
-    #choice2 = input("\nChoose Distribution: ")
-    # while choice2.isnumeric() == False or int(choice2) < 1 or int(choice2) >= cnt:
-    #    choice2 = input("Enter valid number: ")
-    #choice2 = int(choice2)
+    # output_the_distribution(branch_num)
 
 
 def options(choice, choice2):
@@ -76,9 +53,9 @@ def print_output(choice1, choice2):
         # break
 
 
-def output_the_distribution(choice1, choice2):
+def output_the_distribution(choice1):
     choice1 -= 1
-    workbook = xlsxwriter.Workbook('القاعات{}.xlsx'.format(choice2))
+    workbook = xlsxwriter.Workbook('القاعات.xlsx')
     worksheet = workbook.add_worksheet(branch_name[choice1])
 
     general_format = workbook.add_format()
@@ -128,37 +105,30 @@ def output_the_distribution(choice1, choice2):
 
     cnt, R = 1, 2
 
-    # for group in uniqueGroups:
-    #     if cnt < choice2:
-    #         cnt += 1
-    #         continue
-    #     print("\n\n")
-    #     mem.clear()
-    #     buildDp(0, 0, group[0], branch[choice1].hallsInBranch)
-    #     # to_print1.extend(list(toPrint))
-    #     for i in range(len(toPrint)):
-    #         worksheet.write(R + i, 0, toPrint[i][0], sub_header_format)
-    #         worksheet.write(R + i, 1, toPrint[i][1], general_format)
-    #         worksheet.write(R + i, 2, toPrint[i][2], general_format)
-    #         worksheet.write(R + i, 3, toPrint[i][3], general_format)
-    #     toPrint.clear()
-    #     mem.clear()
-    #     buildDp(0, 0, group[1], branch[choice1].hallsInBranch)
-    #     # to_print2.extend(list(toPrint))
+    print("\n\n")
+    print(len(toPrint))
+    # to_print1.extend(list(toPrint))
+    l = len(branch[choice1].hallsInBranch)
+    
 
-    #     for i in range(len(toPrint)):
-    #         worksheet.write(R + i, 4, toPrint[i][1], general_format)
-    #         worksheet.write(R + i, 5, toPrint[i][2], general_format)
-    #         worksheet.write(R + i, 6, toPrint[i][3], general_format)
-    #     toPrint.clear()
-    #     mem.clear()
-    #     buildDp(0, 0, group[2], branch[choice1].hallsInBranch)
-    #     # to_print3.extend(list(toPrint))
-    #     for i in range(len(toPrint)):
-    #         worksheet.write(R + i, 7, toPrint[i][1], general_format)
-    #         worksheet.write(R + i, 8, toPrint[i][2], general_format)
-    #         worksheet.write(R + i, 9, toPrint[i][3], general_format)
-    #     toPrint.clear()
-    #     break
+    for i in range(l):
+        worksheet.write(R + i, 0, toPrint[i][0], sub_header_format)
+        worksheet.write(R + i, 1, toPrint[i][1], general_format)
+        worksheet.write(R + i, 2, toPrint[i][2], general_format)
+        worksheet.write(R + i, 3, toPrint[i][3], general_format)
 
-    # workbook.close()
+    # to_print2.extend(list(toPrint))
+
+    for i in range(l):
+        worksheet.write(R + i, 4, toPrint[i + l][1], general_format)
+        worksheet.write(R + i, 5, toPrint[i + l][2], general_format)
+        worksheet.write(R + i, 6, toPrint[i + l][3], general_format)
+
+    # to_print3.extend(list(toPrint))
+
+    for i in range(l):
+        worksheet.write(R + i, 7, toPrint[i + 2 * l][1], general_format)
+        worksheet.write(R + i, 8, toPrint[i + 2 * l][2], general_format)
+        worksheet.write(R + i, 9, toPrint[i + 2 * l][3], general_format)
+
+    workbook.close()
