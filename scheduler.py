@@ -12,25 +12,8 @@ from solver import buildDp, solve, mem, toPrint
 from college import *
 from display import *
 from groups_input import *
-from pycode import (
-    Monitor,
-    Day,
-    Task,
-    process,
-    read_input,
-    arabic,
-    observer,
-    khalafawy,
-    road_el_farag,
-    professor,
-    Adoctor,
-    doctor,
-    manager,
-    monitor0,
-    monitors,
-    days,
-    observser_data_lst,
-)
+from observers_data import *
+from observers_solve import *
 
 branch_num = -1
 option_num = -1
@@ -118,22 +101,23 @@ class invScreen1(QWidget):
 
     def generateTables(self):
 
-        if (self.txt != ""):
+       if (self.txt != ""):
             good_data = read_input(self.file_name)
-            ok = process(monitors, days)
-            print(good_data)
             if not good_data:
-
                 self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
-            elif not ok :
-
+                return
+            ok1 = process_exam_day(days, collage_day_input)
+            if not ok1:
+                self.label_not_enough.setText("يوجد تعارض بين جدول الامتحانات وجدول القاعات")                
+                return
+            ok2 = process(monitors, days)
+            if not ok2 :
                 self.label_not_enough.setText("عدد الموظفين غير كافي")
-            else:
-                self.label_not_enough.setText("")
-
-                s2 = invScreen2()
-                widget.addWidget(s2)
-                widget.setCurrentWidget(s2)
+                return
+            self.label_not_enough.setText("")
+            s2 = invScreen2()
+            widget.addWidget(s2)
+            widget.setCurrentWidget(s2)
 
 
 current_index = -1
