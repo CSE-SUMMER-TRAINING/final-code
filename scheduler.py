@@ -170,6 +170,7 @@ class invScreen2(QWidget):
         #self.printall.clicked.connect(self.printall_function)
 
         self.changes = self.findChild(QPushButton,"changes")
+        self.changes.clicked.connect(lambda: self.changes_function(current_index))
 
     ##############################################
     def printone_function(self):
@@ -184,7 +185,7 @@ class invScreen2(QWidget):
         painter.drawPixmap(100, 100, screen)
         painter.end()
 
-        self.changes.setText("هل تريد حفظ التغيرات")
+        self.changes.setText("حفظ التغيرات                        ")
 
     ##############################################
 
@@ -243,7 +244,6 @@ class invScreen2(QWidget):
             current_index = self.combox.currentIndex() -1
             self.set_items(self.combox.currentIndex() -1)
 
-            self.changes.clicked.connect(lambda :self.changes_function(self.combox.currentIndex() -1))
 
     ##############################################
     def search_fun(self):
@@ -256,7 +256,6 @@ class invScreen2(QWidget):
 
             self.set_items(self.index)
 
-            self.changes.clicked.connect(lambda :self.changes_function(self.index))
 
 
         else:
@@ -283,7 +282,6 @@ class invScreen2(QWidget):
         self.lineEdit.setText("")
         self.set_items(current_index)
 
-        self.changes.clicked.connect(lambda: self.changes_function(current_index))
 
     ##############################################
     def prev_function(self):
@@ -300,7 +298,6 @@ class invScreen2(QWidget):
 
         self.set_items(current_index)
 
-        self.changes.clicked.connect(lambda: self.changes_function(current_index))
 
     ##############################################
     def backfrominv_fun(self):
