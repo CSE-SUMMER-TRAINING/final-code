@@ -515,7 +515,7 @@ class exScreen2(QWidget):
             self, 'Open file', '', 'Excel (*.csv *xls)')
 
     def save_func(self):
-        output_the_distribution(branch_num, option_num)
+        output_the_distribution(branch_num)
 
     def backfromex_fun(self):
         widget.removeWidget(s1)
