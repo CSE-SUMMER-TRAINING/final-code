@@ -1,7 +1,10 @@
 from cmath import nan
+from operator import indexOf
 from observers_data import *
 from college import *
 import math
+from datetime import date
+
 
 def process_single_task(day, tsk, monitors, lst):
 
@@ -163,7 +166,14 @@ def read_input(exel_name):
         print(3)
         return False
     dataframe1 = allExcelFile.parse(sheets[0])
-    col = ["الاسم", "المسمى الوظيفى", "مكان العمل", "المبنى","البريد الالكتروني", "التكليف الحالي"]
+    col = [
+        "الاسم",
+        "المسمى الوظيفى",
+        "مكان العمل",
+        "المبنى",
+        "البريد الالكتروني",
+        "التكليف الحالي",
+    ]
     for i in range(50):
         if not i:
             col.append(" ")
@@ -194,20 +204,20 @@ def read_input(exel_name):
     day = []
     cnt = 0
     for x, y in dataframe2.items():
-        if len(x.split(".")[0].split("/"))==1:
+        if len(x.split(".")[0].split("/")) == 1:
             continue
         day.append(tuple(x.split(".")[0].split("/")))
-        removeNAN=y.values.tolist()
-        newlist=[]
-        temp=[]
+        removeNAN = y.values.tolist()
+        newlist = []
+        temp = []
         for a in removeNAN:
             if not pd.isnull(a):
                 newlist.append(a)
         temp.append(newlist)
         temp.insert(0, x.split(".")[0])
-        print(temp)
+        # print(temp)
         days.append(temp)
-    print(day)
+    # print(day)
     day = sorted(day, key=srt)
     for x in day:
         if x not in daynumber.keys():
@@ -222,13 +232,13 @@ def read_input(exel_name):
 # these two lists must be cleared and have the data from excel sheeets before start the process
 # then pass these lists as arguements to function => process_exam_day(exam_day_input,collage_day_input)
 exam_day_input = [
-    ExamDay( "12/11/2020", ["e3dady", "1st etisalat"]),
-    ExamDay( "14/10/2020", ["e3dady", "1st etisalat"]),
+    ExamDay("12/11/2020", ["e3dady", "1st etisalat"]),
+    ExamDay("14/10/2020", ["e3dady", "1st etisalat"]),
 ]
 collage_day_input = [
     collageDay(
         {
-            "اعدادي هندسه": [Hall(0, 1, 1, 75, "sb4-1"),Hall(0, 2, 2, 55, "sb7-1")],
+            "اعدادي هندسه": [Hall(0, 1, 1, 75, "sb4-1"), Hall(0, 2, 2, 55, "sb7-1")],
         }
     ),
     collageDay(
@@ -243,13 +253,62 @@ collage_day_input = [
         }
     ),
 ]
+WeekDays = [
+    "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+]
+
+
+def sync_day(dy):
+    if dy == "Friday":
+        return "Friday"
+    return WeekDays[(WeekDays.index(dy) + 3) % 6]
 
 
 def process_exam_day(exam_days, collage_days):
+    visited_days = {}
+    taken_collge_pairs = {}
+
     for i in range(len(exam_days)):
-        cur_day=exam_days[i]
+        cur_day = exam_days[i]
+        dd, mm, yy = cur_day.date.split("/")
+        day_name = date(int(yy), int(mm), int(dd)).strftime("%A")
+        collge_day_idx = 6
+        if day_name in visited_days.keys():
+            collge_day_idx = visited_days[day_name]
+        else:
+            # print(cur_day.date)
+            # print(day_name)
+            # print(visited_days.items())
+            # print(taken_collge_pairs.items())
+            ok = False
+            for j in range(len(collage_days)):
+                if j in taken_collge_pairs.keys():
+                    continue
+                check = 1
+                # print(exam_days[i].study_class_list)
+                # print(collage_days[j].hall_class_map.keys())
+                for study_class in exam_days[i].study_class_list:
+                    if study_class in collage_days[j].hall_class_map.keys():
+                        continue
+                    check = 0
+                if check:
+                    ok = True
+                    collge_day_idx = j
+                    visited_days[day_name] = visited_days[sync_day(day_name)] = j
+                    taken_collge_pairs[j] = True
+                    break
+            # print(ok)
+            if not ok:
+                return False
+        # print(f"this is idx= {collge_day_idx}")
         my_data = {}
-        collge_day_idx = (cur_day.day_number() - 1) % len(collage_days)
+
         for cur_class in cur_day.study_class_list:
             if cur_class not in collage_days[collge_day_idx].hall_class_map.keys():
                 return False
@@ -265,7 +324,7 @@ def process_exam_day(exam_days, collage_days):
                     tmp.floor.add(hall.floorNum)
                     tmp.building.add(hall.buildNum)
                     tmp.observers = observers_on_volume(hall.volume, 14)
-                    my_data[hall.branchNum]=tmp
+                    my_data[hall.branchNum] = tmp
                 # for every 14 student having an observer
         for key, val in my_data.items():
             exam_days[i] = Day(
@@ -275,23 +334,24 @@ def process_exam_day(exam_days, collage_days):
                 len(val.building),
                 khalafawy if key else road_el_farag,
             )
-            print(i,key,val.observers)
+            # print(i, key, val.observers)
     return True
-# نحسب كثافة المراقبين على عدد الطلاب
+
+
 def observers_on_volume(volume, size):
     return (volume + size - 1) // size
 
 
 # شيل كل ده
-read_input("observers_data_input.xlsx")
-ok = process_exam_day(days,collage_day_input)
-print(ok)
-for i in days:
-    print(f"day = {i.day} obs = {i.obs} mon = {i.monit} man = {i.manager} build = {arabic(i.building)}")
-# ok &= process(monitors, days)
+# read_input("observers_data_input.xlsx")
+# ok = process_exam_day(days, collage_day_input)
 # if not ok:
-#     print("not enough")
+#     print(arabic("البيانات اللى انت حاطتها ف الجدول مش بتتماشى مع المطلوب ، روح بص على جدول القاعات والجدول اللى انت عامله واتاكد ان مفيش فرقة مش بتنزل فاليوم ده وانت منزلها"))
 # else:
-#     print(ok)
-#     for mon in monitors:
-#         mon.print_info()
+#     ok &= process(monitors, days)
+#     if not ok:
+#         print("not enough")
+#     else:
+#         print(ok)
+#         for mon in monitors:
+#             mon.print_info()
