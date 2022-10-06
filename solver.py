@@ -120,7 +120,7 @@ def solve(branch :Branch)->None:
     #     choice = input("Enter valid number: ")
     # choice = int(choice)
 
-    choice = 1
+    choice = 2
 
     if choice == 1:
         print('1')

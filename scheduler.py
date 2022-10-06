@@ -18,18 +18,14 @@ from observers_solve import *
 branch_num = -1
 option_num = -1
 
-# 1
 
-
-def get_options(branch_num):
+def build(branch_num, num_of_branches):
     for i in range(num_of_branches):
         branch.append(Branch(branch_name[i], i, num_of_builds[i]))
 
     get_and_store_groups()
-    print(branch_num)
     DISPLAY(branch_num, num_of_branches)
-
-
+    
 def get_tables(branch_num, option_num):
     print(option_num)
     options(branch_num, option_num)
@@ -42,6 +38,7 @@ def get_tables(branch_num, option_num):
             print(f"{group[g].name} {group[g].volume}")
 
 
+# UI
 class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -58,10 +55,6 @@ class MainWindow(QWidget):
 
     def exScreen(self):
         widget.setCurrentWidget(exscreen1)
-
-###############################################################################################################
-
-
 
 class invScreen1(QWidget):
     def __init__(self):
@@ -81,27 +74,22 @@ class invScreen1(QWidget):
         self.txt = ""
         self.file_name = ""
 
-
-
-
-
     def browsefiles(self):
         fname = QFileDialog.getOpenFileName(
             self, 'Open file', '', 'Excel (*.csv *xls *xlsx )')
         self.txt = fname
         self.file_name = fname[0]
         self.linefileedit.setText(fname[0])
+    
     def help_func(self):
         widget.setCurrentWidget(helpinv)
 
     def goBack(self):
         widget.setCurrentWidget(mainwindow)
-
         self.label_not_enough.setText("")
 
     def generateTables(self):
-
-       if (self.txt != ""):
+        if (self.txt != ""):
             good_data = read_input(self.file_name)
             if not good_data:
                 self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
@@ -119,11 +107,8 @@ class invScreen1(QWidget):
             widget.addWidget(s2)
             widget.setCurrentWidget(s2)
 
-
 current_index = -1
-# 3
 class invScreen2(QWidget):
-
     def __init__(self):
         super(invScreen2, self).__init__()
         loadUi("screenInv2.ui", self)
@@ -172,11 +157,10 @@ class invScreen2(QWidget):
         self.changes = self.findChild(QPushButton,"changes")
         self.changes.clicked.connect(lambda: self.changes_function(current_index))
 
-    ##############################################
-    def printone_function(self):
-            # pdf
-        self.changes.setText("")
 
+    def printone_function(self):
+        # pdf
+        self.changes.setText("")
 
         printer = QtPrintSupport.QPrinter()
         painter = QtGui.QPainter()
@@ -187,7 +171,6 @@ class invScreen2(QWidget):
 
         self.changes.setText("حفظ التغيرات                        ")
 
-    ##############################################
 
     def download_function(self):
         cnt = 1
@@ -199,7 +182,6 @@ class invScreen2(QWidget):
 
         QMessageBox.about(self, "", "تم التنزيل                   ")
 
-    ##############################################
 
     def set_items(self,index):
         # clear table rows
@@ -231,21 +213,17 @@ class invScreen2(QWidget):
             self.table_widget.setItem(
                 row, 2, item)
 
-    ##############################################
 
     def valueOfCombo(self):
         global current_index
-
         # clear search input
         self.lineEdit.setText("")
         # print(self.combox.currentIndex())
         if (self.combox.currentIndex()):
-
             current_index = self.combox.currentIndex() -1
             self.set_items(self.combox.currentIndex() -1)
 
 
-    ##############################################
     def search_fun(self):
         global current_index
         if self.lineEdit.text() in self.list:
@@ -255,8 +233,6 @@ class invScreen2(QWidget):
             self.combox.setCurrentIndex(0)
 
             self.set_items(self.index)
-
-
 
         else:
             self.combox.setCurrentIndex(0)
@@ -270,7 +246,6 @@ class invScreen2(QWidget):
             self.label_name.setText("")
             self.label_dep.setText("")
 
-    ##############################################
 
     def next_function(self):
         global current_index
@@ -283,7 +258,6 @@ class invScreen2(QWidget):
         self.set_items(current_index)
 
 
-    ##############################################
     def prev_function(self):
         global current_index
 
@@ -299,7 +273,6 @@ class invScreen2(QWidget):
         self.set_items(current_index)
 
 
-    ##############################################
     def backfrominv_fun(self):
         widget.setCurrentWidget(invscreen1)
 
@@ -331,11 +304,6 @@ class invScreen2(QWidget):
         #     self.download_function()
         QMessageBox.about(self, "", "تم حفظ التغيرات                  ")
 
-
-
-
-###############################################################################################################
-
 class exScreen1(QWidget):
     def __init__(self):
         super(exScreen1, self).__init__()
@@ -346,6 +314,7 @@ class exScreen1(QWidget):
         self.label = self.findChild(QLabel, "lineEdit")
         self.help = self.findChild(QPushButton, "help")
         self.help.clicked.connect(self.help_func)
+        self.label_not_enough = self.findChild(QLabel, "label_not_enough")
 
         self.khalafawy = self.findChild(QCheckBox, "checkBox")
         self.rod = self.findChild(QCheckBox, "checkBox_2")
@@ -364,36 +333,36 @@ class exScreen1(QWidget):
             self, 'Open file', '', 'Excel (*.csv *xlsx)')
         self.lineEdit.setText(fname[0])
         self.txt = fname[0]
-        global num_of_branches
-        excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
-        read_sheet(excelSheet, num_of_branches)
 
     def goBack(self):
         widget.setCurrentWidget(mainwindow)
 
     def generateTables(self):
-
         if (self.txt != ""):
+            ok = check_data(self.txt)
+            if not ok:
+                self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
+                return
+
+            excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
+            read_sheet(excelSheet, num_of_branches)
+            
             if (self.khalafawy.isChecked() == True and self.rod.isChecked() == False):
                 global branch_num
                 branch_num = 1
-                get_options(branch_num)
+                build(branch_num, num_of_branches)
                 global s1
                 s1 = exScreen2()
                 widget.addWidget(s1)
                 widget.setCurrentWidget(s1)
             elif (self.rod.isChecked() == True and self.khalafawy.isChecked() == False):
                 branch_num = 2
-                get_options(branch_num)
+                build(branch_num, num_of_branches)
                 s1 = exScreen2()
                 widget.addWidget(s1)
                 widget.setCurrentWidget(s1)
 
-# 5
-
-
 class exScreen2(QWidget):
-
     def __init__(self):
         super(exScreen2, self).__init__()
         loadUi("screenEx2.ui", self)
@@ -412,7 +381,6 @@ class exScreen2(QWidget):
         #     cnt += 1
 
         self.comboxfl.currentTextChanged.connect(self.change_table)
-
         self.label = self.findChild(QLabel, "label1")
 
     def change_table(self, s):
@@ -489,7 +457,7 @@ class exScreen2(QWidget):
             to_print3.clear()
 
             # for i in range(5):
-        #    print(to_print1[i], to_print2[i], to_print3[i])
+            #    print(to_print1[i], to_print2[i], to_print3[i])
 
     def browsefiles(self):
         QFileDialog.getOpenFileName(
@@ -504,7 +472,6 @@ class exScreen2(QWidget):
         widget.addWidget(exscreen1)
         widget.setCurrentWidget(exscreen1)
 
-
 class invHelp(QWidget):
     def __init__(self):
         super(invHelp, self).__init__()
@@ -514,7 +481,6 @@ class invHelp(QWidget):
 
     def back_func(self):
         widget.setCurrentWidget(invscreen1)
-
 
 class examHelp(QWidget):
     def __init__(self):

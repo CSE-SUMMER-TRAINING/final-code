@@ -267,6 +267,25 @@ font: 30px &quot;MS Shell Dlg 2&quot; center
     <string>خلفاوي</string>
    </property>
   </widget>
+   <widget class="QLabel" name="label_not_enough">
+   <property name="geometry">
+    <rect>
+     <x>800</x>
+     <y>306</y>
+     <width>400</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:red;font-size:18px</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <widget class="QPushButton" name="help">
    <property name="geometry">
     <rect>
