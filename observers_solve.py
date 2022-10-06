@@ -355,7 +355,7 @@ def process_exam_day(exam_days, collage_days):
                 val.observers,
                 len(val.floor),
                 len(val.building),
-                khalafawy if key else road_el_farag,
+                road_el_farag if key else khalafawy,
             ))
             # print(i, key, val.observers)
     return True
