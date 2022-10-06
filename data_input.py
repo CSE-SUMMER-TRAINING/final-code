@@ -7,7 +7,7 @@ branch = []
 name_and_volume_of_halls = []
 num_of_floors = []
 num_of_builds = []
-
+dataframes=[]
 
 def read_inputt(filename):
 
@@ -20,6 +20,12 @@ def read_inputt(filename):
         if (not (allBranches[i][0] >= 'A' and allBranches[i][0] <= 'z')):
             allBranches[i] = reshape(allBranches[i])[::-1]
         branch_name[i] = allBranches[i]
+        dataframe=excelSheet.parse(excelSheet.sheet_names[i])
+        ls=[]
+        for ind,row in dataframe.iterrows():
+            temp=row.values.tolist()
+            ls.append(temp)
+        dataframes.append(ls)
         branch_index[allBranches[i]] = i
 
     num_of_branches = len(allBranches)
