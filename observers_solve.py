@@ -1,10 +1,12 @@
 from cmath import nan
 from operator import indexOf
+from pickle import GLOBAL
 from observers_data import *
 from college import *
 import math
 from datetime import date
 
+colDayBranch=[{},{},{}]
 
 def process_single_task(day, tsk, monitors, lst):
 
@@ -155,6 +157,11 @@ def read_input(exel_name):
     monitors.clear()
     days.clear()
     observser_data_lst.clear()
+    colDayBranch.clear()
+    examDays.clear()
+    colDayBranch.append({})
+    colDayBranch.append({})
+    colDayBranch.append({})
     # check weather the sheet name exist
     try:
         allExcelFile = pd.ExcelFile(exel_name)
@@ -225,34 +232,51 @@ def read_input(exel_name):
             daynumber[x] = cnt
     for i in range(len(days)):
         days[i] = ExamDay(*days[i])
+    excel=pd.ExcelFile("hallsWithAllData.xlsx")
+    for i in range(len(excel.sheet_names)):
+        dataframe=excel.parse(excel.sheet_names[i])
+        print (dataframe)
+        for ind,row in dataframe.iterrows():
+            if(row[1]!="فارغه"):
+                if row[1] not in colDayBranch[0].keys():
+                    colDayBranch[0][row[1]]=[]
+                colDayBranch[0][row[1]].append(Hall(i,row[-1],row[-2],row[-3],row[0]))
+            if(row[4]!="فارغه"):
+                if row[4] not in colDayBranch[1].keys():
+                    colDayBranch[1][row[4]]=[]
+                colDayBranch[1][row[4]].append(Hall(i,row[-1],row[-2],row[-3],row[0]))
+            if(row[7]!="فارغه"):
+                if row[7] not in colDayBranch[2].keys():
+                    colDayBranch[2][row[7]]=[]
+                colDayBranch[2][row[7]].append(Hall(i,row[-1],row[-2],row[-3],row[0]))
     # days.clear()
+    print(colDayBranch)
+    colDayBranch[0]=collageDay(colDayBranch[0])
+    colDayBranch[1]=collageDay(colDayBranch[1])
+    colDayBranch[2]=collageDay(colDayBranch[2])
     return True
 
 
 # these two lists must be cleared and have the data from excel sheeets before start the process
 # then pass these lists as arguements to function => process_exam_day(exam_day_input,collage_day_input)
-exam_day_input = [
-    ExamDay("12/11/2020", ["e3dady", "1st etisalat"]),
-    ExamDay("14/10/2020", ["e3dady", "1st etisalat"]),
-]
-collage_day_input = [
-    collageDay(
-        {
-            "اعدادي هندسه": [Hall(0, 1, 1, 75, "sb4-1"), Hall(0, 2, 2, 55, "sb7-1")],
-        }
-    ),
-    collageDay(
-        {
-            "اولي اتصالات": [Hall(0, 1, 1, 25, "sb4-1"), Hall(0, 2, 2, 55, "sb7-1")],
-            "تالته حاسبات": [Hall(1, 1, 1, 25, "sb4-1"), Hall(1, 2, 2, 55, "sb7-1")],
-        }
-    ),
-    collageDay(
-        {
-            "رابعه حاسبات": [Hall(1, 1, 1, 25, "sb4-1"), Hall(1, 2, 2, 55, "sb7-1")],
-        }
-    ),
-]
+# collage_day_input = [
+#     collageDay(
+#         {
+#             "اعدادي هندسه": [Hall(0, 1, 1, 75, "sb4-1"), Hall(0, 2, 2, 55, "sb7-1")],
+#         }
+#     ),
+#     collageDay(
+#         {
+#             "اولي اتصالات": [Hall(0, 1, 1, 25, "sb4-1"), Hall(0, 2, 2, 55, "sb7-1")],
+#             "تالته حاسبات": [Hall(1, 1, 1, 25, "sb4-1"), Hall(1, 2, 2, 55, "sb7-1")],
+#         }
+#     ),
+#     collageDay(
+#         {
+#             "رابعه حاسبات": [Hall(1, 1, 1, 25, "sb4-1"), Hall(1, 2, 2, 55, "sb7-1")],
+#         }
+#     ),
+# ]colday is up their ready for use
 WeekDays = [
     "Saturday",
     "Sunday",
@@ -262,8 +286,7 @@ WeekDays = [
     "Thursday",
     "Friday",
 ]
-
-
+examDays=[]
 def sync_day(dy):
     if dy == "Friday":
         return "Friday"
@@ -327,13 +350,13 @@ def process_exam_day(exam_days, collage_days):
                     my_data[hall.branchNum] = tmp
                 # for every 14 student having an observer
         for key, val in my_data.items():
-            exam_days[i] = Day(
+            examDays.append( Day(
                 cur_day.date,
                 val.observers,
                 len(val.floor),
                 len(val.building),
-                khalafawy if key else road_el_farag,
-            )
+                road_el_farag if key else khalafawy,
+            ))
             # print(i, key, val.observers)
     return True
 

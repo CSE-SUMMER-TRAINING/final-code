@@ -8,6 +8,7 @@ branch = []
 name_and_volume_of_halls = []           # name and volume of the halls in [branch][build][floor]
 num_of_floors = []                      # number of floors in [branch][build]
 num_of_builds = []                      # number of builds in [branch]
+dataframes = []
 
 def validInt(num):
     try:
@@ -31,6 +32,13 @@ def read_inputt(filename):
         
         # map branch name to branch index and vice versa
         branch_name[i] = allBranches[i]
+
+        dataframe = excelSheet.parse(excelSheet.sheet_names[i])
+        ls = []
+        for ind, row in dataframe.iterrows():
+            temp=row.values.tolist()
+            ls.append(temp)
+        dataframes.append(ls)
         branch_index[allBranches[i]] = i
 
     num_of_branches = len(allBranches)

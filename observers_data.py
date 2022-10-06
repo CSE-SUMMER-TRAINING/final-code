@@ -104,7 +104,7 @@ class Monitor:
                 numofworkdays += 1
             else:
                 dt[cnt].append(" ")
-        dt[cnt][4] = numofworkdays
+        dt[cnt][5] = numofworkdays
 
     def Work_place(self):
         return mp[self.branch]
