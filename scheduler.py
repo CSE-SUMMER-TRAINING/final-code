@@ -101,16 +101,16 @@ class invScreen1(QWidget):
 
     def generateTables(self):
 
-       if (self.txt != ""):
+        if (self.txt != ""):
             good_data = read_input(self.file_name)
             if not good_data:
                 self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
                 return
-            ok1 = process_exam_day(days, collage_day_input)
+            ok1 = process_exam_day(days, colDayBranch)
             if not ok1:
                 self.label_not_enough.setText("يوجد تعارض بين جدول الامتحانات وجدول القاعات")                
                 return
-            ok2 = process(monitors, days)
+            ok2 = process(monitors, examDays)
             if not ok2 :
                 self.label_not_enough.setText("عدد الموظفين غير كافي")
                 return
