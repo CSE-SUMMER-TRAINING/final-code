@@ -14,6 +14,10 @@ from display import *
 from groups_input import *
 from observers_data import *
 from observers_solve import *
+import wget
+
+URL_EXAM = "https://drive.google.com/uc?export=download&id=1b98Hzn6F-3s2dQGSPcDlOJH_YFyLTMFl"
+URL_INV = "https://drive.google.com/uc?export=download&id=1_weWkhA9x7b2zKr6NRkBbIFVxuqPLjD9"
 
 branch_num = -1
 option_num = -1
@@ -472,25 +476,38 @@ class exScreen2(QWidget):
         widget.addWidget(exscreen1)
         widget.setCurrentWidget(exscreen1)
 
+
 class invHelp(QWidget):
     def __init__(self):
         super(invHelp, self).__init__()
         loadUi("helpInv.ui", self)
-        self.save = self.findChild(QPushButton, "back")
-        self.save.clicked.connect(self.back_func)
+        self.back = self.findChild(QPushButton, "back")
+        self.back.clicked.connect(self.back_func)
+        self.save = self.findChild(QPushButton, "save")
+        self.save.clicked.connect(self.save_func)
 
     def back_func(self):
         widget.setCurrentWidget(invscreen1)
+
+    def save_func(self):
+        wget.download(URL_INV)
+
 
 class examHelp(QWidget):
     def __init__(self):
         super(examHelp, self).__init__()
         loadUi("helpEx.ui", self)
-        self.save = self.findChild(QPushButton, "back")
-        self.save.clicked.connect(self.back_func)
+        self.back = self.findChild(QPushButton, "back")
+        self.back.clicked.connect(self.back_func)
+        self.save = self.findChild(QPushButton, "save")
+        self.save.clicked.connect(self.save_func)
 
     def back_func(self):
         widget.setCurrentWidget(exscreen1)
+
+    def save_func(self):
+        wget.download(URL_EXAM)
+
 
 
 app = QApplication(sys.argv)
