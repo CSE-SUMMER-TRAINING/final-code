@@ -1,5 +1,5 @@
 import arabic_reshaper
-from data_input import  branch_index, branch
+from data_input import  branch_index, branch, validStr, validInt
 
 group = []
 
@@ -19,6 +19,10 @@ def read_sheet(excelSheet, num_of_branches):
 def get_and_store_groups():
     for index, rows in sheet.iterrows():
         g = rows.values.tolist()
+
+        if(not validStr(g[0]) and not validStr(g[1]) and not validInt(g[2]) and not validInt(g[3]) and not validInt(g[4])):
+            continue
+
         g[2] = int(g[2])                                                    # number
         g[3] = int(g[3])                                                    # from
         g[4] = int(g[4])                                                    # to

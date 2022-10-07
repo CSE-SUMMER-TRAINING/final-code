@@ -1,6 +1,6 @@
-import string
 import pandas as pd
 from arabic_reshaper import *
+from observers_solve import arabic
 
 branch_name = dict()                    # to get the branch name with branch index
 branch_index = dict()                   # to get branch index with branch name
@@ -50,6 +50,10 @@ def read_inputt(filename):
         sheet = excelSheet.parse(excelSheet.sheet_names[i])
         for index, rows in sheet.iterrows():
             hall = rows.values.tolist()
+
+            if not validStr(hall[0]) and not validInt(hall[1]) and not validInt(hall[2]) and not validInt(hall[3]):
+                continue
+
             hall[1] = int(hall[1])      # volume
             hall[2] = int(hall[2])      # build number
             hall[3] = int(hall[3])      # floor number
@@ -75,15 +79,31 @@ def check_data(fileName):
 
     for i in range(num_of_branches - 1):
         sheet = excelSheet.parse(allBranches[i])
+        header = []
+
+        for p, v in enumerate(sheet.keys()):
+            header.append(reshape(v)[::-1])
+        if sorted(header) != sorted([arabic('اسم القاعه'), arabic('السعه'), arabic('رقم المبني'), arabic('رقم الدور')]):
+            return False
+        
         for index, rows in sheet.iterrows():
-            hall = rows.values.tolist()
-            if(not validStr(hall[0]) or not validInt(hall[1]) or not validInt(hall[2]) or not validInt(hall[3])):
-                return False
+            hall, c = rows.values.tolist(), 0
+            c += (not validStr(hall[0]))
+            c += (not validInt(hall[1]))
+            c += (not validInt(hall[2]))
+            c += (not validInt(hall[3]))
+            if c == 4 or c == 0: continue
+            else: return False
 
     sheet = excelSheet.parse(allBranches[num_of_branches - 1])
     for index, rows in sheet.iterrows():
-        g = rows.values.tolist()
-        if(not validStr(g[0]) or not validStr(g[1]) or not validInt(g[2]) or not validInt(g[3]) or not validInt(g[4])):
-            return False
+        g, c = rows.values.tolist(), 0
+        c += (not validStr(g[0]))
+        c += (not validStr(g[1]))
+        c += (not validInt(g[2]))
+        c += (not validInt(g[3]))
+        c += (not validInt(g[4]))
+        if c == 5 or c == 0: continue
+        else: return False
 
     return True
