@@ -39,7 +39,7 @@
 text-align:center;
 border: none;
 font-size: 10px;
-color:#8D8D8D;
+color:#6c838f;
 font-weight:lighter;</string>
    </property>
    <property name="html">
@@ -61,7 +61,6 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(18, 129, 139);
 font: 20px &quot;MS Shell Dlg 2&quot; center
 </string>
    </property>
@@ -102,7 +101,7 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(18, 129, 139)</string>
+    <string notr="true">background-color:#274857</string>
    </property>
    <property name="text">
     <string/>
@@ -112,23 +111,14 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
    <property name="geometry">
     <rect>
      <x>850</x>
-     <y>820</y>
+     <y>800</y>
      <width>161</width>
      <height>41</height>
     </rect>
    </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
    <property name="styleSheet">
-    <string notr="true">
-QPushButton{
-background-color: rgb(18, 129, 139);font: 19px &quot;MS Shell Dlg 2&quot;;color:white;
-}
-QPushButton:hover{
-background-color:rgb(23, 167, 181);
-font-size:20px;
-}</string>
+    <string notr="true">background-color: #3caac3;
+font-size:19px;color:white;</string>
    </property>
    <property name="text">
     <string>رجوع</string>
@@ -138,7 +128,7 @@ font-size:20px;
    <property name="geometry">
     <rect>
      <x>120</x>
-     <y>430</y>
+     <y>390</y>
      <width>1691</width>
      <height>271</height>
     </rect>
@@ -153,12 +143,30 @@ font-size:20px;
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QPushButton" name="save">
+   <property name="geometry">
+    <rect>
+     <x>850</x>
+     <y>740</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #3caac3;
+font-size:19px;color:white;</string>
+   </property>
+   <property name="text">
+    <string>حفظ نسخة</string>
+   </property>
+  </widget>
   <zorder>label_8</zorder>
   <zorder>textBrowser</zorder>
   <zorder>label</zorder>
   <zorder>label_9</zorder>
   <zorder>back</zorder>
   <zorder>label_2</zorder>
+  <zorder>save</zorder>
  </widget>
  <resources/>
  <connections/>

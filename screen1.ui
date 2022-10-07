@@ -30,25 +30,18 @@
     <rect>
      <x>980</x>
      <y>410</y>
-     <width>241</width>
-     <height>171</height>
+     <width>291</width>
+     <height>251</height>
     </rect>
    </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
    <property name="styleSheet">
-    <string notr="true">
-QPushButton{
-background-color: rgb(18, 129, 139);font: 17pt &quot;MS Shell Dlg 2&quot;;color:white;
-}
-QPushButton:hover{
-background-color:rgb(23, 167, 181);
-font-size:18pt;
-}</string>
+    <string notr="true">font: 14pt &quot;MS Shell Dlg 2&quot;;
+background-color: 
+#8abbca;
+color:white;</string>
    </property>
    <property name="text">
-    <string>جدول الملاحظين</string>
+    <string/>
    </property>
    <property name="iconSize">
     <size>
@@ -60,27 +53,19 @@ font-size:18pt;
   <widget class="QPushButton" name="exam">
    <property name="geometry">
     <rect>
-     <x>710</x>
+     <x>660</x>
      <y>410</y>
-     <width>241</width>
-     <height>171</height>
+     <width>291</width>
+     <height>251</height>
     </rect>
    </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
    <property name="styleSheet">
-    <string notr="true">
-QPushButton{
-background-color: rgb(18, 129, 139);font: 17pt &quot;MS Shell Dlg 2&quot;;color:white;
-}
-QPushButton:hover{
-background-color:rgb(23, 167, 181);
-font-size:18pt;
-}</string>
+    <string notr="true">font: 17pt &quot;MS Shell Dlg 2&quot;;
+background-color: #3caac3;
+color:white;</string>
    </property>
    <property name="text">
-    <string>جدول الامتحانات</string>
+    <string/>
    </property>
    <property name="iconSize">
     <size>
@@ -99,7 +84,7 @@ font-size:18pt;
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(18, 129, 139)</string>
+    <string notr="true">background-color: #274857</string>
    </property>
    <property name="text">
     <string/>
@@ -122,7 +107,7 @@ font-size:18pt;
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>icons/table.png</pixmap>
+    <pixmap>../../../Downloads/table.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -165,12 +150,85 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(18, 129, 139);
 font: 30px &quot;MS Shell Dlg 2&quot; center
 </string>
    </property>
    <property name="text">
     <string>Timetable generator</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>760</x>
+     <y>470</y>
+     <width>81</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../../../Downloads/exam (2).png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>720</x>
+     <y>560</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+font-size:25px;
+</string>
+   </property>
+   <property name="text">
+    <string>جدول الامتحانات</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>1080</x>
+     <y>470</y>
+     <width>81</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../../../Downloads/exam (1).png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>1040</x>
+     <y>560</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+font-size:25px;
+</string>
+   </property>
+   <property name="text">
+    <string>جدول الملاحظين</string>
    </property>
   </widget>
  </widget>

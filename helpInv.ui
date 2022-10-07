@@ -28,7 +28,7 @@
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
-     <x>600</x>
+     <x>560</x>
      <y>160</y>
      <width>791</width>
      <height>51</height>
@@ -39,7 +39,7 @@
 text-align:center;
 border: none;
 font-size: 10px;
-color:#8D8D8D;
+color:#6c838f;
 font-weight:lighter;</string>
    </property>
    <property name="html">
@@ -53,24 +53,15 @@ p, li { white-space: pre-wrap; }
   <widget class="QPushButton" name="back">
    <property name="geometry">
     <rect>
-     <x>920</x>
+     <x>880</x>
      <y>890</y>
      <width>161</width>
      <height>41</height>
     </rect>
    </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
    <property name="styleSheet">
-    <string notr="true">
-QPushButton{
-background-color: rgb(18, 129, 139);font: 19px ;color:white;
-}
-QPushButton:hover{
-background-color:rgb(23, 167, 181);
-font-size:20px;
-}</string>
+    <string notr="true">background-color: #8abbca;
+font-size:19px;color:white;</string>
    </property>
    <property name="text">
     <string>رجوع</string>
@@ -86,7 +77,7 @@ font-size:20px;
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(18, 129, 139)</string>
+    <string notr="true">background-color: #274857</string>
    </property>
    <property name="text">
     <string/>
@@ -103,7 +94,6 @@ font-size:20px;
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(18, 129, 139);
 font: 20px &quot;MS Shell Dlg 2&quot; center
 </string>
    </property>
@@ -137,8 +127,8 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>300</y>
+     <x>610</x>
+     <y>250</y>
      <width>691</width>
      <height>521</height>
     </rect>
@@ -153,12 +143,30 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QPushButton" name="save">
+   <property name="geometry">
+    <rect>
+     <x>880</x>
+     <y>830</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #8abbca;
+font-size:19px;color:white;</string>
+   </property>
+   <property name="text">
+    <string>حفظ نسخة</string>
+   </property>
+  </widget>
   <zorder>label_8</zorder>
   <zorder>textBrowser</zorder>
   <zorder>back</zorder>
   <zorder>label</zorder>
   <zorder>label_9</zorder>
   <zorder>label_2</zorder>
+  <zorder>save</zorder>
  </widget>
  <resources/>
  <connections/>
