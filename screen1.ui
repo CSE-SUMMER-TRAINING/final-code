@@ -107,7 +107,7 @@ color:white;</string>
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../../../Downloads/table.png</pixmap>
+    <pixmap>icons/table.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -170,7 +170,7 @@ font: 30px &quot;MS Shell Dlg 2&quot; center
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../../../Downloads/exam (2).png</pixmap>
+    <pixmap>icons/exam (2).png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -207,7 +207,7 @@ font-size:25px;
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../../../Downloads/exam (1).png</pixmap>
+    <pixmap>icons/exam (1).png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
