@@ -343,28 +343,33 @@ class exScreen1(QWidget):
 
     def generateTables(self):
         if (self.txt != ""):
-            ok = check_data(self.txt)
-            if not ok:
-                self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
-                return
+            if (self.khalafawy.isChecked() == True and self.rod.isChecked() == False) or (self.rod.isChecked() == True and self.khalafawy.isChecked() == False):
+                ok = check_data(self.txt)
+                if not ok:
+                    self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
+                    return
 
-            excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
-            read_sheet(excelSheet, num_of_branches)
-            
-            if (self.khalafawy.isChecked() == True and self.rod.isChecked() == False):
-                global branch_num
-                branch_num = 1
-                build(branch_num, num_of_branches)
-                global s1
-                s1 = exScreen2()
-                widget.addWidget(s1)
-                widget.setCurrentWidget(s1)
-            elif (self.rod.isChecked() == True and self.khalafawy.isChecked() == False):
-                branch_num = 2
-                build(branch_num, num_of_branches)
-                s1 = exScreen2()
-                widget.addWidget(s1)
-                widget.setCurrentWidget(s1)
+                excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
+                read_sheet(excelSheet, num_of_branches)
+
+                if (self.khalafawy.isChecked() == True and self.rod.isChecked() == False):
+                    global branch_num
+                    branch_num = 1
+                    build(branch_num, num_of_branches)
+                    global s1
+                    s1 = exScreen2()
+                    widget.addWidget(s1)
+                    widget.setCurrentWidget(s1)
+                elif (self.rod.isChecked() == True and self.khalafawy.isChecked() == False):
+                    branch_num = 2
+                    build(branch_num, num_of_branches)
+                    s1 = exScreen2()
+                    widget.addWidget(s1)
+                    widget.setCurrentWidget(s1)
+
+            else:
+                self.label_not_enough.setText("برجاء اختيار الفرع")
+                return
 
 class exScreen2(QWidget):
     def __init__(self):

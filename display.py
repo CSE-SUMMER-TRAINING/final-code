@@ -182,9 +182,9 @@ def output_the_distribution_with_halls_data(choice1):
     worksheet.write(1, 3, 'الي', sub_header_format)
     worksheet.write(1, 6, 'الي', sub_header_format)
     worksheet.write(1, 9, 'الي', sub_header_format)
-    worksheet.write(1, 10, 'size', sub_header_format)
-    worksheet.write(1, 11, 'floor', sub_header_format)
-    worksheet.write(1, 12, 'building', sub_header_format)
+    worksheet.write(1, 10, 'السعه', sub_header_format)
+    worksheet.write(1, 11, 'رقم المبنى', sub_header_format)
+    worksheet.write(1, 12, 'رقم الدور', sub_header_format)
 
     cnt, R = 1, 2
 
