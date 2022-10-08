@@ -431,7 +431,7 @@ def send_email(address, name, section, month, year):
                 <table style="border-collapse: collapse;border-spacing: 0; font-size:150%">
                     <thead>
                         <th style="padding: 10px 20px;border: 1px solid #000;">إجمالي عدد أيام الملاحظة</th>
-                        <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">5</th>
+                        <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">6</th>
                     </thead>
                 </table>
             </body>
