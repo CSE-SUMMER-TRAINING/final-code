@@ -5,6 +5,10 @@ from observers_data import *
 from college import *
 import math
 from datetime import date
+import win32com.client as client
+from tabulate import tabulate
+from os import startfile
+from pretty_html_table import build_table
 
 colDayBranch=[{},{},{}]
 
@@ -363,6 +367,79 @@ def process_exam_day(exam_days, collage_days):
 
 def observers_on_volume(volume, size):
     return (volume + size - 1) // size
+
+
+
+def email_content():
+    dic = {
+        "اليوم"      : [],
+        "التاريخ"    : [],
+        "حضور الساعة": [],
+        "مكان اللجان": [],
+    }
+    days = ["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"]
+    dates = ["20/10/2022","21/10/2022","22/10/2022","23/10/2022","24/10/2022","25/10/2022"]
+    hours = ["9:15","9:15","9:15","9:15","9:15","9:15"]
+    places = ["روض الفرج","روض الفرج","روض الفرج","روض الفرج","روض الفرج","روض الفرج"]
+    
+    for a in days:
+        dic["اليوم"].append(a)
+    
+    for a in dates:
+        dic["التاريخ"].append(a)
+        
+    for a in hours:
+        dic["حضور الساعة"].append(a)
+        
+    for a in places:
+        dic["مكان اللجان"].append(a)
+    
+    df = pd.DataFrame(dic)
+    table = build_table(df, "blue_light",text_align='right',font_size="large")
+    return table
+
+
+
+def send_email(address, name, section, month, year):
+   
+    outlook = client.Dispatch('outlook.application')            #create a Outlook instance
+    mail = outlook.CreateItem(0)                                #create Mail Message item
+    mail.To = address
+    mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
+    mail.HTMLBody= f"""
+        <!DOCTYPE html>
+        <html dir="rtl">
+            <head>
+                <meta charset="UTF-8">
+            </head>
+            <body>
+                <h1>تكليف ملاحظة لجان الامتحانات {month} {year}</h1>
+                <table style="border-collapse: collapse;border-spacing: 0; font-size:150%">
+                    <thead>
+                        <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">السيد</th>
+                        <th style="padding: 10px 20px;border: 1px solid #000;">{name}</th>
+                        <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">قسم</th>
+                        <th style="padding: 10px 20px;border: 1px solid #000;">{section}</th>
+                    </thead>
+                </table>
+
+                <p style="font-size:150%;">تحية طيبة وبعد....</p>
+                <p style="font-size:150%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
+                <div>
+                    {email_content()}
+                </div>
+                <table style="border-collapse: collapse;border-spacing: 0; font-size:150%">
+                    <thead>
+                        <th style="padding: 10px 20px;border: 1px solid #000;">إجمالي عدد أيام الملاحظة</th>
+                        <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">5</th>
+                    </thead>
+                </table>
+            </body>
+        </html>
+        
+"""
+    startfile("outlook.exe")
+    mail.send
 
 
 # شيل كل ده
