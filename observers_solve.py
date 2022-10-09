@@ -5,6 +5,7 @@ from observers_data import *
 from college import *
 import math
 from datetime import date
+
 import win32com.client as client
 from tabulate import tabulate
 from os import startfile
@@ -66,7 +67,7 @@ def process(monitors, days):
     done, ok = 1, 0
     for day in days:
         for i in range(1, day.observers() + 1):
-            tsk = Task(day.current_day(), day.work_place(), observer)
+            tsk = Task(day.day, day.work_place(), observer)
             ok = process_single_task(
                 day,
                 tsk,
@@ -87,7 +88,7 @@ def process(monitors, days):
 
         for i in range(1, day.monitor() + 1):
 
-            tsk = Task(day.current_day(), day.work_place(), monitor0)
+            tsk = Task(day.day, day.work_place(), monitor0)
 
             ok = process_single_task(
                 day,
@@ -117,7 +118,7 @@ def process(monitors, days):
 
         for i in range(1, day.Manager() + 1):
 
-            tsk = Task(day.current_day(), day.work_place(), manager)
+            tsk = Task(day.day, day.work_place(), manager)
             employees[tsk.task_place()][0]
             ok = process_single_task(
                 day,
@@ -369,52 +370,50 @@ def observers_on_volume(volume, size):
     return (volume + size - 1) // size
 
 
-
 def email_content():
     dic = {
-        "اليوم"      : [],
-        "التاريخ"    : [],
+        "اليوم": [],
+        "التاريخ": [],
         "حضور الساعة": [],
         "مكان اللجان": [],
     }
-    days = ["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"]
-    dates = ["20/10/2022","21/10/2022","22/10/2022","23/10/2022","24/10/2022","25/10/2022"]
-    hours = ["9:15","9:15","9:15","9:15","9:15","9:15"]
-    places = ["روض الفرج","روض الفرج","روض الفرج","روض الفرج","روض الفرج","روض الفرج"]
-    
+    days = ["السبت", "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس"]
+    dates = ["20/10/2022", "21/10/2022", "22/10/2022", "23/10/2022", "24/10/2022", "25/10/2022"]
+    hours = ["9:15", "9:15", "9:15", "9:15", "9:15", "9:15"]
+    places = ["روض الفرج", "روض الفرج", "روض الفرج", "روض الفرج", "روض الفرج", "روض الفرج"]
+
     for a in days:
         dic["اليوم"].append(a)
-    
+
     for a in dates:
         dic["التاريخ"].append(a)
-        
+
     for a in hours:
         dic["حضور الساعة"].append(a)
-        
+
     for a in places:
         dic["مكان اللجان"].append(a)
-    
+
     df = pd.DataFrame(dic)
-    table = build_table(df, "blue_light",text_align='right',font_size="large")
+    table = build_table(df, "blue_light", text_align='right', font_size="large")
     return table
 
 
-
 def send_email(address, name, section, month, year):
-   
-    outlook = client.Dispatch('outlook.application')            #create a Outlook instance
-    mail = outlook.CreateItem(0)                                #create Mail Message item
+    outlook = client.Dispatch('outlook.application')  # create a Outlook instance
+    mail = outlook.CreateItem(0)  # create Mail Message item
     mail.To = address
     mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
-    mail.HTMLBody= f"""
+    mail.HTMLBody = f"""
         <!DOCTYPE html>
         <html dir="rtl">
             <head>
                 <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
             </head>
             <body>
-                <h1>تكليف ملاحظة لجان الامتحانات {month} {year}</h1>
-                <table style="border-collapse: collapse;border-spacing: 0; font-size:150%">
+                <h2>تكليف ملاحظة لجان الامتحانات {month} {year}</h2>
+                <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
                     <thead>
                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">السيد</th>
                         <th style="padding: 10px 20px;border: 1px solid #000;">{name}</th>
@@ -423,24 +422,41 @@ def send_email(address, name, section, month, year):
                     </thead>
                 </table>
 
-                <p style="font-size:150%;">تحية طيبة وبعد....</p>
-                <p style="font-size:150%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
+                <p style="font-size:120%;">تحية طيبة وبعد....</p>
+                <p style="font-size:120%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
                 <div>
                     {email_content()}
                 </div>
-                <table style="border-collapse: collapse;border-spacing: 0; font-size:150%">
+                <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
                     <thead>
                         <th style="padding: 10px 20px;border: 1px solid #000;">إجمالي عدد أيام الملاحظة</th>
                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">6</th>
                     </thead>
                 </table>
+                <p style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem;">نظرًا لقرار مجلس الكلية فى حالة تبديل يوم مكان أخر لابد من إيجاد البديل</p>
+                <ol style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem 2rem;">
+                    <li style="padding:0.5rem;">الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل</li>
+                    <li style="padding:0.5rem;">استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل</li>
+                    <li style="padding:0.5rem;">توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها</li>
+                    <li style="padding:0.5rem;">جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها</li>
+                    <li style="padding:0.5rem;">مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف</li>
+                    <li style="padding:0.5rem;">يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان</li>
+                    <li style="padding:0.5rem;">عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة</li>
+                    <li style="padding:0.5rem;">إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان</li>
+                    <li style="padding:0.5rem;">عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط</li>
+                    <li style="padding:0.5rem;">الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان</li>
+                  </ol>
+                  <div style="font-size: 130%;font-weight:bold;margin-right:40vw;">
+                    <p style="padding:0.5rem; background-color:rgb(7, 105, 105); border-radius:20%; width:fit-content; color:white;">إدارة شئون الطلاب</p>
+                    <p style="margin:0 auto;"><img src="https://upload.wikimedia.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
+                    <p style="margin:0 auto;">كلية الهندسة بشبرا</p>
+                  </div>
+                  
             </body>
         </html>
-        
 """
     startfile("outlook.exe")
     mail.send
-
 
 # شيل كل ده
 # read_input("observers_data_input.xlsx")

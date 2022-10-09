@@ -94,8 +94,8 @@ color:#2D2D2D;</string>
   <widget class="QPushButton" name="generate">
    <property name="geometry">
     <rect>
-     <x>1020</x>
-     <y>650</y>
+     <x>1030</x>
+     <y>620</y>
      <width>131</width>
      <height>41</height>
     </rect>
@@ -139,8 +139,8 @@ font-size:11pt;
   <widget class="QPushButton" name="back">
    <property name="geometry">
     <rect>
-     <x>870</x>
-     <y>650</y>
+     <x>860</x>
+     <y>620</y>
      <width>131</width>
      <height>41</height>
     </rect>
@@ -234,39 +234,7 @@ font: 30px &quot;MS Shell Dlg 2&quot; center
    <property name="text">
     <string>جدول الامتحانات</string>
    </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_2">
-   <property name="geometry">
-    <rect>
-     <x>890</x>
-     <y>580</y>
-     <width>121</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-   </property>
-   <property name="text">
-    <string>روض الفرج</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox">
-   <property name="geometry">
-    <rect>
-     <x>1050</x>
-     <y>580</y>
-     <width>101</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-   </property>
-   <property name="text">
-    <string>خلفاوي</string>
-   </property>
-  </widget>
+    </widget>
    <widget class="QLabel" name="label_not_enough">
    <property name="geometry">
     <rect>
@@ -289,8 +257,8 @@ font: 30px &quot;MS Shell Dlg 2&quot; center
   <widget class="QPushButton" name="help">
    <property name="geometry">
     <rect>
-     <x>960</x>
-     <y>740</y>
+     <x>950</x>
+     <y>700</y>
      <width>101</width>
      <height>31</height>
     </rect>

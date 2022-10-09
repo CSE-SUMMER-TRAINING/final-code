@@ -18,7 +18,7 @@ def DISPLAY(branch_num, num_of_branches):
     #    choice = input("Enter valid number: ")
     #choice = int(choice)
 
-    solve(branch[choice - 1])
+    solve(branch[choice])
     # output_the_distribution(branch_num)
 
 

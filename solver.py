@@ -83,7 +83,7 @@ def buildDp(idx, msk, g, h, l)->None:
 def solve(branch :Branch)->None:
     
     groups = branch.groupsInBranch.copy()
-    print(groups)
+    # print(groups)
     allHalls = branch.hallsInBranch.copy() + branch.hallsInBranch.copy() + branch.hallsInBranch.copy()
     l = len(allHalls) // 3
     
