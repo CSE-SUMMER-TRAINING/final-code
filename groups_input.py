@@ -14,7 +14,7 @@ class Group:
 
 def read_sheet(excelSheet, num_of_branches):
     global sheet
-    sheet = excelSheet.parse(excelSheet.sheet_names[num_of_branches])
+    sheet = excelSheet.parse(excelSheet.sheet_names[0])
 
 def get_and_store_groups():
     for index, rows in sheet.iterrows():

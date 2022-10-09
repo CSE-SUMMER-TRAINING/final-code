@@ -15,6 +15,7 @@ from groups_input import *
 from observers_data import *
 from observers_solve import *
 import wget
+from template import *
 
 URL_EXAM = "https://drive.google.com/uc?export=download&id=1b98Hzn6F-3s2dQGSPcDlOJH_YFyLTMFl"
 URL_INV = "https://drive.google.com/uc?export=download&id=1_weWkhA9x7b2zKr6NRkBbIFVxuqPLjD9"
@@ -107,6 +108,7 @@ class invScreen1(QWidget):
                 self.label_not_enough.setText("عدد الموظفين غير كافي")
                 return
             self.label_not_enough.setText("")
+            create_observers_template()
             s2 = invScreen2()
             widget.addWidget(s2)
             widget.setCurrentWidget(s2)
@@ -349,6 +351,7 @@ class exScreen1(QWidget):
                     self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
                     return
 
+                create_halls_template()
                 excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
                 read_sheet(excelSheet, num_of_branches)
 

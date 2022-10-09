@@ -105,8 +105,8 @@ def output_the_distribution(choice1):
 
     cnt, R = 1, 2
 
-    print("\n\n")
-    print(len(toPrint))
+    # print("\n\n")
+    # print(len(toPrint))
     # to_print1.extend(list(toPrint))
     l = len(branch[choice1].hallsInBranch)
     
@@ -188,8 +188,8 @@ def output_the_distribution_with_halls_data(choice1):
 
     cnt, R = 1, 2
 
-    print("\n\n")
-    print(len(toPrint))
+    # print("\n\n")
+    # print(len(toPrint))
     # to_print1.extend(list(toPrint))
     l = len(branch[choice1].hallsInBranch)
     

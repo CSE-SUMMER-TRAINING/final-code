@@ -1,6 +1,6 @@
 import pandas as pd
 from arabic_reshaper import *
-from observers_solve import arabic
+from observers_data import arabic
 
 branch_name = dict()                    # to get the branch name with branch index
 branch_index = dict()                   # to get branch index with branch name
@@ -24,7 +24,7 @@ def validStr(s):
 def read_inputt(filename):
     excelSheet = pd.ExcelFile(filename)
     allBranches = excelSheet.sheet_names        # get the name of all branches in the input sheet
-    allBranches.pop()                           # excepting the classes tab
+    allBranches.pop(0)                          # excepting the classes tab
 
     for i in range(len(allBranches)):
         if (not (allBranches[i][0] >= 'A' and allBranches[i][0] <= 'z')):
@@ -40,7 +40,7 @@ def read_inputt(filename):
         name_and_volume_of_halls.append([])
         num_of_floors.append([])
         num_of_builds.append(0)
-        sheet = excelSheet.parse(excelSheet.sheet_names[i])
+        sheet = excelSheet.parse(excelSheet.sheet_names[i + 1])
         ls = []
 
         for index, rows in sheet.iterrows():
@@ -64,19 +64,17 @@ def read_inputt(filename):
             num_of_floors[i][hall[2]] = max(num_of_floors[i][hall[2]], hall[3] + 1)
         dataframes.append(ls)
 
-    print(dataframes)
     return (excelSheet, num_of_branches, allBranches)
 
 def check_data(fileName):
     excelSheet = pd.ExcelFile(fileName)
-    allBranches = excelSheet.sheet_names
-    num_of_branches = len(allBranches)
+    worksheets = excelSheet.sheet_names
     
-    if num_of_branches < 2: 
+    if len(worksheets) < 2: 
         return False
 
-    for i in range(num_of_branches - 1):
-        sheet = excelSheet.parse(allBranches[i])
+    for i in range(1, len(worksheets)):
+        sheet = excelSheet.parse(worksheets[i])
         header = []
 
         for p, v in enumerate(sheet.keys()):
@@ -94,7 +92,7 @@ def check_data(fileName):
             else: return False
 
 
-    sheet = excelSheet.parse(allBranches[num_of_branches - 1])
+    sheet = excelSheet.parse(worksheets[0])
     header = []
 
     for p, v in enumerate(sheet.keys()):
