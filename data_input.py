@@ -1,6 +1,6 @@
 import pandas as pd
 from arabic_reshaper import *
-from observers_solve import arabic
+from observers_data import arabic
 
 branch_name = dict()                    # to get the branch name with branch index
 branch_index = dict()                   # to get branch index with branch name
