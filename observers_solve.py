@@ -5,6 +5,7 @@ from observers_data import *
 from college import *
 import math
 from datetime import date
+
 import win32com.client as client
 from tabulate import tabulate
 from os import startfile
@@ -66,7 +67,7 @@ def process(monitors, days):
     done, ok = 1, 0
     for day in days:
         for i in range(1, day.observers() + 1):
-            tsk = Task(day.current_day(), day.work_place(), observer)
+            tsk = Task(day.day, day.work_place(), observer)
             ok = process_single_task(
                 day,
                 tsk,
@@ -87,7 +88,7 @@ def process(monitors, days):
 
         for i in range(1, day.monitor() + 1):
 
-            tsk = Task(day.current_day(), day.work_place(), monitor0)
+            tsk = Task(day.day, day.work_place(), monitor0)
 
             ok = process_single_task(
                 day,
@@ -117,7 +118,7 @@ def process(monitors, days):
 
         for i in range(1, day.Manager() + 1):
 
-            tsk = Task(day.current_day(), day.work_place(), manager)
+            tsk = Task(day.day, day.work_place(), manager)
             employees[tsk.task_place()][0]
             ok = process_single_task(
                 day,
@@ -369,44 +370,41 @@ def observers_on_volume(volume, size):
     return (volume + size - 1) // size
 
 
-
 def email_content():
     dic = {
-        "اليوم"      : [],
-        "التاريخ"    : [],
+        "اليوم": [],
+        "التاريخ": [],
         "حضور الساعة": [],
         "مكان اللجان": [],
     }
-    days = ["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"]
-    dates = ["20/10/2022","21/10/2022","22/10/2022","23/10/2022","24/10/2022","25/10/2022"]
-    hours = ["9:15","9:15","9:15","9:15","9:15","9:15"]
-    places = ["روض الفرج","روض الفرج","روض الفرج","روض الفرج","روض الفرج","روض الفرج"]
-    
+    days = ["السبت", "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس"]
+    dates = ["20/10/2022", "21/10/2022", "22/10/2022", "23/10/2022", "24/10/2022", "25/10/2022"]
+    hours = ["9:15", "9:15", "9:15", "9:15", "9:15", "9:15"]
+    places = ["روض الفرج", "روض الفرج", "روض الفرج", "روض الفرج", "روض الفرج", "روض الفرج"]
+
     for a in days:
         dic["اليوم"].append(a)
-    
+
     for a in dates:
         dic["التاريخ"].append(a)
-        
+
     for a in hours:
         dic["حضور الساعة"].append(a)
-        
+
     for a in places:
         dic["مكان اللجان"].append(a)
-    
+
     df = pd.DataFrame(dic)
-    table = build_table(df, "blue_light",text_align='right',font_size="large")
+    table = build_table(df, "blue_light", text_align='right', font_size="large")
     return table
 
 
-
 def send_email(address, name, section, month, year):
-   
-    outlook = client.Dispatch('outlook.application')            #create a Outlook instance
-    mail = outlook.CreateItem(0)                                #create Mail Message item
+    outlook = client.Dispatch('outlook.application')  # create a Outlook instance
+    mail = outlook.CreateItem(0)  # create Mail Message item
     mail.To = address
     mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
-    mail.HTMLBody= f"""
+    mail.HTMLBody = f"""
         <!DOCTYPE html>
         <html dir="rtl">
             <head>
@@ -422,7 +420,6 @@ def send_email(address, name, section, month, year):
                         <th style="padding: 10px 20px;border: 1px solid #000;">{section}</th>
                     </thead>
                 </table>
-
                 <p style="font-size:150%;">تحية طيبة وبعد....</p>
                 <p style="font-size:150%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
                 <div>
@@ -436,11 +433,10 @@ def send_email(address, name, section, month, year):
                 </table>
             </body>
         </html>
-        
+
 """
     startfile("outlook.exe")
     mail.send
-
 
 # شيل كل ده
 # read_input("observers_data_input.xlsx")
