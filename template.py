@@ -47,6 +47,7 @@ def create_observers_template():
     workbook = xlsxwriter.Workbook('نموذج الملاحظين.xlsx')
 
     observersData = workbook.add_worksheet('الملاحظين')
+    examsTable = workbook.add_worksheet('جدول الامتحانات')
 
     header_format = workbook.add_format()
     header_format.set_align('center')
@@ -65,5 +66,15 @@ def create_observers_template():
     observersData.write(0, 3, 'المبنى', header_format)
     observersData.write(0, 4, 'البريد الالكتروني', header_format)
     observersData.write(0, 5, 'التكليف الحالي', header_format)
+
+    examsTable.set_column('A:G', 25)
+    examsTable.right_to_left()
+    examsTable.write(0, 0, 'التاريخ', header_format)
+    examsTable.write(0, 1, '0/0/0000', header_format)
+    examsTable.write(0, 2, '0/0/0000', header_format)
+    examsTable.write(0, 3, '0/0/0000', header_format)
+    examsTable.write(0, 4, '0/0/0000', header_format)
+    examsTable.write(0, 5, '0/0/0000', header_format)
+    examsTable.write(0, 6, '0/0/0000', header_format)
 
     workbook.close()
