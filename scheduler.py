@@ -228,15 +228,13 @@ class invScreen2(QWidget):
             mon.push_info(lst, cnt)
             cnt = cnt + 1
         
-        try:
+       try:
             dataframeout = pd.DataFrame(lst,columns=excelhead)
             dataframeout.to_excel("observer_output.xlsx")
-        except:
-            pass
+            QMessageBox.about(self, "", "تم التنزيل                   ")
 
-        QMessageBox.about(self, "", "تم التنزيل                   ")
-        print(":asfa")
-        print(observser_data_lst)
+        except:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله") #needed to be errorbox
         
 
     def set_items(self, index):
