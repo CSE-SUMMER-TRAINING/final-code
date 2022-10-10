@@ -97,7 +97,7 @@ class Monitor:
 
     def push_info(self, dt, cnt):
         numofworkdays = 0
-        for i in range(len(daynumber)):
+        for i in range(1,len(daynumber)+1):
             dt[cnt].append(" ")
             if i in self.accupied_days.keys():
                 dt[cnt].append(self.accupied_days[i][1])

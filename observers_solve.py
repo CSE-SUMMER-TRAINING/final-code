@@ -237,18 +237,20 @@ def read_input(exel_name):
     for i in range(len(excel.sheet_names)):
         dataframe=excel.parse(excel.sheet_names[i])
         for ind,row in dataframe.iterrows():
+            if(ind==0):continue
             if(row[1]!="فارغه"):
                 if row[1] not in colDayBranch[0].keys():
                     colDayBranch[0][row[1]]=[]
-                colDayBranch[0][row[1]].append(Hall(i,row[-1],row[-2],row[-3],row[0]))
+                print(row[3],row[2])
+                colDayBranch[0][row[1]].append((Hall(i,row[-1],row[-2],row[-3],row[0]),int(row[3])-int(row[2])+1))
             if(row[4]!="فارغه"):
                 if row[4] not in colDayBranch[1].keys():
                     colDayBranch[1][row[4]]=[]
-                colDayBranch[1][row[4]].append(Hall(i,row[-1],row[-2],row[-3],row[0]))
+                colDayBranch[1][row[4]].append((Hall(i,row[-1],row[-2],row[-3],row[0]),int(row[6])-int(row[5])+1))
             if(row[7]!="فارغه"):
                 if row[7] not in colDayBranch[2].keys():
                     colDayBranch[2][row[7]]=[]
-                colDayBranch[2][row[7]].append(Hall(i,row[-1],row[-2],row[-3],row[0]))
+                colDayBranch[2][row[7]].append((Hall(i,row[-1],row[-2],row[-3],row[0]),int(row[9])-int(row[8])+1))
     seen = set()
     seen_add = seen.add
     res= [x for x in day if not (x in seen or seen_add(x))]
@@ -257,7 +259,7 @@ def read_input(exel_name):
         for ele in i:
             x = x + str(ele) + '/'
         y=x.split("/")
-        y.pop();
+        y.pop()
         dd, mm, yy = y
         x=x[:-1:]
         day_name = date(int(yy), int(mm), int(dd)).strftime("%A")
@@ -334,18 +336,18 @@ def process_exam_day(exam_days, collage_days):
             if cur_class not in collage_days[collge_day_idx].hall_class_map.keys():
                 return False
             for hall in collage_days[collge_day_idx].hall_class_map[cur_class]:
-                if hall.branchNum in my_data.keys():
-                    my_data[hall.branchNum].floor.add(hall.floorNum)
-                    my_data[hall.branchNum].building.add(hall.buildNum)
-                    my_data[hall.branchNum].observers += observers_on_volume(
-                        hall.volume, 14
+                if hall[0].branchNum in my_data.keys():
+                    my_data[hall[0].branchNum].floor.add(hall[0].floorNum)
+                    my_data[hall[0].branchNum].building.add(hall[0].buildNum)
+                    my_data[hall[0].branchNum].observers += observers_on_volume(
+                        hall[0].volume, 14
                     )
                 else:
                     tmp = brachDayTasks()
-                    tmp.floor.add(hall.floorNum)
-                    tmp.building.add(hall.buildNum)
-                    tmp.observers = observers_on_volume(hall.volume, 14)
-                    my_data[hall.branchNum] = tmp
+                    tmp.floor.add(hall[0].floorNum)
+                    tmp.building.add(hall[0].buildNum)
+                    tmp.observers = observers_on_volume(hall[1], 14)
+                    my_data[hall[0].branchNum] = tmp
         for key, val in my_data.items():
             examDays.append( Day(
                 cur_day.date,
