@@ -20,8 +20,17 @@ def validInt(num):
 def validStr(s):
     return isinstance(s, str)
 
-
+def clearAll()->None:
+    branch_name.clear()
+    branch_index.clear()               
+    branch.clear()
+    name_and_volume_of_halls.clear()          
+    num_of_floors.clear()                      
+    num_of_builds.clear()                    
+    dataframes.clear()
+    
 def read_inputt(filename):
+    clearAll()
     excelSheet = pd.ExcelFile(filename)
     allBranches = excelSheet.sheet_names        # get the name of all branches in the input sheet
     allBranches.pop(0)                          # excepting the classes tab
