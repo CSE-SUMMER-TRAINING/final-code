@@ -216,13 +216,24 @@ class invScreen2(QWidget):
 
     def download_function(self):
         cnt = 0
+        print(observser_data_lst)
+        lst=[]
+        for i in observser_data_lst:
+            lst.append(i.copy())
         for mon in monitors:
-            mon.push_info(observser_data_lst, cnt)
+            mon.push_info(lst, cnt)
             cnt = cnt + 1
-        dataframeout = pd.DataFrame(observser_data_lst,columns=excelhead)
-        dataframeout.to_excel("observer_output.xlsx")
+        
+        try:
+            dataframeout = pd.DataFrame(lst,columns=excelhead)
+            dataframeout.to_excel("observer_output.xlsx")
+        except:
+            pass
 
         QMessageBox.about(self, "", "تم التنزيل                   ")
+        print(":asfa")
+        print(observser_data_lst)
+        
 
     def set_items(self, index):
         # clear table rows
@@ -335,6 +346,7 @@ class invScreen2(QWidget):
         irow = 0
         for ts in mon.task:
             item = self.table_widget.item(irow, 0)
+            if item==None:continue
             ts.day = item.text()
 
             item = self.table_widget.item(irow, 1)
