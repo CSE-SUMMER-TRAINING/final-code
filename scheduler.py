@@ -343,30 +343,41 @@ class invScreen2(QWidget):
         index_change_function = index
         # load data
         mon = monitors[index_change_function]
-        irow = 0
+        i, j, ok = 0, 0, 0
+
         for ts in mon.task:
-            item = self.table_widget.item(irow, 0)
-            if item==None:continue
-            ts.day = item.text()
+            
+            if ok == 0:
+                item = self.table_widget.item(i, 0)
+                print(item.text())
+                ts.day = item.text()
 
-            item = self.table_widget.item(irow, 1)
-            ts.type = item.text()
+                item = self.table_widget.item(i, 1)
+                print(item.text())
+                ts.type = item.text()
 
-            item = self.table_widget.item(irow, 2)
-            ts.building = item.text()
-            irow += 1
+                item = self.table_widget.item(i, 2)
+                print(item.text())
+                ts.building = item.text()
+                i += 1
+                ok = 1
+                
+            else:
+                item = self.table_widget.item(j, 3)
+                print(item.text())
+                ts.day = item.text()
 
-        # # ask for download
-        # dlg = QMessageBox(self)
-        # dlg.setWindowTitle("تم حفظ التغيرات")
-        # dlg.setText("هل تريد اعادة تنزيل الملف")
-        # dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        # button = dlg.exec()
-        #
-        # if button == QMessageBox.Yes:
-        #     self.download_function()
+                item = self.table_widget.item(j, 4)
+                print(item.text())
+                ts.type = item.text()
+
+                item = self.table_widget.item(j, 5)
+                print(item.text())
+                ts.building = item.text()
+                j += 1
+                ok = 0
+            
         QMessageBox.about(self, "", "تم حفظ التغيرات                  ")
-
 class exScreen1(QWidget):
     def __init__(self):
 
