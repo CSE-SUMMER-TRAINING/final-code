@@ -1,5 +1,5 @@
 from distutils.command.build import build
-from college import Branch
+from college import Branch,Hall
 from groups_input import group
 from arabic_reshaper import reshape
 

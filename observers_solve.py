@@ -12,7 +12,7 @@ from os import startfile
 from pretty_html_table import build_table
 
 colDayBranch=[{},{},{}]
-
+excelhead=[]
 def process_single_task(day, tsk, monitors, lst):
 
     if not monitors:
@@ -161,6 +161,7 @@ monitors, days, observser_data_lst = [], [], []
 def read_input(exel_name):
     monitors.clear()
     days.clear()
+    excelhead.clear()
     observser_data_lst.clear()
     colDayBranch.clear()
     examDays.clear()
@@ -171,12 +172,11 @@ def read_input(exel_name):
     try:
         allExcelFile = pd.ExcelFile(exel_name)
         sheets = allExcelFile.sheet_names
-        if len(sheets) != 3:
-            print(len(sheets))
-            return 0
+        if len(sheets) != 2:
+            return "الملف غير مطابق للمواصفات يجب ان يحتوي علي اثنين شيت واحد للمراقبين و الاخر لجدول الامتحانات"
+
     except:
-        print(3)
-        return False
+        return "الملف غير قابل للفتح"
     dataframe1 = allExcelFile.parse(sheets[0])
     col = [
         "الاسم",
@@ -186,27 +186,21 @@ def read_input(exel_name):
         "البريد الالكتروني",
         "التكليف الحالي",
     ]
-    for i in range(50):
-        if not i:
-            col.append(" ")
-            col.append(" ")
-        else:
-            col.append(f"يوم {i} وقت")
-            col.append(f"يوم {i}")
-    observser_data_lst.append(col)
+    excelhead.append(col.copy());
+    excelhead.append(col.copy());
+    excelhead.append(col.copy());
     ok = True
     values = []
-    for i in range(6):
+    if(len(dataframe1.columns)!=6):return "يجب ان يكون الشيت الاول من 6 اعمدة"
+    for i in range(6):        
         values.append(dataframe1.columns[i])
     ok &= values == ["nameNN", "nik", "job", "place", "email", "num"]
     if not ok:
-        return False
+        return "اسماء الاعمدة غير صحيحة"
     for index, rows in dataframe1.iterrows():
         my_list = rows.values.tolist()
         observser_data_lst.append(my_list)
     for x in observser_data_lst:
-        if x == observser_data_lst[0]:
-            continue
         monitors.append(Monitor(*x))
 
     def srt(elem):
@@ -227,9 +221,7 @@ def read_input(exel_name):
                 newlist.append(a)
         temp.append(newlist)
         temp.insert(0, x.split(".")[0])
-        # print(temp)
         days.append(temp)
-    # print(day)
     day = sorted(day, key=srt)
     for x in day:
         if x not in daynumber.keys():
@@ -237,10 +229,13 @@ def read_input(exel_name):
             daynumber[x] = cnt
     for i in range(len(days)):
         days[i] = ExamDay(*days[i])
+    try:
+        excel=pd.ExcelFile("hallsWithAllData.xlsx")
+    except:
+        return "يجب تشغيل جزء القاعات قبل هذا الجزء"
     excel=pd.ExcelFile("hallsWithAllData.xlsx")
     for i in range(len(excel.sheet_names)):
         dataframe=excel.parse(excel.sheet_names[i])
-        print (dataframe)
         for ind,row in dataframe.iterrows():
             if(row[1]!="فارغه"):
                 if row[1] not in colDayBranch[0].keys():
@@ -254,34 +249,31 @@ def read_input(exel_name):
                 if row[7] not in colDayBranch[2].keys():
                     colDayBranch[2][row[7]]=[]
                 colDayBranch[2][row[7]].append(Hall(i,row[-1],row[-2],row[-3],row[0]))
-    # days.clear()
-    print(colDayBranch)
+    seen = set()
+    seen_add = seen.add
+    res= [x for x in day if not (x in seen or seen_add(x))]
+    for i in res:
+        x=''
+        for ele in i:
+            x = x + str(ele) + '/'
+        y=x.split("/")
+        y.pop();
+        dd, mm, yy = y
+        x=x[:-1:]
+        day_name = date(int(yy), int(mm), int(dd)).strftime("%A")
+        excelhead[0].append(x)
+        excelhead[0].append(x)
+        excelhead[1].append(arabicWeekDays[day_name])
+        excelhead[1].append(arabicWeekDays[day_name])
+        excelhead[2].append("الساعة")
+        excelhead[2].append("المكان")
+
     colDayBranch[0]=collageDay(colDayBranch[0])
     colDayBranch[1]=collageDay(colDayBranch[1])
     colDayBranch[2]=collageDay(colDayBranch[2])
-    return True
+    return 0
 
 
-# these two lists must be cleared and have the data from excel sheeets before start the process
-# then pass these lists as arguements to function => process_exam_day(exam_day_input,collage_day_input)
-# collage_day_input = [
-#     collageDay(
-#         {
-#             "اعدادي هندسه": [Hall(0, 1, 1, 75, "sb4-1"), Hall(0, 2, 2, 55, "sb7-1")],
-#         }
-#     ),
-#     collageDay(
-#         {
-#             "اولي اتصالات": [Hall(0, 1, 1, 25, "sb4-1"), Hall(0, 2, 2, 55, "sb7-1")],
-#             "تالته حاسبات": [Hall(1, 1, 1, 25, "sb4-1"), Hall(1, 2, 2, 55, "sb7-1")],
-#         }
-#     ),
-#     collageDay(
-#         {
-#             "رابعه حاسبات": [Hall(1, 1, 1, 25, "sb4-1"), Hall(1, 2, 2, 55, "sb7-1")],
-#         }
-#     ),
-# ]colday is up their ready for use
 WeekDays = [
     "Saturday",
     "Sunday",
@@ -291,6 +283,15 @@ WeekDays = [
     "Thursday",
     "Friday",
 ]
+arabicWeekDays = {
+    "Saturday" :'السبت',
+    "Sunday":'الاحد',
+    "Monday":'الاثنين',
+    "Tuesday":"الثلاثاء",
+    "Wednesday":" الاربع",
+    "Thursday":"الخميس",
+    "Friday":"الجمعة",
+}
 examDays=[]
 def sync_day(dy):
     if dy == "Friday":
@@ -310,17 +311,11 @@ def process_exam_day(exam_days, collage_days):
         if day_name in visited_days.keys():
             collge_day_idx = visited_days[day_name]
         else:
-            # print(cur_day.date)
-            # print(day_name)
-            # print(visited_days.items())
-            # print(taken_collge_pairs.items())
             ok = False
             for j in range(len(collage_days)):
                 if j in taken_collge_pairs.keys():
                     continue
                 check = 1
-                # print(exam_days[i].study_class_list)
-                # print(collage_days[j].hall_class_map.keys())
                 for study_class in exam_days[i].study_class_list:
                     if study_class in collage_days[j].hall_class_map.keys():
                         continue
@@ -331,10 +326,8 @@ def process_exam_day(exam_days, collage_days):
                     visited_days[day_name] = visited_days[sync_day(day_name)] = j
                     taken_collge_pairs[j] = True
                     break
-            # print(ok)
             if not ok:
                 return False
-        # print(f"this is idx= {collge_day_idx}")
         my_data = {}
 
         for cur_class in cur_day.study_class_list:
@@ -353,7 +346,6 @@ def process_exam_day(exam_days, collage_days):
                     tmp.building.add(hall.buildNum)
                     tmp.observers = observers_on_volume(hall.volume, 14)
                     my_data[hall.branchNum] = tmp
-                # for every 14 student having an observer
         for key, val in my_data.items():
             examDays.append( Day(
                 cur_day.date,
@@ -362,7 +354,6 @@ def process_exam_day(exam_days, collage_days):
                 len(val.building),
                 road_el_farag if key else khalafawy,
             ))
-            # print(i, key, val.observers)
     return True
 
 
@@ -457,17 +448,3 @@ def send_email(address, name, section, month, year):
 """
     startfile("outlook.exe")
     mail.send
-
-# شيل كل ده
-# read_input("observers_data_input.xlsx")
-# ok = process_exam_day(days, collage_day_input)
-# if not ok:
-#     print(arabic("البيانات اللى انت حاطتها ف الجدول مش بتتماشى مع المطلوب ، روح بص على جدول القاعات والجدول اللى انت عامله واتاكد ان مفيش فرقة مش بتنزل فاليوم ده وانت منزلها"))
-# else:
-#     ok &= process(monitors, days)
-#     if not ok:
-#         print("not enough")
-#     else:
-#         print(ok)
-#         for mon in monitors:
-#             mon.print_info()

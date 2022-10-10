@@ -89,7 +89,7 @@ font: 30px &quot;MS Shell Dlg 2&quot; center
      <x>790</x>
      <y>320</y>
      <width>400</width>
-     <height>30</height>
+     <height>50</height>
     </rect>
    </property>
    <property name="layoutDirection">

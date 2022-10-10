@@ -74,6 +74,7 @@ class invScreen1(QWidget):
         self.help = self.findChild(QPushButton, "help")
         self.help.clicked.connect(self.help_func)
         self.label_not_enough = self.findChild(QLabel, "label_not_enough")
+        self.label_not_enough.setWordWrap(True)
         self.browse.clicked.connect(self.browsefiles)
         self.generate.clicked.connect(self.generateTables)
         self.back.clicked.connect(self.goBack)
@@ -98,8 +99,8 @@ class invScreen1(QWidget):
     def generateTables(self):
         if (self.txt != ""):
             good_data = read_input(self.file_name)
-            if not good_data:
-                self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
+            if good_data:
+                self.label_not_enough.setText(good_data)
                 return
             ok1 = process_exam_day(days, colDayBranch)
             if not ok1:
@@ -214,11 +215,11 @@ class invScreen2(QWidget):
         self.changes.setText("حفظ التغيرات ")
 
     def download_function(self):
-        cnt = 1
+        cnt = 0
         for mon in monitors:
             mon.push_info(observser_data_lst, cnt)
             cnt = cnt + 1
-        dataframeout = pd.DataFrame(observser_data_lst)
+        dataframeout = pd.DataFrame(observser_data_lst,columns=excelhead)
         dataframeout.to_excel("observer_output.xlsx")
 
         QMessageBox.about(self, "", "تم التنزيل                   ")
