@@ -476,8 +476,8 @@ class exScreen2(QWidget):
                QTabBar::tab:selected {
                     font-family: Roboto;
                     font-size: 18px;
+                    background: rgb(175,175,175,255);
                     color: rgb(0,0,0,255);
-                    background: rgb(234,234,234,255);
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
                     border:1px solid rgb(197,197,199,255);
@@ -487,8 +487,8 @@ class exScreen2(QWidget):
                     font-family: Roboto;
                     font-size: 18px;
                     font: italic;
-                    color: rgb(255,255,255,255);
-                    background: rgb(175,175,175,255);
+                    background: rgb(234,234,234,255);
+                    color: rgb(0,0,0,255);
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
 
@@ -531,12 +531,16 @@ class exScreen2(QWidget):
             for j in range(len(vertical)-1):
                 item = QtWidgets.QTableWidgetItem(str(toPrint[j][i+1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
                 table.setItem(j+1, i, item)
 
         for i in range(3):
             for j in range(len(vertical)-1):
                 item = QtWidgets.QTableWidgetItem(str(toPrint[j+len(vertical)-1][i+1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
                 table.setItem(j+1, i+3, item)
         
         nj = 2*len(vertical)-2
@@ -544,6 +548,8 @@ class exScreen2(QWidget):
             for j in range(len(vertical)-1):
                 item = QtWidgets.QTableWidgetItem(str(toPrint[j+nj][i+1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
                 table.setItem(j+1, i+6, item)
 
         l0 = QLabel("lab2")
@@ -569,7 +575,7 @@ class exScreen2(QWidget):
                  font-family: Roboto;
                  font-size: 18px;
                  color: rgb(0,0,0,255);
-                 background: rgb(234,234,234,255);
+                 background: rgb(175,175,175,255);
                  border-top-left-radius: 8px;
                  border-top-right-radius: 8px;
                  border:1px solid rgb(197,197,199,255);
@@ -579,12 +585,12 @@ class exScreen2(QWidget):
                  font-family: Roboto;
                  font-size: 18px;
                  font: italic;
-                 color: rgb(255,255,255,255);
-                 background: rgb(175,175,175,255);
+                color: rgb(0,0,0,255);
                  border-top-left-radius: 8px;
                  border-top-right-radius: 8px;          
                  border:1px solid rgb(197,197,199,255);
                  padding: 10px 30px 10px 24px;
+                 background: rgb(234,234,234,255);
              }
             ''')
 
