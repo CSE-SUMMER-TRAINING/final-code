@@ -111,10 +111,14 @@ class invScreen1(QWidget):
                 self.label_not_enough.setText("عدد الموظفين غير كافي")
                 return
             self.label_not_enough.setText("")
+            self.linefileedit.setText("")
+            self.txt=""
             # create_observers_template()
             s2 = invScreen2()
             widget.addWidget(s2)
             widget.setCurrentWidget(s2)
+        else :
+            self.label_not_enough.setText("برجاء اختيار الملف")
 
 current_index = -1
 nj = 0
@@ -428,6 +432,9 @@ class exScreen1(QWidget):
             exs2 = exScreen2(self.txt)
             widget.addWidget(exs2)
             widget.setCurrentWidget(exs2)
+            self.lineEdit.setText("")
+            self.txt = ""
+
 
         else:
             self.label_not_enough.setText("برجاء اختيار ملف")
