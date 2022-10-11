@@ -394,17 +394,17 @@ def email_content(days,dates,hours,places):
 
 def send_email(address, name, section, month, year,days,dates,hours,places):
     print (f"\n{address}  {name}  {section}  {month}  {year} ")
-    print ("days: ")
+    print ("days: ",end=" ")
     for i in days:
         print(i,end=" ")
     print ("\ndates: ")
     for i in dates :
         print (i,end=" ")
     
-    print("\nhours: ")
+    print("\nhours: ",end=" ")
     for i in hours :
         print(i,end=" ")
-    print("\nplaces: ")
+    print("\nplaces: ",end=" ")
     for i in places :
         print (i,end=" ")
 #     outlook = client.Dispatch('outlook.application')  # create a Outlook instance

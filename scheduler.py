@@ -143,6 +143,7 @@ class invScreen2(QWidget):
         self.label_dep0 = self.findChild(QLabel, "label_3")
         self.label_name0 = self.findChild(QLabel, "label_6")
         self.label_ = self.findChild(QLabel, "label_2")
+        self.label_5 = self.findChild(QLabel, "label_5")
 
         self.table_widget = self.findChild(QTableWidget, "tableWidget")
 
@@ -170,6 +171,10 @@ class invScreen2(QWidget):
 
         self.printone_2 = self.findChild(QPushButton, "printone_2")
         self.printone_2.clicked.connect(self.printone_2_function)
+        
+        self.print_2 = self.findChild(QPushButton, "print_2")
+        self.print_2.clicked.connect(self.print_2_function)
+        
         # print all not comp
         # self.printall = self.findChild(QPushButton,"print")
         # self.printall.clicked.connect(self.printall_function)
@@ -220,8 +225,8 @@ class invScreen2(QWidget):
         self.frame.setStyleSheet("border:1px solid #005580;border-radius:10px;background-color:white;")
 
         self.changes.setText("حفظ التغيرات ")
-        
-    def printone_2_function(self): 
+
+    def print_2_function(self): 
         mp={
             0:"الأثنين",
             1:"الثلاثاء",
@@ -237,9 +242,7 @@ class invScreen2(QWidget):
             hours=[]
             places=[]
             for tas in mon.task:
-                # print(tas.day," ",tas.building," ",tas.type)
                 spliteddate=tas.day.split("/")
-                # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
                 days.append(arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()]))
                 dates.append(tas.day)
                 hours.append("9:15")
@@ -247,7 +250,34 @@ class invScreen2(QWidget):
                 
             send_email(mon.email,arabic(mon.user_name),arabic(mon.branch),11,2020,days,dates,hours,places)
         pass
-
+    
+    def printone_2_function(self):
+        if(current_index==-1):
+            self.label_5.setText("من فضلك اختار شخص")
+        else:
+            mp={
+                0:"الأثنين",
+                1:"الثلاثاء",
+                2:"الأربعاء",
+                3:"الخميس",
+                4:"الجمعة",
+                5:"السبت",
+                6:"الأحد",
+            }
+            tmplst=monitors[current_index]
+            days=[]
+            dates=[]
+            hours=[]
+            places=[]
+            for tas in tmplst.task:
+                spliteddate=tas.day.split("/")
+                days.append(arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()]))
+                dates.append(tas.day)
+                hours.append("9:15")
+                places.append(arabic(tas.building))
+                
+            send_email(tmplst.email,arabic(tmplst.user_name),arabic(tmplst.branch),11,2020,days,dates,hours,places)
+    
     def download_function(self):
         cnt = 0
         print(observser_data_lst)
@@ -258,7 +288,7 @@ class invScreen2(QWidget):
             mon.push_info(lst, cnt)
             cnt = cnt + 1
         
-       try:
+        try:
             dataframeout = pd.DataFrame(lst,columns=excelhead)
             dataframeout.to_excel("observer_output.xlsx")
             QMessageBox.about(self, "", "تم التنزيل                   ")
@@ -269,6 +299,7 @@ class invScreen2(QWidget):
 
     def set_items(self, index):
         # clear table rows
+        self.label_5.setText("")
         for i in range(self.table_widget.rowCount()):
             self.table_widget.removeRow(self.table_widget.rowCount() - 1)
         # clear labels
@@ -337,7 +368,7 @@ class invScreen2(QWidget):
         else:
             self.combox.setCurrentIndex(0)
             self.lineEdit.setText("غير موجود")
-            current_index = -1
+            current_index = -1            
 
             # clear table
             for i in range(self.table_widget.rowCount()):
