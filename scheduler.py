@@ -1,9 +1,25 @@
 from calendar import c
 import sys
-from PyQt5 import QtWidgets,QtPrintSupport, QtGui, QtCore
-from  PyQt5.QtPrintSupport import QPrinter ,QPrintDialog
-from PyQt5.QtWidgets import QWidget, QCheckBox, QApplication, QLabel, QPushButton, QFileDialog, QComboBox,\
-    QTableWidget, QTableWidgetItem, QVBoxLayout,QFrame,QDialog,QMessageBox,QTabWidget,QToolBox,QCompleter
+from PyQt5 import QtWidgets, QtPrintSupport, QtGui, QtCore
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
+from PyQt5.QtWidgets import (
+    QWidget,
+    QCheckBox,
+    QApplication,
+    QLabel,
+    QPushButton,
+    QFileDialog,
+    QComboBox,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QFrame,
+    QDialog,
+    QMessageBox,
+    QTabWidget,
+    QToolBox,
+    QCompleter,
+)
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QLineEdit
@@ -17,22 +33,28 @@ from observers_data import *
 from observers_solve import *
 import wget
 from template import *
+
 # year=
 # month=
-URL_EXAM = "https://drive.google.com/uc?export=download&id=1b98Hzn6F-3s2dQGSPcDlOJH_YFyLTMFl"
-URL_INV = "https://drive.google.com/uc?export=download&id=1_weWkhA9x7b2zKr6NRkBbIFVxuqPLjD9"
+URL_EXAM = (
+    "https://drive.google.com/uc?export=download&id=1b98Hzn6F-3s2dQGSPcDlOJH_YFyLTMFl"
+)
+URL_INV = (
+    "https://drive.google.com/uc?export=download&id=1_weWkhA9x7b2zKr6NRkBbIFVxuqPLjD9"
+)
 
 branch_num = -1
 option_num = -1
 
 
-def build( num_of_branches=2):
+def build(num_of_branches=2):
     for i in range(num_of_branches):
         branch.append(Branch(branch_name[i], i, num_of_builds[i]))
 
     get_and_store_groups()
     DISPLAY(branch_num, num_of_branches)
-    
+
+
 def get_tables(branch_num, option_num):
     # print(option_num)
     options(branch_num, option_num)
@@ -85,7 +107,8 @@ class invScreen1(QWidget):
 
     def browsefiles(self):
         fname = QFileDialog.getOpenFileName(
-            self, 'Open file', '', 'Excel (*.csv *xls *xlsx )')
+            self, "Open file", "", "Excel (*.csv *xls *xlsx )"
+        )
         self.txt = fname
         self.file_name = fname[0]
         self.linefileedit.setText(fname[0])
@@ -98,14 +121,16 @@ class invScreen1(QWidget):
         self.label_not_enough.setText("")
 
     def generateTables(self):
-        if (self.txt != ""):
+        if self.txt != "":
             good_data = read_input(self.file_name)
             if good_data:
                 self.label_not_enough.setText(good_data)
                 return
             ok1 = process_exam_day(days, colDayBranch)
             if not ok1:
-                self.label_not_enough.setText("يوجد تعارض بين جدول الامتحانات وجدول القاعات")
+                self.label_not_enough.setText(
+                    "يوجد تعارض بين جدول الامتحانات وجدول القاعات"
+                )
                 return
             ok2 = process(monitors, examDays)
             if not ok2:
@@ -113,16 +138,18 @@ class invScreen1(QWidget):
                 return
             self.label_not_enough.setText("")
             self.linefileedit.setText("")
-            self.txt=""
+            self.txt = ""
             # create_observers_template()
             s2 = invScreen2()
             widget.addWidget(s2)
             widget.setCurrentWidget(s2)
-        else :
+        else:
             self.label_not_enough.setText("برجاء اختيار الملف")
+
 
 current_index = -1
 nj = 0
+
 
 class invScreen2(QWidget):
     def __init__(self):
@@ -144,7 +171,6 @@ class invScreen2(QWidget):
         self.label_name0 = self.findChild(QLabel, "label_6")
         self.label_ = self.findChild(QLabel, "label_2")
         self.label_5 = self.findChild(QLabel, "label_5")
-
         self.table_widget = self.findChild(QTableWidget, "tableWidget")
 
         self.lineEdit = self.findChild(QLineEdit, "lineEdit")
@@ -171,10 +197,8 @@ class invScreen2(QWidget):
 
         self.printone_2 = self.findChild(QPushButton, "printone_2")
         self.printone_2.clicked.connect(self.printone_2_function)
-        
         self.print_2 = self.findChild(QPushButton, "print_2")
         self.print_2.clicked.connect(self.print_2_function)
-        
         # print all not comp
         # self.printall = self.findChild(QPushButton,"print")
         # self.printall.clicked.connect(self.printall_function)
@@ -200,7 +224,9 @@ class invScreen2(QWidget):
         self.label_name0.setGeometry(800, 80, 50, 30)
         self.label_.setGeometry(330, 20, 400, 50)
         self.frame.setStyleSheet("border:none;background-color:white;")
-        self.table_widget.setStyleSheet("border:1px solid black;background-color:white;")
+        self.table_widget.setStyleSheet(
+            "border:1px solid black;background-color:white;"
+        )
 
         header = self.table_widget.horizontalHeader()
         for i in range(6):
@@ -222,33 +248,57 @@ class invScreen2(QWidget):
         self.label_dep0.setGeometry(640, 80, 121, 30)
         self.label_name0.setGeometry(1320, 80, 141, 30)
         self.label_.setGeometry(270, 10, 1060, 40)
-        self.frame.setStyleSheet("border:1px solid #005580;border-radius:10px;background-color:white;")
+        self.frame.setStyleSheet(
+            "border:1px solid #005580;border-radius:10px;background-color:white;"
+        )
 
         self.changes.setText("حفظ التغيرات ")
 
-    def print_2_function(self): 
-        mp={
-            0:"الأثنين",
-            1:"الثلاثاء",
-            2:"الأربعاء",
-            3:"الخميس",
-            4:"الجمعة",
-            5:"السبت",
-            6:"الأحد",
-        }        
+    def print_2_function(self):
+        mp = {
+            0: "الأثنين",
+            1: "الثلاثاء",
+            2: "الأربعاء",
+            3: "الخميس",
+            4: "الجمعة",
+            5: "السبت",
+            6: "الأحد",
+        }
         for mon in monitors:
-            days=[]
-            dates=[]
-            hours=[]
-            places=[]
+            days = []
+            dates = []
+            hours = []
+            places = []
             for tas in mon.task:
-                spliteddate=tas.day.split("/")
-                days.append(arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()]))
+                # print(tas.day," ",tas.building," ",tas.type)
+                spliteddate = tas.day.split("/")
+                # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
+                days.append(
+                    arabic(
+                        mp[
+                            date(
+                                int(spliteddate[2]),
+                                int(spliteddate[1]),
+                                int(spliteddate[0]),
+                            ).weekday()
+                        ]
+                    )
+                )
                 dates.append(tas.day)
                 hours.append("9:15")
                 places.append(arabic(tas.building))
-                
-            send_email(mon.email,arabic(mon.user_name),arabic(mon.branch),11,2020,days,dates,hours,places)
+
+            send_email(
+                mon.email,
+                arabic(mon.user_name),
+                arabic(mon.branch),
+                11,
+                2020,
+                days,
+                dates,
+                hours,
+                places,
+            )
         pass
     
     def printone_2_function(self):
@@ -275,27 +325,28 @@ class invScreen2(QWidget):
                 dates.append(tas.day)
                 hours.append("9:15")
                 places.append(arabic(tas.building))
-                
+
             send_email(tmplst.email,arabic(tmplst.user_name),arabic(tmplst.branch),11,2020,days,dates,hours,places)
-    
     def download_function(self):
         cnt = 0
-        print(observser_data_lst)
-        lst=[]
+        lst = []
         for i in observser_data_lst:
             lst.append(i.copy())
         for mon in monitors:
             mon.push_info(lst, cnt)
             cnt = cnt + 1
-        
+
         try:
-            dataframeout = pd.DataFrame(lst,columns=excelhead)
+            # print(excelhead)
+            dataframeout = pd.DataFrame(lst, columns=excelhead)
+            # print(dataframeout)
             dataframeout.to_excel("observer_output.xlsx")
             QMessageBox.about(self, "", "تم التنزيل                   ")
 
         except:
-            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله") #needed to be errorbox
-        
+            QMessageBox.about(
+                self, "", "لا يمكن تنزيل الملف اثناء تشغيله"
+            )  # needed to be errorbox
 
     def set_items(self, index):
         # clear table rows
@@ -328,22 +379,18 @@ class invScreen2(QWidget):
                 # item 3
                 item = QtWidgets.QTableWidgetItem(str(ts.building))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
-                self.table_widget.setItem(
-                    row, 2, item)
+                self.table_widget.setItem(row, 2, item)
 
             else:
                 item = QtWidgets.QTableWidgetItem(str(ts.day))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
-                self.table_widget.setItem(
-                    row - 1, 3, item)
+                self.table_widget.setItem(row - 1, 3, item)
                 item = QtWidgets.QTableWidgetItem(str(ts.type))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
-                self.table_widget.setItem(
-                    row - 1, 4, item)
+                self.table_widget.setItem(row - 1, 4, item)
                 item = QtWidgets.QTableWidgetItem(str(ts.building))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
-                self.table_widget.setItem(
-                    row - 1, 5, item)
+                self.table_widget.setItem(row - 1, 5, item)
             i += 1
 
     def valueOfCombo(self):
@@ -351,7 +398,7 @@ class invScreen2(QWidget):
         # clear search input
         self.lineEdit.setText("")
         # print(self.combox.currentIndex())
-        if (self.combox.currentIndex()):
+        if self.combox.currentIndex():
             current_index = self.combox.currentIndex() - 1
             self.set_items(self.combox.currentIndex() - 1)
 
@@ -368,7 +415,7 @@ class invScreen2(QWidget):
         else:
             self.combox.setCurrentIndex(0)
             self.lineEdit.setText("غير موجود")
-            current_index = -1            
+            # current_index = -1
 
             # clear table
             for i in range(self.table_widget.rowCount()):
@@ -401,46 +448,105 @@ class invScreen2(QWidget):
 
     def backfrominv_fun(self):
         widget.setCurrentWidget(invscreen1)
-
+    
+    def valid_day(self,s):
+        s= s.split('/')
+        if len(s)!= 3 :
+            return False
+        def is_int(s):
+            try: 
+                int(s)
+                return True
+            except ValueError:
+                return False
+        cnt = 0 
+        for it in s:
+            if not is_int(it):
+                return False
+            if cnt ==2 and len(it)!= 4:
+                return False
+            if cnt <2 and (len(it) <1 or len(it)>2):
+                return False
+            cnt+=1
+        return True
+        
+    def current_day(self,day):
+        x = tuple(day.split("/"))
+        return daynumber[x]
     def changes_function(self, index):
-        index_change_function = index
         # load data
-        mon = monitors[index_change_function]
+        mon = monitors[index]
         i, j, ok = 0, 0, 0
-
+        print("###############################")
         for ts in mon.task:
-            
             if ok == 0:
+                day_change= -1
                 item = self.table_widget.item(i, 0)
-                print(item.text())
-                ts.day = item.text()
-
+                if not self.valid_day(item.text()):
+                    QMessageBox.about(self, "", "صيغة التاريخ غير صحيحة\nاكتب التاريخ كالتالى 10/10/2000")
+                    return
+                else :
+                    if ts.day != item.text():
+                        day_change = ts.day
+                    ts.day = item.text()
                 item = self.table_widget.item(i, 1)
-                print(item.text())
+                if item.text() not in tasks_known_names.keys():
+                    QMessageBox.about(self, "", "هذا التكليف غير معروف يمكنك اختيار احدى التكاليف التالية\n1-رئيس لجنة\n2-مراقب دور\n3-ملاحظ\n4-احتياطى")
+                    return
                 ts.type = item.text()
-
                 item = self.table_widget.item(i, 2)
-                print(item.text())
                 ts.building = item.text()
+                if day_change!= -1:
+                    mon.accupied_days[self.current_day(day_change)] = [0,""]
+                try :
+                    ts.current_day()
+                except:
+                    ts.day= day_change
+                    QMessageBox.about(self, "", "هذا اليوم ليس من ضمن ايام الامتحانات\nلا يمكن تنفيذ العملية")
+                    return
+                if ts.current_day() in mon.accupied_days.keys():
+                    mon.accupied_days[ts.current_day()][1] = ts.building
+                else :
+                    mon.accupied_days[ts.current_day()] = [1,ts.building]
                 i += 1
                 ok = 1
-                
             else:
+                day_change= -1
                 item = self.table_widget.item(j, 3)
                 print(item.text())
-                ts.day = item.text()
-
+                if not self.valid_day(item.text()):
+                    QMessageBox.about(self, "", "صيغة التاريخ غير صحيحة\nاكتب التاريخ كالتالى 10/10/2000")
+                    return
+                else :
+                    if ts.day != item.text():
+                        day_change = ts.day
+                    ts.day = item.text()
                 item = self.table_widget.item(j, 4)
-                print(item.text())
+                if item.text() not in tasks_known_names.keys():
+                    QMessageBox.about(self, "", "هذا التكليف غير معروف يمكنك اختيار احدى التكاليف التالية\n1-رئيس لجنة\n2-مراقب دور\n3-ملاحظ\n4-احتياطى")
+                    return
                 ts.type = item.text()
-
                 item = self.table_widget.item(j, 5)
-                print(item.text())
                 ts.building = item.text()
+                if day_change!= -1:
+                    mon.accupied_days[self.current_day(day_change)] = [0,""]
+                try :
+                    ts.current_day()
+                except:
+                    ts.day= day_change
+                    QMessageBox.about(self, "", "هذا اليوم ليس من ضمن ايام الامتحانات\nلا يمكن تنفيذ العملية")
+                    return
+                if ts.current_day() in mon.accupied_days.keys():
+                    mon.accupied_days[ts.current_day()][1] = ts.building
+                else :
+                    mon.accupied_days[ts.current_day()] = [1,ts.building]
                 j += 1
                 ok = 0
-            
+            print(mon.accupied_days[ts.current_day()])
+        monitors[index] = mon
         QMessageBox.about(self, "", "تم حفظ التغيرات                  ")
+
+
 class exScreen1(QWidget):
     def __init__(self):
 
@@ -464,7 +570,8 @@ class exScreen1(QWidget):
 
     def browsefiles(self):
         fname = QFileDialog.getOpenFileName(
-            self, 'Open file', '', 'Excel (*.csv *xlsx)')
+            self, "Open file", "", "Excel (*.csv *xlsx)"
+        )
         self.lineEdit.setText(fname[0])
         self.txt = fname[0]
         # global num_of_branches
@@ -475,7 +582,7 @@ class exScreen1(QWidget):
         widget.setCurrentWidget(mainwindow)
 
     def generateTables(self):
-        if (self.txt != ""):
+        if self.txt != "":
             ok = check_data(self.txt)
             if not ok:
                 self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
@@ -494,13 +601,12 @@ class exScreen1(QWidget):
             self.lineEdit.setText("")
             self.txt = ""
 
-
         else:
             self.label_not_enough.setText("برجاء اختيار ملف")
             return
 
-class exScreen2(QWidget):
 
+class exScreen2(QWidget):
     def __init__(self, file):
 
         super(exScreen2, self).__init__()
@@ -561,11 +667,11 @@ class exScreen2(QWidget):
                     border:1px solid rgb(197,197,199,255);
                     padding: 10px 30px 10px 24px;
                 }
-            """)
+            """
+        )
 
         self.f(0)
         self.add_tab_widget.tabBarClicked.connect(self.f)
-
 
     def f(self, index=0):
         global nj
@@ -576,14 +682,13 @@ class exScreen2(QWidget):
         # print(toPrint)
         vertical = ["  القاعه"]
 
-
         for i in range(len(toPrint)):
             if toPrint[i][0] not in vertical:
                 vertical.append(toPrint[i][0])
 
-        table = QTableWidget(len(vertical),9)
+        table = QTableWidget(len(vertical), 9)
 
-        header = ["الدفعه","من","الي","الدفعه","من","الي","الدفعه","من","الي"]
+        header = ["الدفعه", "من", "الي", "الدفعه", "من", "الي", "الدفعه", "من", "الي"]
         table.setHorizontalHeaderLabels(header)
         table_ho = table.horizontalHeader()
         for i in range(9):
@@ -594,29 +699,31 @@ class exScreen2(QWidget):
         table_ve.setStyleSheet("font-size:20px;")
         # print(len(toPrint))
         for i in range(3):
-            for j in range(len(vertical)-1):
-                item = QtWidgets.QTableWidgetItem(str(toPrint[j][i+1]))
+            for j in range(len(vertical) - 1):
+                item = QtWidgets.QTableWidgetItem(str(toPrint[j][i + 1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 item.setFlags(QtCore.Qt.ItemIsEnabled)
 
-                table.setItem(j+1, i, item)
+                table.setItem(j + 1, i, item)
 
         for i in range(3):
-            for j in range(len(vertical)-1):
-                item = QtWidgets.QTableWidgetItem(str(toPrint[j+len(vertical)-1][i+1]))
+            for j in range(len(vertical) - 1):
+                item = QtWidgets.QTableWidgetItem(
+                    str(toPrint[j + len(vertical) - 1][i + 1])
+                )
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 item.setFlags(QtCore.Qt.ItemIsEnabled)
 
-                table.setItem(j+1, i+3, item)
-        
-        nj = 2*len(vertical)-2
+                table.setItem(j + 1, i + 3, item)
+
+        nj = 2 * len(vertical) - 2
         for i in range(3):
-            for j in range(len(vertical)-1):
-                item = QtWidgets.QTableWidgetItem(str(toPrint[j+nj][i+1]))
+            for j in range(len(vertical) - 1):
+                item = QtWidgets.QTableWidgetItem(str(toPrint[j + nj][i + 1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 item.setFlags(QtCore.Qt.ItemIsEnabled)
 
-                table.setItem(j+1, i+6, item)
+                table.setItem(j + 1, i + 6, item)
 
         l0 = QLabel("lab2")
         if index == 0:
@@ -629,7 +736,8 @@ class exScreen2(QWidget):
         self.tabs.resize(1450, 700)  # size
         self.tabs.setTabPosition(QTabWidget.South)
 
-        self.tabs.setStyleSheet('''QTabWidget::tab-bar
+        self.tabs.setStyleSheet(
+            """QTabWidget::tab-bar
             {
                 alignment: center;
             }
@@ -658,11 +766,12 @@ class exScreen2(QWidget):
                  padding: 10px 30px 10px 24px;
                  background: rgb(234,234,234,255);
              }
-            ''')
-
+            """
+        )
 
     def backfromex_fun(self):
         widget.setCurrentWidget(exscreen1)
+
 
 class invHelp(QWidget):
     def __init__(self):
@@ -678,6 +787,7 @@ class invHelp(QWidget):
 
     def save_func(self):
         wget.download(URL_INV)
+
 
 class examHelp(QWidget):
     def __init__(self):
@@ -709,6 +819,6 @@ widget.addWidget(invscreen1)
 widget.addWidget(helpinv)
 widget.addWidget(helpexam)
 
-widget.move(2,2)
+widget.move(2, 2)
 widget.show()
 sys.exit(app.exec_())
