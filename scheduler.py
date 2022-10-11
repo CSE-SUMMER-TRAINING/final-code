@@ -293,7 +293,7 @@ class invScreen2(QWidget):
             dataframeout.to_excel("observer_output.xlsx")
             QMessageBox.about(self, "", "تم التنزيل                   ")
         except:
-            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")#error messege
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيل output.xlsx")#error messege
             pass
 
         
