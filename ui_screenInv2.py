@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\Ahmed\Downloads\New folder\final-code\screenInv2.ui'
+# Form implementation generated from reading ui file 'c:\Users\Ahmed\Downloads\New folder - Copy\final-code\screenInv2.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -31,7 +31,7 @@ class Ui_Form(object):
         self.label_7.setStyleSheet("background-color: transparent;\n"
 "")
         self.label_7.setText("")
-        self.label_7.setPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder\\final-code\\../../Downloads/table.png"))
+        self.label_7.setPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder - Copy\\final-code\\../../Downloads/table.png"))
         self.label_7.setScaledContents(True)
         self.label_7.setObjectName("label_7")
         self.label_8 = QtWidgets.QLabel(Form)
@@ -44,7 +44,7 @@ class Ui_Form(object):
         self.label_9.setStyleSheet("background-color: transparent;\n"
 "")
         self.label_9.setText("")
-        self.label_9.setPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder\\final-code\\../../Downloads/table.png"))
+        self.label_9.setPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder - Copy\\final-code\\../../Downloads/table.png"))
         self.label_9.setScaledContents(True)
         self.label_9.setObjectName("label_9")
         self.back = QtWidgets.QPushButton(Form)
@@ -142,6 +142,12 @@ class Ui_Form(object):
 "}\n"
 "")
         self.changes.setObjectName("changes")
+        self.label_5 = QtWidgets.QLabel(self.frame)
+        self.label_5.setGeometry(QtCore.QRect(650, 380, 341, 101))
+        self.label_5.setStyleSheet("border:none;font-size:22px;color:red;")
+        self.label_5.setText("")
+        self.label_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_5.setObjectName("label_5")
         self.prev = QtWidgets.QPushButton(self.cover)
         self.prev.setGeometry(QtCore.QRect(440, 890, 93, 28))
         self.prev.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -161,7 +167,7 @@ class Ui_Form(object):
 "")
         self.prev.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder\\final-code\\icons/prev.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder - Copy\\final-code\\icons/prev.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.prev.setIcon(icon)
         self.prev.setObjectName("prev")
         self.next = QtWidgets.QPushButton(self.cover)
@@ -183,7 +189,7 @@ class Ui_Form(object):
 "")
         self.next.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder\\final-code\\icons/next.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder - Copy\\final-code\\icons/next.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.next.setIcon(icon1)
         self.next.setObjectName("next")
         self.printone = QtWidgets.QPushButton(self.cover)

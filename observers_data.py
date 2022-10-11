@@ -30,7 +30,12 @@ mp = {
     road_el_farag: 1,
     khalafawy: 0,
 }
-
+tasks_known_names= {
+    "رئيس لجنة":True,
+"ملاحظ":True,
+"مراقب دور":True,
+    "احتياطى":True
+}
 
 class Task(object):
     def __init__(self, day=0, building=0, type=observer):
@@ -42,7 +47,9 @@ class Task(object):
         self.day = d
         self.month = m
         self.year = y
-
+    def current_day(self):
+        x = tuple(self.day.split("/"))
+        return daynumber[x]
     def print_info(self):
         print(
             arabic(
