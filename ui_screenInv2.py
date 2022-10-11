@@ -140,6 +140,11 @@ class Ui_Form(object):
 "font-size:16px;\n"
 "}\n"
 "")
+        self.label_5 = QLabel(self.frame)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setGeometry(QRect(650, 380, 341, 101))
+        self.label_5.setStyleSheet(u"border:none;font-size:22px;color:red;")
+        self.label_5.setAlignment(Qt.AlignCenter)
         self.prev = QPushButton(self.cover)
         self.prev.setObjectName(u"prev")
         self.prev.setGeometry(QRect(440, 890, 93, 28))
@@ -184,7 +189,7 @@ class Ui_Form(object):
         self.next.setIcon(icon1)
         self.printone = QPushButton(self.cover)
         self.printone.setObjectName(u"printone")
-        self.printone.setGeometry(QRect(1020, 880, 141, 41))
+        self.printone.setGeometry(QRect(1110, 880, 141, 41))
         self.printone.setCursor(QCursor(Qt.PointingHandCursor))
         self.printone.setStyleSheet(u"QPushButton{\n"
 "\n"
@@ -227,6 +232,28 @@ class Ui_Form(object):
         self.comboBox1.setStyleSheet(u"background-color:white;")
         self.comboBox1.setInsertPolicy(QComboBox.InsertAtBottom)
         self.comboBox1.setSizeAdjustPolicy(QComboBox.AdjustToContentsOnFirstShow)
+        self.printone_2 = QPushButton(self.cover)
+        self.printone_2.setObjectName(u"printone_2")
+        self.printone_2.setGeometry(QRect(830, 880, 211, 41))
+        self.printone_2.setCursor(QCursor(Qt.PointingHandCursor))
+        self.printone_2.setStyleSheet(u"QPushButton{\n"
+"\n"
+"background-color: #005580;\n"
+"color:white;\n"
+"font-size:15px;\n"
+"}\n"
+"QPushButton:hover{\n"
+"\n"
+"background-color: #6699ff;\n"
+"color:white;\n"
+"font-size:16px;\n"
+"}\n"
+"")
+        self.print_2 = QPushButton(Form)
+        self.print_2.setObjectName(u"print_2")
+        self.print_2.setGeometry(QRect(420, 10, 251, 28))
+        self.print_2.setCursor(QCursor(Qt.PointingHandCursor))
+        self.print_2.setStyleSheet(u"")
         self.label_8.raise_()
         self.label.raise_()
         self.label_7.raise_()
@@ -235,6 +262,7 @@ class Ui_Form(object):
         self.download.raise_()
         self.print.raise_()
         self.cover.raise_()
+        self.print_2.raise_()
 
         self.retranslateUi(Form)
 
@@ -271,6 +299,7 @@ class Ui_Form(object):
         self.label_10.setText("")
         self.label_6.setText(QCoreApplication.translate("Form", u"\u0627\u0644\u0633\u064a\u062f/", None))
         self.changes.setText(QCoreApplication.translate("Form", u"\u062d\u0641\u0638 \u0627\u0644\u062a\u063a\u064a\u0631\u0627\u062a", None))
+        self.label_5.setText("")
         self.prev.setText("")
 #if QT_CONFIG(shortcut)
         self.prev.setShortcut(QCoreApplication.translate("Form", u"Left", None))
@@ -281,5 +310,10 @@ class Ui_Form(object):
 #endif // QT_CONFIG(shortcut)
         self.printone.setText(QCoreApplication.translate("Form", u"\u0637\u0628\u0627\u0639\u0647", None))
         self.searchButton.setText(QCoreApplication.translate("Form", u"\u0628\u062d\u062b", None))
+        self.printone_2.setText(QCoreApplication.translate("Form", u"\u0627\u0631\u0633\u0627\u0644 \u0627\u064a\u0645\u064a\u0644 \u0644\u0644\u0634\u062e\u0635", None))
+        self.print_2.setText(QCoreApplication.translate("Form", u"\u0627\u0631\u0633\u0627\u0644 \u0627\u064a\u0645\u064a\u0644 \u0644\u0644\u0643\u0644", None))
+#if QT_CONFIG(shortcut)
+        self.print_2.setShortcut(QCoreApplication.translate("Form", u"Ctrl+P", None))
+#endif // QT_CONFIG(shortcut)
     # retranslateUi
 

@@ -17,7 +17,8 @@ from observers_data import *
 from observers_solve import *
 import wget
 from template import *
-
+# year=
+# month=
 URL_EXAM = "https://drive.google.com/uc?export=download&id=1b98Hzn6F-3s2dQGSPcDlOJH_YFyLTMFl"
 URL_INV = "https://drive.google.com/uc?export=download&id=1_weWkhA9x7b2zKr6NRkBbIFVxuqPLjD9"
 
@@ -111,10 +112,14 @@ class invScreen1(QWidget):
                 self.label_not_enough.setText("عدد الموظفين غير كافي")
                 return
             self.label_not_enough.setText("")
+            self.linefileedit.setText("")
+            self.txt=""
             # create_observers_template()
             s2 = invScreen2()
             widget.addWidget(s2)
             widget.setCurrentWidget(s2)
+        else :
+            self.label_not_enough.setText("برجاء اختيار الملف")
 
 current_index = -1
 nj = 0
@@ -138,6 +143,7 @@ class invScreen2(QWidget):
         self.label_dep0 = self.findChild(QLabel, "label_3")
         self.label_name0 = self.findChild(QLabel, "label_6")
         self.label_ = self.findChild(QLabel, "label_2")
+        self.label_5 = self.findChild(QLabel, "label_5")
 
         self.table_widget = self.findChild(QTableWidget, "tableWidget")
 
@@ -163,6 +169,12 @@ class invScreen2(QWidget):
         self.printone = self.findChild(QPushButton, "printone")
         self.printone.clicked.connect(self.printone_function)
 
+        self.printone_2 = self.findChild(QPushButton, "printone_2")
+        self.printone_2.clicked.connect(self.printone_2_function)
+        
+        self.print_2 = self.findChild(QPushButton, "print_2")
+        self.print_2.clicked.connect(self.print_2_function)
+        
         # print all not comp
         # self.printall = self.findChild(QPushButton,"print")
         # self.printall.clicked.connect(self.printall_function)
@@ -214,6 +226,58 @@ class invScreen2(QWidget):
 
         self.changes.setText("حفظ التغيرات ")
 
+    def print_2_function(self): 
+        mp={
+            0:"الأثنين",
+            1:"الثلاثاء",
+            2:"الأربعاء",
+            3:"الخميس",
+            4:"الجمعة",
+            5:"السبت",
+            6:"الأحد",
+        }        
+        for mon in monitors:
+            days=[]
+            dates=[]
+            hours=[]
+            places=[]
+            for tas in mon.task:
+                spliteddate=tas.day.split("/")
+                days.append(arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()]))
+                dates.append(tas.day)
+                hours.append("9:15")
+                places.append(arabic(tas.building))
+                
+            send_email(mon.email,arabic(mon.user_name),arabic(mon.branch),11,2020,days,dates,hours,places)
+        pass
+    
+    def printone_2_function(self):
+        if(current_index==-1):
+            self.label_5.setText("من فضلك اختار شخص")
+        else:
+            mp={
+                0:"الأثنين",
+                1:"الثلاثاء",
+                2:"الأربعاء",
+                3:"الخميس",
+                4:"الجمعة",
+                5:"السبت",
+                6:"الأحد",
+            }
+            tmplst=monitors[current_index]
+            days=[]
+            dates=[]
+            hours=[]
+            places=[]
+            for tas in tmplst.task:
+                spliteddate=tas.day.split("/")
+                days.append(arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()]))
+                dates.append(tas.day)
+                hours.append("9:15")
+                places.append(arabic(tas.building))
+                
+            send_email(tmplst.email,arabic(tmplst.user_name),arabic(tmplst.branch),11,2020,days,dates,hours,places)
+    
     def download_function(self):
         cnt = 0
         print(observser_data_lst)
@@ -239,6 +303,7 @@ class invScreen2(QWidget):
 
     def set_items(self, index):
         # clear table rows
+        self.label_5.setText("")
         for i in range(self.table_widget.rowCount()):
             self.table_widget.removeRow(self.table_widget.rowCount() - 1)
         # clear labels
@@ -307,7 +372,7 @@ class invScreen2(QWidget):
         else:
             self.combox.setCurrentIndex(0)
             self.lineEdit.setText("غير موجود")
-            current_index = -1
+            current_index = -1            
 
             # clear table
             for i in range(self.table_widget.rowCount()):
@@ -431,6 +496,9 @@ class exScreen1(QWidget):
             exs2 = exScreen2(self.txt)
             widget.addWidget(exs2)
             widget.setCurrentWidget(exs2)
+            self.lineEdit.setText("")
+            self.txt = ""
+
 
         else:
             self.label_not_enough.setText("برجاء اختيار ملف")
@@ -479,8 +547,8 @@ class exScreen2(QWidget):
                QTabBar::tab:selected {
                     font-family: Roboto;
                     font-size: 18px;
+                    background: rgb(175,175,175,255);
                     color: rgb(0,0,0,255);
-                    background: rgb(234,234,234,255);
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
                     border:1px solid rgb(197,197,199,255);
@@ -490,8 +558,8 @@ class exScreen2(QWidget):
                     font-family: Roboto;
                     font-size: 18px;
                     font: italic;
-                    color: rgb(255,255,255,255);
-                    background: rgb(175,175,175,255);
+                    background: rgb(234,234,234,255);
+                    color: rgb(0,0,0,255);
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
 
@@ -534,12 +602,16 @@ class exScreen2(QWidget):
             for j in range(len(vertical)-1):
                 item = QtWidgets.QTableWidgetItem(str(toPrint[j][i+1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
                 table.setItem(j+1, i, item)
 
         for i in range(3):
             for j in range(len(vertical)-1):
                 item = QtWidgets.QTableWidgetItem(str(toPrint[j+len(vertical)-1][i+1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
                 table.setItem(j+1, i+3, item)
         
         nj = 2*len(vertical)-2
@@ -547,6 +619,8 @@ class exScreen2(QWidget):
             for j in range(len(vertical)-1):
                 item = QtWidgets.QTableWidgetItem(str(toPrint[j+nj][i+1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
                 table.setItem(j+1, i+6, item)
 
         l0 = QLabel("lab2")
@@ -572,7 +646,7 @@ class exScreen2(QWidget):
                  font-family: Roboto;
                  font-size: 18px;
                  color: rgb(0,0,0,255);
-                 background: rgb(234,234,234,255);
+                 background: rgb(175,175,175,255);
                  border-top-left-radius: 8px;
                  border-top-right-radius: 8px;
                  border:1px solid rgb(197,197,199,255);
@@ -582,12 +656,12 @@ class exScreen2(QWidget):
                  font-family: Roboto;
                  font-size: 18px;
                  font: italic;
-                 color: rgb(255,255,255,255);
-                 background: rgb(175,175,175,255);
+                color: rgb(0,0,0,255);
                  border-top-left-radius: 8px;
                  border-top-right-radius: 8px;          
                  border:1px solid rgb(197,197,199,255);
                  padding: 10px 30px 10px 24px;
+                 background: rgb(234,234,234,255);
              }
             ''')
 
