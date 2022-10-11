@@ -227,10 +227,12 @@ class invScreen2(QWidget):
         try:
             dataframeout = pd.DataFrame(lst,columns=excelhead)
             dataframeout.to_excel("observer_output.xlsx")
+            QMessageBox.about(self, "", "تم التنزيل                   ")
         except:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")#error messege
             pass
 
-        QMessageBox.about(self, "", "تم التنزيل                   ")
+        
         print(":asfa")
         print(observser_data_lst)
         
@@ -345,8 +347,8 @@ class invScreen2(QWidget):
         mon = monitors[index_change_function]
         i, j, ok = 0, 0, 0
 
-        for ts in mon.task:
-            
+        for i in range(len(mon.task)):
+            ts=mon.task[i]
             if ok == 0:
                 item = self.table_widget.item(i, 0)
                 print(item.text())
@@ -376,7 +378,8 @@ class invScreen2(QWidget):
                 ts.building = item.text()
                 j += 1
                 ok = 0
-            
+            mon.task=ts
+        monitors[index_change_function]= mon
         QMessageBox.about(self, "", "تم حفظ التغيرات                  ")
 class exScreen1(QWidget):
     def __init__(self):
