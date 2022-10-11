@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\Ahmed\Downloads\final-code-main (3)\final-code-main\final-code\screenInv2.ui'
+# Form implementation generated from reading ui file 'c:\Users\Ahmed\Downloads\New folder\final-code\screenInv2.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -31,7 +31,7 @@ class Ui_Form(object):
         self.label_7.setStyleSheet("background-color: transparent;\n"
 "")
         self.label_7.setText("")
-        self.label_7.setPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\final-code-main (3)\\final-code-main\\final-code\\../../Downloads/table.png"))
+        self.label_7.setPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder\\final-code\\../../Downloads/table.png"))
         self.label_7.setScaledContents(True)
         self.label_7.setObjectName("label_7")
         self.label_8 = QtWidgets.QLabel(Form)
@@ -44,7 +44,7 @@ class Ui_Form(object):
         self.label_9.setStyleSheet("background-color: transparent;\n"
 "")
         self.label_9.setText("")
-        self.label_9.setPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\final-code-main (3)\\final-code-main\\final-code\\../../Downloads/table.png"))
+        self.label_9.setPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder\\final-code\\../../Downloads/table.png"))
         self.label_9.setScaledContents(True)
         self.label_9.setObjectName("label_9")
         self.back = QtWidgets.QPushButton(Form)
@@ -161,7 +161,7 @@ class Ui_Form(object):
 "")
         self.prev.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\final-code-main (3)\\final-code-main\\final-code\\icons/prev.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder\\final-code\\icons/prev.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.prev.setIcon(icon)
         self.prev.setObjectName("prev")
         self.next = QtWidgets.QPushButton(self.cover)
@@ -183,11 +183,11 @@ class Ui_Form(object):
 "")
         self.next.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\final-code-main (3)\\final-code-main\\final-code\\icons/next.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("c:\\Users\\Ahmed\\Downloads\\New folder\\final-code\\icons/next.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.next.setIcon(icon1)
         self.next.setObjectName("next")
         self.printone = QtWidgets.QPushButton(self.cover)
-        self.printone.setGeometry(QtCore.QRect(1020, 880, 141, 41))
+        self.printone.setGeometry(QtCore.QRect(1110, 880, 141, 41))
         self.printone.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.printone.setStyleSheet("QPushButton{\n"
 "\n"
@@ -231,6 +231,28 @@ class Ui_Form(object):
         self.comboBox1.setInsertPolicy(QtWidgets.QComboBox.InsertAtBottom)
         self.comboBox1.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContentsOnFirstShow)
         self.comboBox1.setObjectName("comboBox1")
+        self.printone_2 = QtWidgets.QPushButton(self.cover)
+        self.printone_2.setGeometry(QtCore.QRect(830, 880, 211, 41))
+        self.printone_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.printone_2.setStyleSheet("QPushButton{\n"
+"\n"
+"background-color: #005580;\n"
+"color:white;\n"
+"font-size:15px;\n"
+"}\n"
+"QPushButton:hover{\n"
+"\n"
+"background-color: #6699ff;\n"
+"color:white;\n"
+"font-size:16px;\n"
+"}\n"
+"")
+        self.printone_2.setObjectName("printone_2")
+        self.print_2 = QtWidgets.QPushButton(Form)
+        self.print_2.setGeometry(QtCore.QRect(420, 10, 251, 28))
+        self.print_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.print_2.setStyleSheet("")
+        self.print_2.setObjectName("print_2")
         self.label_8.raise_()
         self.label.raise_()
         self.label_7.raise_()
@@ -239,6 +261,7 @@ class Ui_Form(object):
         self.download.raise_()
         self.print.raise_()
         self.cover.raise_()
+        self.print_2.raise_()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -271,3 +294,6 @@ class Ui_Form(object):
         self.next.setShortcut(_translate("Form", "Right"))
         self.printone.setText(_translate("Form", "طباعه"))
         self.searchButton.setText(_translate("Form", "بحث"))
+        self.printone_2.setText(_translate("Form", "ارسال ايميل للشخص"))
+        self.print_2.setText(_translate("Form", "ارسال ايميل للكل"))
+        self.print_2.setShortcut(_translate("Form", "Ctrl+P"))

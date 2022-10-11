@@ -471,7 +471,7 @@ font-size:16px;
    <widget class="QPushButton" name="printone">
     <property name="geometry">
      <rect>
-      <x>1020</x>
+      <x>1110</x>
       <y>880</y>
       <width>141</width>
       <height>41</height>
@@ -565,6 +565,59 @@ font-size:16px;
      <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
     </property>
    </widget>
+   <widget class="QPushButton" name="printone_2">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>880</y>
+      <width>211</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+
+background-color: #005580;
+color:white;
+font-size:15px;
+}
+QPushButton:hover{
+
+background-color: #6699ff;
+color:white;
+font-size:16px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>ارسال ايميل للشخص</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="print_2">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>10</y>
+     <width>251</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string>ارسال ايميل للكل</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
   </widget>
   <zorder>label_8</zorder>
   <zorder>label</zorder>
@@ -574,6 +627,7 @@ font-size:16px;
   <zorder>download</zorder>
   <zorder>print</zorder>
   <zorder>cover</zorder>
+  <zorder>print_2</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -17,7 +17,8 @@ from observers_data import *
 from observers_solve import *
 import wget
 from template import *
-
+# year=
+# month=
 URL_EXAM = "https://drive.google.com/uc?export=download&id=1b98Hzn6F-3s2dQGSPcDlOJH_YFyLTMFl"
 URL_INV = "https://drive.google.com/uc?export=download&id=1_weWkhA9x7b2zKr6NRkBbIFVxuqPLjD9"
 
@@ -167,6 +168,8 @@ class invScreen2(QWidget):
         self.printone = self.findChild(QPushButton, "printone")
         self.printone.clicked.connect(self.printone_function)
 
+        self.printone_2 = self.findChild(QPushButton, "printone_2")
+        self.printone_2.clicked.connect(self.printone_2_function)
         # print all not comp
         # self.printall = self.findChild(QPushButton,"print")
         # self.printall.clicked.connect(self.printall_function)
@@ -217,6 +220,33 @@ class invScreen2(QWidget):
         self.frame.setStyleSheet("border:1px solid #005580;border-radius:10px;background-color:white;")
 
         self.changes.setText("حفظ التغيرات ")
+        
+    def printone_2_function(self): 
+        mp={
+            0:"الأثنين",
+            1:"الثلاثاء",
+            2:"الأربعاء",
+            3:"الخميس",
+            4:"الجمعة",
+            5:"السبت",
+            6:"الأحد",
+        }        
+        for mon in monitors:
+            days=[]
+            dates=[]
+            hours=[]
+            places=[]
+            for tas in mon.task:
+                # print(tas.day," ",tas.building," ",tas.type)
+                spliteddate=tas.day.split("/")
+                # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
+                days.append(arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()]))
+                dates.append(tas.day)
+                hours.append("9:15")
+                places.append(arabic(tas.building))
+                
+            send_email(mon.email,arabic(mon.user_name),arabic(mon.branch),11,2020,days,dates,hours,places)
+        pass
 
     def download_function(self):
         cnt = 0
