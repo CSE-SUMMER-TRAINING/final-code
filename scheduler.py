@@ -258,7 +258,7 @@ class invScreen2(QWidget):
             mon.push_info(lst, cnt)
             cnt = cnt + 1
         
-       try:
+        try:
             dataframeout = pd.DataFrame(lst,columns=excelhead)
             dataframeout.to_excel("observer_output.xlsx")
             QMessageBox.about(self, "", "تم التنزيل                   ")
