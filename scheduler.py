@@ -200,8 +200,8 @@ class invScreen2(QWidget):
         self.print_2 = self.findChild(QPushButton, "print_2")
         self.print_2.clicked.connect(self.print_2_function)
         # print all not comp
-        # self.printall = self.findChild(QPushButton,"print")
-        # self.printall.clicked.connect(self.printall_function)
+        self.printall = self.findChild(QPushButton,"print")
+        self.printall.clicked.connect(self.printall_function)
 
         self.changes = self.findChild(QPushButton, "changes")
         self.changes.clicked.connect(lambda: self.changes_function(current_index))
@@ -209,7 +209,14 @@ class invScreen2(QWidget):
         # auto complete
         self.completer = QCompleter(self.list)
         self.lineEdit.setCompleter(self.completer)
-
+    def printall_function(self):
+        try:
+            printall()
+            QMessageBox.about(self, "", "تم التنزيل                   ")
+        except:
+            QMessageBox.about(
+                self, "", "لا يمكن تنزيل الملف اثناء تشغيله برجاء قفل table_with_cells.pdf"
+            )  # needed to be errorbox
     def printone_function(self):
         # pdf
         self.changes.setText("")
