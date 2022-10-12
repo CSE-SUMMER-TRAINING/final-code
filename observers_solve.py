@@ -21,7 +21,7 @@ def printall():
     pdf.core_fonts_encoding='utf-8'
     #1-find site-package in ur python directory then go to fpdf (after installing it) create folder with the name "font"
     #2-extrat the zip file their that's all !!!!!!!!!!!!!!!!!!!!!!!!
-    pdf.add_font('FreeSerif', '', 'IBMPlexSansArabic-Regular.ttf')
+    pdf.add_font('FreeSerif', '', 'IBM_Plex_Sans_Arabic/IBMPlexSansArabic-Regular.ttf')
     mp = {
                 0: "الأثنين",
                 1: "الثلاثاء",
