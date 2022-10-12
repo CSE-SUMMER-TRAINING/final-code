@@ -360,7 +360,7 @@ def process_exam_day(exam_days, collage_days):
 
 
 def observers_on_volume(volume, size):
-    return (volume + size - 1)*30 // (size*100)
+    return (volume + size - 1)*130 // (size*100)
 
 # days dates hours places
 def email_content(days,dates,hours,places):
