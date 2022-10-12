@@ -281,7 +281,6 @@ class invScreen2(QWidget):
                 spliteddate = tas.day.split("/")
                 # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
                 days.append(
-                    arabic(
                         mp[
                             date(
                                 int(spliteddate[2]),
@@ -289,18 +288,17 @@ class invScreen2(QWidget):
                                 int(spliteddate[0]),
                             ).weekday()
                         ]
-                    )
                 )
                 dates.append(tas.day)
                 hours.append("9:15")
-                places.append(arabic(tas.building))
+                places.append(tas.building)
 
             send_email(
                 mon.email,
-                arabic(mon.user_name),
-                arabic(mon.branch),
+                mon.user_name,
+                mon.branch,
                 11,
-                2020,
+                mon.task[0].day[-4:],
                 days,
                 dates,
                 hours,
@@ -328,12 +326,12 @@ class invScreen2(QWidget):
             places=[]
             for tas in tmplst.task:
                 spliteddate=tas.day.split("/")
-                days.append(arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()]))
+                days.append(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()])
                 dates.append(tas.day)
                 hours.append("9:15")
-                places.append(arabic(tas.building))
+                places.append(tas.building)
 
-            send_email(tmplst.email,arabic(tmplst.user_name),arabic(tmplst.branch),11,2020,days,dates,hours,places)
+            send_email(tmplst.email,tmplst.user_name,tmplst.branch,11,tmplst.task[0].day[-4:],days,dates,hours,places)
     def download_function(self):
         cnt = 0
         lst = []
