@@ -272,6 +272,9 @@ class invScreen2(QWidget):
             6: "الأحد",
         }
         for mon in monitors:
+            if len(mon.task) == 0:
+               self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
+               continue
             days = []
             dates = []
             hours = []
@@ -309,6 +312,10 @@ class invScreen2(QWidget):
     def printone_2_function(self):
         if(current_index==-1):
             self.label_5.setText("من فضلك اختار شخص")
+           
+        elif len(monitors[current_index].task) == 0:
+            self.label_5.setText(f"{monitors[current_index].user_name} ليس لديه أيّ تكليفات")
+            
         else:
             mp={
                 0:"الأثنين",
