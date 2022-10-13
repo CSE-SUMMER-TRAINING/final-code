@@ -33,6 +33,7 @@ from observers_data import *
 from observers_solve import *
 import wget
 from template import *
+from PyQt5.QtGui import *
 
 # year=
 # month=
@@ -633,6 +634,11 @@ class exScreen2(QWidget):
         # get name of branches
         excelSheet = pd.ExcelFile(file)
         self.listOfBranches = excelSheet.sheet_names
+
+        # groups
+        self.groups = pd.read_excel(file, usecols='A')
+        self.groups.head()
+
         self.listOfBranches.pop(0)
 
         self.listOfFrames = []
@@ -644,7 +650,6 @@ class exScreen2(QWidget):
             self.listOfFrames.append(frame)
 
         for i in range(len(self.listOfBranches)):
-
             self.add_tab_widget.addTab(self.listOfFrames[i], self.listOfBranches[i])
             # self.add_tab_widget.setTabPosition(QTabWidget.South)
             # change direction
@@ -681,14 +686,18 @@ class exScreen2(QWidget):
             """
         )
 
-        self.f(0)
-        self.add_tab_widget.tabBarClicked.connect(self.f)
+        self.fill_tabs(0)
+        self.add_tab_widget.tabBarClicked.connect(self.fill_tabs)
 
-    def f(self, index=0):
+    def fill_tabs(self, index=0):
         global nj
         index = index
+        # two tabs for each branch
         self.tabs = QTabWidget(self.listOfFrames[index])
+
         print(index)
+
+        # table optimal solution
         DISPLAY(index, num_of_branches)
         # print(toPrint)
         vertical = ["  القاعه"]
@@ -736,12 +745,139 @@ class exScreen2(QWidget):
 
                 table.setItem(j + 1, i + 6, item)
 
-        l0 = QLabel("lab2")
-        if index == 0:
-            l0 = QLabel("lab11")
+        # suggest tab
+        self.suggest = QWidget()
+
+        # for day1
+        self.but1 = QPushButton("اليوم الاول", self.suggest)
+        self.but1.setStyleSheet("""
+                QPushButton{
+                background-color:#255;
+                border-radius:20px;
+                width:300px;
+                height:80px;
+                color:white;
+                font-size:20px;
+                }
+                QPushButton:hover{
+                        background-color:#555;
+
+                }
+
+                """)
+
+        self.but1.clicked.connect(self.day1)
+
+        self.but1.move(1180, 100)
+        self.but1.setCursor(Qt.PointingHandCursor)
+
+        # for day 2
+        self.but2 = QPushButton("اليوم الثاني", self.suggest)
+        self.but2.setStyleSheet("""
+                        QPushButton{
+                        background-color:#255;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#555;
+
+                        }
+
+                        """
+                                )
+        self.but2.move(1180, 200)
+        self.but2.clicked.connect(self.day2)
+        self.but2.setCursor(Qt.PointingHandCursor)
+
+        # groups area
+        self.frame1 = QFrame(self.suggest)
+        self.frame1.move(40, 30)
+
+        # choose from label 
+        self.labelgroubs = QLabel(self.frame1)
+        self.labelgroubs.resize(800, 40)
+        self.labelgroubs.move(180, 10)
+        self.labelgroubs.setAlignment(QtCore.Qt.AlignCenter)
+
+        # names of groups
+        self.checkboxlist = []
+
+        # after saving data for day1 or both
+        self.buttonsendall = QPushButton(self.suggest)
+        self.buttonsendall.resize(0, 0)
+        self.buttonsendall.clicked.connect(self.send)
+        self.buttonsendall.setCursor(Qt.PointingHandCursor)
+
+        # return checkboxes not checked
+        self.buttonback = QPushButton(self.suggest)
+        self.buttonback.resize(0, 0)
+        self.buttonback.clicked.connect(self.return_data)
+        self.buttonback.setCursor(Qt.PointingHandCursor)
+
+        # get groups
+        for i in self.groups.values:
+            self.checkboxlist.append(i[0])
+
+        # for each check box
+        self.choosegroup = []
+        xch = 800
+        ych = 100
+        for x in range(len(self.checkboxlist)):
+            c = QCheckBox(self.frame1)
+            c.move(xch, ych)
+            c.resize(0, 0)
+            c.setStyleSheet("font-size:24px;")
+            self.choosegroup.append(c)
+            if xch >= 300:
+                xch -= 300
+
+            else:
+                xch = 800
+                ych += 50
+
+        self.button1_send = QPushButton(self.frame1)
+        self.button1_send.setStyleSheet("border:none;")
+        self.button1_send.move(100, 500)
+        self.button2_send = QPushButton(self.frame1)
+        self.button2_send.setStyleSheet("border:none;")
+        self.button2_send.move(100, 500)
+
+        self.button2_send.setCursor(Qt.PointingHandCursor)
+        self.button1_send.setCursor(Qt.PointingHandCursor)
+
+        # frame table by person 
+        self.frame2 = QFrame(self.suggest)
+        self.frame2.move(40, 30)
+        self.frame2.resize(0, 0)
+        self.closeframe2btn = QPushButton(self.frame2)
+        self.closeframe2btn.resize(0, 0)
+        self.closeframe2btn.setCursor(Qt.PointingHandCursor)
+
+        self.table_suggest = QTableWidget(self.frame2)
+        self.table_suggest.move(5, 30)
+        self.closeframe2btn.clicked.connect(self.closeframe2fun)
 
         self.tabs.addTab(table, "حل مقترح")
-        self.tabs.addTab(l0, "اضافة حل؟")
+        self.tabs.addTab(self.suggest, "اضافة حل؟")
+        # groups choosen
+        self.day1list = []
+        self.day2list = []
+
+        # return from frame1
+        self.backToFrame0 = QPushButton(self.frame1)
+        self.backToFrame0.setIcon(QIcon("icons\go-back-arrow.png"))
+        self.backToFrame0.setCursor(Qt.PointingHandCursor)
+        self.backToFrame0.setStyleSheet("background-color:white;border:none;")
+        size = QSize(0, 0)
+        self.backToFrame0.resize(0, 0)
+        self.backToFrame0.setIconSize(size)
+        self.backToFrame0.clicked.connect(self.backToFrame0Function)
+        self.backToFrame0.setToolTip("رجوع")
+        self.backToFrame0.move(0, 0)
 
         self.tabs.move(10, 10)  # position
         self.tabs.resize(1450, 700)  # size
@@ -779,6 +915,197 @@ class exScreen2(QWidget):
              }
             """
         )
+
+    def day1(self):
+        self.frame1.resize(1200, 800)
+        self.button2_send.resize(0, 0)
+        self.but1.move(1220, 100)
+        self.but2.move(1180, 200)
+        size = QSize(30, 30)
+        self.backToFrame0.setIconSize(size)
+        self.backToFrame0.resize(50, 30)
+
+        self.labelgroubs.setText("اختار من هذه الدفعات")
+        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#cfc9c9;padding:3px;border-radius:10px;")
+
+        # show checkbox
+        for i in range(len(self.choosegroup)):
+            if self.choosegroup[i].isChecked() != True and self.choosegroup[i].text() not in self.day2list:
+                self.choosegroup[i].resize(230, 100)
+                self.choosegroup[i].setText(self.checkboxlist[i])
+            else:
+                if self.choosegroup[i].text() in self.day1list:
+                    self.choosegroup[i].resize(230, 100)
+                    self.choosegroup[i].setText(self.checkboxlist[i])
+                    self.choosegroup[i].setChecked(True)
+                else:
+                    self.choosegroup[i].resize(0, 0)
+
+        self.button1_send.setText("حفظ لليوم الاول")
+        # self.button1_send.move(500, 500)
+        self.button1_send.clicked.connect(self.send_data1)
+        self.button1_send.resize(200, 40)
+        self.button1_send.setStyleSheet(
+            "border:1px solid #255;color:white;background-color:#255;padding:5px;border-radius:10px;font-size:17px;")
+
+        self.buttonsendall.move(1200, 400)
+        self.buttonsendall.resize(200, 60)
+        self.buttonsendall.setText("ارسال ")
+        self.buttonsendall.setStyleSheet(
+            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+
+        self.buttonback.move(1200, 500)
+        self.buttonback.resize(200, 60)
+        self.buttonback.setText("تراجع")
+        self.buttonback.setStyleSheet(
+            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+
+    def day2(self):
+        self.frame1.resize(1200, 800)
+        self.button1_send.resize(0, 0)
+        self.but1.move(1180, 100)
+        self.but2.move(1220, 200)
+        size = QSize(30, 30)
+        self.backToFrame0.setIconSize(size)
+        self.backToFrame0.resize(50, 30)
+
+        self.labelgroubs.setText("اختار من هذه الدفعات")
+        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#cfc9c9;padding:3px;border-radius:10px;")
+
+        for i in range(len(self.choosegroup)):
+            if self.choosegroup[i].isChecked() != True and self.choosegroup[i].text() not in self.day1list:
+                self.choosegroup[i].resize(230, 100)
+                self.choosegroup[i].setText(self.checkboxlist[i])
+
+            else:
+                if self.choosegroup[i].text() in self.day2list:
+                    self.choosegroup[i].resize(230, 100)
+                    self.choosegroup[i].setText(self.checkboxlist[i])
+                    self.choosegroup[i].setChecked(True)
+                else:
+                    self.choosegroup[i].resize(0, 0)
+
+        self.button2_send.setText("حفظ لليوم الثاني")
+        # self.button2_send.move(500, 400)
+        self.button2_send.clicked.connect(self.send_data2)
+        self.button2_send.resize(200, 40)
+        self.button2_send.setStyleSheet(
+            "border:1px solid #255;color:white;background-color:#255;padding:5px;border-radius:10px;font-size:17px;")
+
+        self.buttonsendall.move(1200, 400)
+        self.buttonsendall.resize(200, 60)
+        self.buttonsendall.setText("ارسال ")
+        self.buttonsendall.setStyleSheet(
+            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+
+        self.buttonback.move(1200, 500)
+        self.buttonback.resize(200, 60)
+        self.buttonback.setText("تراجع")
+        self.buttonback.setStyleSheet(
+            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+
+    def send(self):
+        print(self.day1list)
+        print(self.day2list)
+
+        ret = QMessageBox.question(self, 'MessageBox', "هل تريد عرض الجدول",
+                                   QMessageBox.Yes | QMessageBox.No)
+
+        if ret == QMessageBox.Yes:
+            self.show_table()
+
+        self.return_data()
+
+    def show_table(self):
+        # self.frame2.setStyleSheet("background-color:black;")
+        self.frame2.resize(1420, 700)
+        self.table_suggest.resize(1300, 450)
+        self.closeframe2btn.resize(200, 50)
+        self.closeframe2btn.setText("اغلاق")
+        self.closeframe2btn.move(1000, 520)
+        self.frame2.setStyleSheet("background-color:white;")
+        self.closeframe2btn.setStyleSheet("background-color:#255;color:white;")
+
+        # first tab
+        DISPLAY(0, num_of_branches)
+        # print(toPrint)
+        vertical = ["  القاعه"]
+
+        for i in range(len(toPrint)):
+            if toPrint[i][0] not in vertical:
+                vertical.append(toPrint[i][0])
+
+        self.table_suggest.setColumnCount(9)
+        self.table_suggest.setRowCount(len(vertical))
+
+        header = ["الدفعه", "من", "الي", "الدفعه", "من", "الي", "الدفعه", "من", "الي"]
+        self.table_suggest.setHorizontalHeaderLabels(header)
+        table_ho = self.table_suggest.horizontalHeader()
+        for i in range(9):
+            table_ho.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+
+        self.table_suggest.setVerticalHeaderLabels(vertical)
+        table_ve = self.table_suggest.verticalHeader()
+        table_ve.setStyleSheet("font-size:20px;")
+        # print(len(toPrint))
+        for i in range(3):
+            for j in range(len(vertical) - 1):
+                item = QtWidgets.QTableWidgetItem(str(toPrint[j][i + 1]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+                self.table_suggest.setItem(j + 1, i, item)
+
+        for i in range(3):
+            for j in range(len(vertical) - 1):
+                item = QtWidgets.QTableWidgetItem(str(toPrint[j + len(vertical) - 1][i + 1]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+                self.table_suggest.setItem(j + 1, i + 3, item)
+
+        nj = 2 * len(vertical) - 2
+        for i in range(3):
+            for j in range(len(vertical) - 1):
+                item = QtWidgets.QTableWidgetItem(str(toPrint[j + nj][i + 1]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+                self.table_suggest.setItem(j + 1, i + 6, item)
+
+    def closeframe2fun(self):
+        self.frame2.resize(0, 0)
+        self.closeframe2btn.resize(0, 0)
+        self.table_suggest.resize(0, 0)
+
+    def return_data(self):
+        for i in range(len(self.choosegroup)):
+            self.choosegroup[i].setChecked(False)
+            self.choosegroup[i].resize(230, 100)
+
+        self.day2list.clear()
+        self.day1list.clear()
+
+    def send_data2(self):
+
+        for i in range(len(self.choosegroup)):
+            if self.choosegroup[i].isChecked() == True and self.choosegroup[i].text() not in self.day1list and \
+                self.choosegroup[i].text() not in self.day2list:
+                self.day2list.append(self.choosegroup[i].text())
+
+        print(self.day2list)
+
+    def send_data1(self):
+        for i in range(len(self.choosegroup)):
+            if self.choosegroup[i].isChecked() == True and self.choosegroup[i].text() not in self.day2list and \
+                self.choosegroup[i].text() not in self.day1list:
+                self.day1list.append(self.choosegroup[i].text())
+        print(self.day1list)
+
+    def backToFrame0Function(self):
+        self.frame1.resize(0, 0)
+        self.backToFrame0.resize(0, 0)
+        self.but2.move(1180, 200)
+        self.but1.move(1180, 100)
+        self.buttonsendall.resize(0, 0)
+        self.buttonback.resize(0, 0)
 
     def backfromex_fun(self):
         widget.setCurrentWidget(exscreen1)
