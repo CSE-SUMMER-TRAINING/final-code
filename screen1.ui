@@ -35,10 +35,14 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 14pt &quot;MS Shell Dlg 2&quot;;
-background-color: 
-#8abbca;
-color:white;</string>
+    <string notr="true">QPushButton{
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+background-color:#305a6c;
+color:white;
+}
+QPushButton:hover{
+background-color:#407991;
+}</string>
    </property>
    <property name="text">
     <string/>
@@ -60,9 +64,14 @@ color:white;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 17pt &quot;MS Shell Dlg 2&quot;;
-background-color: #3caac3;
-color:white;</string>
+    <string notr="true">QPushButton{
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+background-color:#305a6c;
+color:white;
+}
+QPushButton:hover{
+background-color:#407991;
+}</string>
    </property>
    <property name="text">
     <string/>
@@ -84,7 +93,7 @@ color:white;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #274857</string>
+    <string notr="true">background-color: #305a6c</string>
    </property>
    <property name="text">
     <string/>

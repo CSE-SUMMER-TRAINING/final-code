@@ -36,7 +36,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(18, 129, 139);
+background-color:#305a6c;
 font: 20px &quot;MS Shell Dlg 2&quot; center
 </string>
    </property>
@@ -77,7 +77,7 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(18, 129, 139)</string>
+    <string notr="true">background-color: #305a6c;</string>
    </property>
    <property name="text">
     <string/>
@@ -89,8 +89,18 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
      <x>120</x>
      <y>10</y>
      <width>93</width>
-     <height>28</height>
+     <height>33</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+font: 10pt &quot;MS Shell Dlg 2&quot;;
+background-color:#e6e6e6;
+color:#141414;
+}
+QPushButton:hover{
+background-color:#ececec;
+}</string>
    </property>
    <property name="text">
     <string>رجوع</string>

@@ -36,7 +36,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(18, 129, 139);
+background-color: #305a6c;
 font: 30px &quot;MS Shell Dlg 2&quot; center
 </string>
    </property>
@@ -77,7 +77,7 @@ font: 30px &quot;MS Shell Dlg 2&quot; center
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(18, 129, 139)</string>
+    <string notr="true">background-color: #305a6c;</string>
    </property>
    <property name="text">
     <string/>
@@ -153,9 +153,14 @@ p, li { white-space: pre-wrap; }
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
-
-color:#2D2D2D;</string>
+    <string notr="true">QPushButton{
+font: 10pt &quot;MS Shell Dlg 2&quot;;
+background-color:#e6e6e6;
+color:#141414;
+}
+QPushButton:hover{
+background-color:#ececec;
+}</string>
    </property>
    <property name="text">
     <string>مساعدة</string>
@@ -180,9 +185,14 @@ color:#2D2D2D;</string>
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
-
-color:#2D2D2D;</string>
+    <string notr="true">QPushButton{
+font: 10pt &quot;MS Shell Dlg 2&quot;;
+background-color:#e6e6e6;
+color:#141414;
+}
+QPushButton:hover{
+background-color:#ececec;
+}</string>
    </property>
    <property name="text">
     <string>اختار</string>
@@ -209,10 +219,10 @@ color:#2D2D2D;</string>
    <property name="styleSheet">
     <string notr="true">
 QPushButton{
-background-color: rgb(18, 129, 139);font: 10pt &quot;MS Shell Dlg 2&quot;;color:white;
+background-color:#305a6c;font: 10pt &quot;MS Shell Dlg 2&quot;;color:white;
 }
 QPushButton:hover{
-background-color:rgb(23, 167, 181);
+background-color:#407991;
 font-size:11pt;
 }</string>
    </property>
@@ -264,10 +274,10 @@ font-size:11pt;
    <property name="styleSheet">
     <string notr="true">
 QPushButton{
-background-color: rgb(18, 129, 139);font: 10pt &quot;MS Shell Dlg 2&quot;;color:white;
+background-color: #305a6c;font: 10pt &quot;MS Shell Dlg 2&quot;;color:white;
 }
 QPushButton:hover{
-background-color:rgb(23, 167, 181);
+background-color:#407991;
 font-size:11pt;
 }</string>
    </property>

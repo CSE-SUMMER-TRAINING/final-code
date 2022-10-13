@@ -42,7 +42,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);
-background-color: #005580;
+background-color: #305a6c;
 font: 20px &quot;MS Shell Dlg 2&quot; center
 </string>
    </property>
@@ -83,7 +83,7 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:  #005580</string>
+    <string notr="true">background-color:  #305a6c</string>
    </property>
    <property name="text">
     <string/>
@@ -106,7 +106,7 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../../Downloads/table.png</pixmap>
+    <pixmap>icons/table.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -124,6 +124,15 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+background-color: #e6e6e6;
+color:black;
+}
+QPushButton:hover{
+background-color: #ececec;
+}</string>
+   </property>
    <property name="text">
     <string>رجوع</string>
    </property>
@@ -139,6 +148,15 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
    </property>
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+background-color: #e6e6e6;
+color:black;
+}
+QPushButton:hover{
+background-color: #ececec;
+}</string>
    </property>
    <property name="text">
     <string>تنزيل</string>
@@ -157,7 +175,13 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">QPushButton{
+background-color: #e6e6e6;
+color:black;
+}
+QPushButton:hover{
+background-color: #ececec;
+}</string>
    </property>
    <property name="text">
     <string>طباعة الكل</string>
@@ -216,11 +240,11 @@ border-radius:10px;</string>
      <property name="styleSheet">
       <string notr="true">color:black;font-size:16px;</string>
      </property>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>240</number>
-     </attribute>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>100</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>240</number>
      </attribute>
      <attribute name="verticalHeaderCascadingSectionResizes">
       <bool>false</bool>
@@ -424,14 +448,14 @@ font-size:16px;
     <property name="styleSheet">
      <string notr="true">QPushButton{
 
-background-color:#005580;
+background-color:#305a6c;
 color:white;
 font-size:15px;
 border-radius:10px;
 }
 QPushButton:hover{
 
-background-color: #6699ff;
+background-color: #407991;
 color:white;
 font-size:16px;
 }
@@ -463,14 +487,14 @@ font-size:16px;
     <property name="styleSheet">
      <string notr="true">QPushButton{
 
-background-color:#005580;
+background-color:#305a6c;
 color:white;
 font-size:15px;
 border-radius:10px;
 }
 QPushButton:hover{
 
-background-color: #6699ff;
+background-color: #407991;
 color:white;
 font-size:16px;
 }
@@ -502,13 +526,13 @@ font-size:16px;
     <property name="styleSheet">
      <string notr="true">QPushButton{
 
-background-color: #005580;
+background-color: #305a6c;
 color:white;
 font-size:15px;
 }
 QPushButton:hover{
 
-background-color: #6699ff;
+background-color: #407991;
 color:white;
 font-size:16px;
 }
@@ -533,13 +557,13 @@ font-size:16px;
     <property name="styleSheet">
      <string notr="true">QPushButton{
 
-background-color: #005580;
+background-color: #305a6c;
 color:white;
 font-size:15px;
 }
 QPushButton:hover{
 
-background-color: #6699ff;
+background-color: #407991;
 color:white;
 font-size:16px;
 }
@@ -599,13 +623,13 @@ font-size:16px;
     <property name="styleSheet">
      <string notr="true">QPushButton{
 
-background-color: #005580;
+background-color: #305a6c;
 color:white;
 font-size:15px;
 }
 QPushButton:hover{
 
-background-color: #6699ff;
+background-color: #407991;
 color:white;
 font-size:16px;
 }
@@ -629,7 +653,13 @@ font-size:16px;
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">QPushButton{
+background-color: #e6e6e6;
+color:black;
+}
+QPushButton:hover{
+background-color: #ececec;
+}</string>
    </property>
    <property name="text">
     <string>ارسال ايميل للكل</string>

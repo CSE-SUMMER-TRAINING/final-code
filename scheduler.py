@@ -591,6 +591,7 @@ class exScreen1(QWidget):
         # read_sheet(excelSheet, num_of_branches)
 
     def goBack(self):
+        self.label_not_enough.setText("")
         widget.setCurrentWidget(mainwindow)
 
     def generateTables(self):
@@ -664,8 +665,8 @@ class exScreen2(QWidget):
                QTabBar::tab:selected {
                     font-family: Roboto;
                     font-size: 18px;
-                    background: rgb(175,175,175,255);
-                    color: rgb(0,0,0,255);
+                    background: #407991;
+                    color: white;
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
                     border:1px solid rgb(197,197,199,255);
@@ -675,11 +676,10 @@ class exScreen2(QWidget):
                     font-family: Roboto;
                     font-size: 18px;
                     font: italic;
-                    background: rgb(234,234,234,255);
-                    color: rgb(0,0,0,255);
+                    background: #305a6c;
+                    color: white;
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
-
                     border:1px solid rgb(197,197,199,255);
                     padding: 10px 30px 10px 24px;
                 }
@@ -752,7 +752,7 @@ class exScreen2(QWidget):
         self.but1 = QPushButton("اليوم الاول", self.suggest)
         self.but1.setStyleSheet("""
                 QPushButton{
-                background-color:#255;
+                background-color:#305a6c;
                 border-radius:20px;
                 width:300px;
                 height:80px;
@@ -760,10 +760,8 @@ class exScreen2(QWidget):
                 font-size:20px;
                 }
                 QPushButton:hover{
-                        background-color:#555;
-
+                        background-color:#407991;
                 }
-
                 """)
 
         self.but1.clicked.connect(self.day1)
@@ -775,7 +773,7 @@ class exScreen2(QWidget):
         self.but2 = QPushButton("اليوم الثاني", self.suggest)
         self.but2.setStyleSheet("""
                         QPushButton{
-                        background-color:#255;
+                        background-color:#305a6c;
                         border-radius:20px;
                         width:300px;
                         height:80px;
@@ -783,12 +781,10 @@ class exScreen2(QWidget):
                         font-size:20px;
                         }
                         QPushButton:hover{
-                                background-color:#555;
-
+                                background-color:#407991;
                         }
 
-                        """
-                                )
+                        """)
         self.but2.move(1180, 200)
         self.but2.clicked.connect(self.day2)
         self.but2.setCursor(Qt.PointingHandCursor)
@@ -895,8 +891,8 @@ class exScreen2(QWidget):
             QTabBar::tab:selected {
                  font-family: Roboto;
                  font-size: 18px;
-                 color: rgb(0,0,0,255);
-                 background: rgb(175,175,175,255);
+                 color: white;
+                 background: #407991;
                  border-top-left-radius: 8px;
                  border-top-right-radius: 8px;
                  border:1px solid rgb(197,197,199,255);
@@ -906,12 +902,12 @@ class exScreen2(QWidget):
                  font-family: Roboto;
                  font-size: 18px;
                  font: italic;
-                color: rgb(0,0,0,255);
+                color: white;
                  border-top-left-radius: 8px;
                  border-top-right-radius: 8px;          
                  border:1px solid rgb(197,197,199,255);
                  padding: 10px 30px 10px 24px;
-                 background: rgb(234,234,234,255);
+                 background: #305a6c;
              }
             """
         )
@@ -920,13 +916,33 @@ class exScreen2(QWidget):
         self.frame1.resize(1200, 800)
         self.button2_send.resize(0, 0)
         self.but1.move(1220, 100)
+        self.but1.setStyleSheet("""
+                        background-color:#407991;
+                        border-radius:20px;
+                        color:white;
+                        font-size:20px;
+                        """)
         self.but2.move(1180, 200)
+        self.but2.setStyleSheet("""
+                        QPushButton{
+                        background-color:#305a6c;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#407991;
+                        }
+                        """)
+
         size = QSize(30, 30)
         self.backToFrame0.setIconSize(size)
         self.backToFrame0.resize(50, 30)
 
         self.labelgroubs.setText("اختار من هذه الدفعات")
-        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#cfc9c9;padding:3px;border-radius:10px;")
+        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#e6e6e6;color:#141414;padding:3px;border-radius:10px;")
 
         # show checkbox
         for i in range(len(self.choosegroup)):
@@ -945,32 +961,87 @@ class exScreen2(QWidget):
         # self.button1_send.move(500, 500)
         self.button1_send.clicked.connect(self.send_data1)
         self.button1_send.resize(200, 40)
-        self.button1_send.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#255;padding:5px;border-radius:10px;font-size:17px;")
+        self.button1_send.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
         self.buttonsendall.move(1200, 400)
         self.buttonsendall.resize(200, 60)
         self.buttonsendall.setText("ارسال ")
-        self.buttonsendall.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+        self.buttonsendall.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
         self.buttonback.move(1200, 500)
         self.buttonback.resize(200, 60)
         self.buttonback.setText("تراجع")
-        self.buttonback.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+        self.buttonback.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
     def day2(self):
         self.frame1.resize(1200, 800)
         self.button1_send.resize(0, 0)
         self.but1.move(1180, 100)
+        self.but1.setStyleSheet("""
+                        QPushButton{
+                        background-color:#305a6c;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#407991;
+                        }
+                        """)
         self.but2.move(1220, 200)
+        self.but2.setStyleSheet("""
+                        background-color:#407991;
+                        border-radius:20px;
+                        color:white;
+                        font-size:20px;
+                        """)
         size = QSize(30, 30)
         self.backToFrame0.setIconSize(size)
         self.backToFrame0.resize(50, 30)
 
         self.labelgroubs.setText("اختار من هذه الدفعات")
-        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#cfc9c9;padding:3px;border-radius:10px;")
+        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#e6e6e6;color:#141414;padding:3px;border-radius:10px;")
 
         for i in range(len(self.choosegroup)):
             if self.choosegroup[i].isChecked() != True and self.choosegroup[i].text() not in self.day1list:
@@ -989,20 +1060,56 @@ class exScreen2(QWidget):
         # self.button2_send.move(500, 400)
         self.button2_send.clicked.connect(self.send_data2)
         self.button2_send.resize(200, 40)
-        self.button2_send.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#255;padding:5px;border-radius:10px;font-size:17px;")
+        self.button2_send.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
         self.buttonsendall.move(1200, 400)
         self.buttonsendall.resize(200, 60)
         self.buttonsendall.setText("ارسال ")
-        self.buttonsendall.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+        self.buttonsendall.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
         self.buttonback.move(1200, 500)
         self.buttonback.resize(200, 60)
         self.buttonback.setText("تراجع")
-        self.buttonback.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+        self.buttonback.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
     def send(self):
         print(self.day1list)
@@ -1024,7 +1131,7 @@ class exScreen2(QWidget):
         self.closeframe2btn.setText("اغلاق")
         self.closeframe2btn.move(1000, 520)
         self.frame2.setStyleSheet("background-color:white;")
-        self.closeframe2btn.setStyleSheet("background-color:#255;color:white;")
+        self.closeframe2btn.setStyleSheet("background-color:#305a6c;color:white;")
 
         # first tab
         DISPLAY(0, num_of_branches)
@@ -1124,7 +1231,7 @@ class invHelp(QWidget):
         widget.setCurrentWidget(invscreen1)
 
     def save_func(self):
-        wget.download(URL_INV)
+        create_observers_template()
 
 
 class examHelp(QWidget):
@@ -1140,7 +1247,7 @@ class examHelp(QWidget):
         widget.setCurrentWidget(exscreen1)
 
     def save_func(self):
-        wget.download(URL_EXAM)
+        create_halls_template()
 
 
 app = QApplication(sys.argv)
