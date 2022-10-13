@@ -40,6 +40,7 @@ def printall():
             spliteddate = tas.day.split("/")
             dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
             data.append((arabic(tas.building),"9:15",tas.day,dayy))
+        if(len(data)==1):continue
         pdf.add_page()
         pdf.image("icons\download.png",90,w=35,h=30)
         pdf.set_font('FreeSerif', size=12)
