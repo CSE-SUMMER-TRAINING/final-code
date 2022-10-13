@@ -592,6 +592,7 @@ class exScreen1(QWidget):
 
     def goBack(self):
         self.label_not_enough.setText("")
+        self.lineEdit.setText("")
         widget.setCurrentWidget(mainwindow)
 
     def generateTables(self):
@@ -1211,6 +1212,32 @@ class exScreen2(QWidget):
         self.backToFrame0.resize(0, 0)
         self.but2.move(1180, 200)
         self.but1.move(1180, 100)
+        self.but2.setStyleSheet("""
+                        QPushButton{
+                        background-color:#305a6c;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#407991;
+                        }
+                        """)
+        self.but1.setStyleSheet("""
+                        QPushButton{
+                        background-color:#305a6c;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#407991;
+                        }
+                        """)
         self.buttonsendall.resize(0, 0)
         self.buttonback.resize(0, 0)
 
