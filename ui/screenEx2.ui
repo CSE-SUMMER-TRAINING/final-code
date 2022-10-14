@@ -86,7 +86,7 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
   <widget class="QPushButton" name="back">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>80</x>
      <y>10</y>
      <width>93</width>
      <height>33</height>
@@ -106,10 +106,34 @@ background-color:#ececec;
     <string>رجوع</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="save">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>10</y>
+     <width>93</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+font: 10pt &quot;MS Shell Dlg 2&quot;;
+background-color:#e6e6e6;
+color:#141414;
+}
+QPushButton:hover{
+background-color:#ececec;
+}</string>
+   </property>
+   <property name="text">
+    <string>تنزيل</string>
+   </property>
+  </widget>
   <zorder>label_2</zorder>
   <zorder>label</zorder>
   <zorder>label_5</zorder>
   <zorder>back</zorder>
+  <zorder>save</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -3,6 +3,7 @@ from xml.etree.ElementTree import tostring
 import xlsxwriter
 from data_input import *
 from solver import buildDp, solve, mem, toPrint
+from observers_data import arabic
 
 to_print1 = []
 to_print2 = []
@@ -10,14 +11,7 @@ to_print3 = []
 
 
 def DISPLAY(branch_num, num_of_branches):
-    # for i in range(num_of_branches):
-    #     print(f"\t\t\t{i + 1}. {branch_name[i]}")
-
     choice = branch_num
-    # while choice.isnumeric() == False or int(choice) < 1 or int(choice) > num_of_branches:
-    #    choice = input("Enter valid number: ")
-    #choice = int(choice)
-
     solve(branch[choice])
     # output_the_distribution(branch_num)
 
@@ -52,11 +46,14 @@ def print_output(choice1, choice2):
     #     mem.clear()
         # break
 
+def hasSpace(str):
+    return True if ' ' in str else False
 
 def output_the_distribution(choice1):
-    choice1 -= 1
-    workbook = xlsxwriter.Workbook('القاعات.xlsx')
-    worksheet = workbook.add_worksheet(branch_name[choice1])
+    name = branch_name[choice1]
+    workbook = xlsxwriter.Workbook(f"قاعات {arabic(name)}.xlsx")
+    if hasSpace(name): name = arabic(branch_name[choice1])
+    worksheet = workbook.add_worksheet(name)
 
     general_format = workbook.add_format()
     general_format.set_align('center')
@@ -104,10 +101,6 @@ def output_the_distribution(choice1):
     worksheet.write(1, 9, 'الي', sub_header_format)
 
     cnt, R = 1, 2
-
-    # print("\n\n")
-    # print(len(toPrint))
-    # to_print1.extend(list(toPrint))
     l = len(branch[choice1].hallsInBranch)
     
 
@@ -131,12 +124,13 @@ def output_the_distribution(choice1):
         worksheet.write(R + i, 8, toPrint[i + 2 * l][2], general_format)
         worksheet.write(R + i, 9, toPrint[i + 2 * l][3], general_format)
     workbook.close()
-    output_the_distribution_with_halls_data(choice1+1)
+    output_the_distribution_with_halls_data(choice1)
 
 def output_the_distribution_with_halls_data(choice1):
-    choice1 -= 1
+    name = branch_name[choice1]
     workbook = xlsxwriter.Workbook('hallsWithAllData.xlsx')
-    worksheet = workbook.add_worksheet(branch_name[choice1])
+    if hasSpace(name): name = arabic(branch_name[choice1])
+    worksheet = workbook.add_worksheet(name)
 
     general_format = workbook.add_format()
     general_format.set_align('center')

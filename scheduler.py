@@ -150,6 +150,7 @@ class invScreen1(QWidget):
 
 current_index = -1
 nj = 0
+solveIdx = 0
 
 
 class Worker(QObject):
@@ -920,7 +921,7 @@ class exScreen1(QWidget):
 
             self.label_not_enough.setText("")
             # create_halls_template()
-            global num_of_branches
+            global num_of_branches, allBranches
             excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
             read_sheet(excelSheet, num_of_branches)
             build(num_of_branches)
@@ -938,13 +939,14 @@ class exScreen1(QWidget):
 
 class exScreen2(QWidget):
     def __init__(self, file):
-
         super(exScreen2, self).__init__()
-
         loadUi("./ui/screenEx2.ui", self)
 
         self.back = self.findChild(QPushButton, "back")
         self.back.clicked.connect(self.backfromex_fun)
+        self.saveBtn = self.findChild(QPushButton, "save")
+        self.saveBtn.clicked.connect(self.saveSol)
+
         # set tabs of branches
         self.add_tab_widget = QTabWidget(self)
         self.add_tab_widget.move(200, 100)  # position
@@ -952,25 +954,21 @@ class exScreen2(QWidget):
         # get name of branches
         excelSheet = pd.ExcelFile(file)
         self.listOfBranches = excelSheet.sheet_names
-
         # groups
         self.groups = pd.read_excel(file, usecols='A')
         self.groups.head()
 
         self.listOfBranches.pop(0)
-
         self.listOfFrames = []
 
-        # self.save_func()
         for i in range(len(self.listOfBranches)):
             frame = QFrame(self)
-            # frame.setStyleSheet("background-color:#c6ebd9;")
             self.listOfFrames.append(frame)
 
         for i in range(len(self.listOfBranches)):
             self.add_tab_widget.addTab(self.listOfFrames[i], self.listOfBranches[i])
-            # self.add_tab_widget.setTabPosition(QTabWidget.South)
             # change direction
+            # self.add_tab_widget.setTabPosition(QTabWidget.South)
             self.add_tab_widget.setLayoutDirection(Qt.RightToLeft)
 
         self.add_tab_widget.setStyleSheet(
@@ -1007,16 +1005,16 @@ class exScreen2(QWidget):
         self.add_tab_widget.tabBarClicked.connect(self.fill_tabs)
 
     def fill_tabs(self, index=0):
-        global nj
+        global nj, solveIdx
         index = index
+        solveIdx = index
+
         # two tabs for each branch
         self.tabs = QTabWidget(self.listOfFrames[index])
 
-        print(index)
-
         # table optimal solution
         DISPLAY(index, num_of_branches)
-        # print(toPrint)
+
         vertical = ["  القاعه"]
 
         for i in range(len(toPrint)):
@@ -1034,7 +1032,7 @@ class exScreen2(QWidget):
         table.setVerticalHeaderLabels(vertical)
         table_ve = table.verticalHeader()
         table_ve.setStyleSheet("font-size:20px;")
-        # print(len(toPrint))
+
         for i in range(3):
             for j in range(len(vertical) - 1):
                 item = QtWidgets.QTableWidgetItem(str(toPrint[j][i + 1]))
@@ -1080,9 +1078,7 @@ class exScreen2(QWidget):
                         background-color:#407991;
                 }
                 """)
-
         self.but1.clicked.connect(self.day1)
-
         self.but1.move(1180, 100)
         self.but1.setCursor(Qt.PointingHandCursor)
 
@@ -1166,16 +1162,18 @@ class exScreen2(QWidget):
         self.frame2 = QFrame(self.suggest)
         self.frame2.move(40, 30)
         self.frame2.resize(0, 0)
-        self.closeframe2btn = QPushButton(self.frame2)
-        self.closeframe2btn.resize(0, 0)
-        self.closeframe2btn.setCursor(Qt.PointingHandCursor)
+        
+        # self.closeframe2btn = QPushButton(self.frame2)
+        # self.closeframe2btn.resize(0, 0)
+        # self.closeframe2btn.setCursor(Qt.PointingHandCursor)
+        # self.closeframe2btn.clicked.connect(self.closeframe2fun)
 
         self.table_suggest = QTableWidget(self.frame2)
         self.table_suggest.move(5, 30)
-        self.closeframe2btn.clicked.connect(self.closeframe2fun)
 
         self.tabs.addTab(table, "حل مقترح")
         self.tabs.addTab(self.suggest, "اضافة حل؟")
+
         # groups choosen
         self.day1list = []
         self.day2list = []
@@ -1443,12 +1441,12 @@ class exScreen2(QWidget):
     def show_table(self):
         # self.frame2.setStyleSheet("background-color:black;")
         self.frame2.resize(1420, 700)
-        self.table_suggest.resize(1300, 450)
-        self.closeframe2btn.resize(200, 50)
-        self.closeframe2btn.setText("اغلاق")
-        self.closeframe2btn.move(1000, 520)
         self.frame2.setStyleSheet("background-color:white;")
-        self.closeframe2btn.setStyleSheet("background-color:#305a6c;color:white;")
+        self.table_suggest.resize(1300, 450)
+        # self.closeframe2btn.resize(200, 50)
+        # self.closeframe2btn.setText("اغلاق")
+        # self.closeframe2btn.move(1000, 520)
+        # self.closeframe2btn.setStyleSheet("background-color:#305a6c;color:white;")
 
         # first tab
         DISPLAY(0, num_of_branches)
@@ -1494,10 +1492,13 @@ class exScreen2(QWidget):
                 item.setFlags(QtCore.Qt.ItemIsEnabled)
                 self.table_suggest.setItem(j + 1, i + 6, item)
 
-    def closeframe2fun(self):
-        self.frame2.resize(0, 0)
-        self.closeframe2btn.resize(0, 0)
-        self.table_suggest.resize(0, 0)
+    # def closeframe2fun(self):
+    #     self.frame2.resize(0, 0)
+    #     self.closeframe2btn.resize(0, 0)
+    #     self.table_suggest.resize(0, 0)
+
+    def saveSol(self):
+        output_the_distribution(solveIdx)
 
     def return_data(self):
         for i in range(len(self.choosegroup)):

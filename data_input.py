@@ -28,7 +28,7 @@ def clearAll()->None:
     num_of_floors.clear()                      
     num_of_builds.clear()                    
     dataframes.clear()
-    
+ 
 def read_inputt(filename):
     clearAll()
     excelSheet = pd.ExcelFile(filename)
