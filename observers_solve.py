@@ -199,7 +199,7 @@ def read_input(exel_name):
     if(len(dataframe1.columns)!=6):return "يجب ان يكون الشيت الاول من 6 اعمدة"
     for i in range(6):        
         values.append(dataframe1.columns[i])
-    ok &= values == ["nameNN", "nik", "job", "place", "email", "num"]
+    ok &= values == ["الاسم", "المسمى الوظيفى", "مكان العمل", "المبنى", "البريد الالكتروني", "التكليف الحالي"]
     if not ok:
         return "اسماء الاعمدة غير صحيحة"
     for index, rows in dataframe1.iterrows():
