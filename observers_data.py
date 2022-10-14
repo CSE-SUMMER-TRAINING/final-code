@@ -8,7 +8,7 @@ def arabic(str):
 
 
 daynumber = {}
-khalafawy = "خلفاوي"
+khalafawy = "الخلفاوي"
 road_el_farag = "روض الفرج"
 professor = "ا.د"
 Adoctor = "ا.م"

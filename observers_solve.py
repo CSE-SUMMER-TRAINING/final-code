@@ -1,6 +1,7 @@
 from cmath import nan
 from operator import indexOf
 from pickle import GLOBAL
+from tokenize import triple_quoted
 from observers_data import *
 from college import *
 import math
@@ -15,7 +16,7 @@ from fpdf.enums import XPos, YPos
 import psutil
 colDayBranch=[{},{},{}]
 excelhead=[]
-
+is_bransh={}
 
 # def printall():
 #     pdf = FPDF(orientation='P', unit='mm', format='A4')
@@ -325,6 +326,7 @@ def read_input(exel_name):
     excel=pd.ExcelFile("hallsWithAllData.xlsx")
     for i in range(len(excel.sheet_names)):
         dataframe=excel.parse(excel.sheet_names[i])
+        is_bransh[excel.sheet_names[i]]=True
         for ind,row in dataframe.iterrows():
             if(ind==0):continue
             if(row[1]!="فارغه"):
