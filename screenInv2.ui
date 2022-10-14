@@ -181,6 +181,9 @@ color:black;
 }
 QPushButton:hover{
 background-color: #ececec;
+}
+QPushButton:disabled{
+background-color:#b1b1b1;
 }</string>
    </property>
    <property name="text">
@@ -240,11 +243,11 @@ border-radius:10px;</string>
      <property name="styleSheet">
       <string notr="true">color:black;font-size:16px;</string>
      </property>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>100</number>
-     </attribute>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>240</number>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>100</number>
      </attribute>
      <attribute name="verticalHeaderCascadingSectionResizes">
       <bool>false</bool>
@@ -423,7 +426,8 @@ font-size:16px;
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">border:none;font-size:22px;color:red;</string>
+      <string notr="true">border:none;font-size:22px;color:red;
+background-color:transparent;</string>
      </property>
      <property name="text">
       <string/>
@@ -659,6 +663,9 @@ color:black;
 }
 QPushButton:hover{
 background-color: #ececec;
+}
+QPushButton:disabled{
+background-color:#b1b1b1;
 }</string>
    </property>
    <property name="text">
