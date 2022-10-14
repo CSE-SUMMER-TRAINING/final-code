@@ -17,91 +17,7 @@ colDayBranch=[{},{},{}]
 excelhead=[]
 
 
-def printall():
-    pdf = FPDF(orientation='P', unit='mm', format='A4')
-    pdf.core_fonts_encoding='utf-8'
-    #1-find site-package in ur python directory then go to fpdf (after installing it) create folder with the name "font"
-    #2-extrat the zip file their that's all !!!!!!!!!!!!!!!!!!!!!!!!
-    pdf.add_font('FreeSerif', '', 'IBM_Plex_Sans_Arabic/IBMPlexSansArabic-Regular.ttf')
-    mp = {
-                0: "الأثنين",
-                1: "الثلاثاء",
-                2: "الأربعاء",
-                3: "الخميس",
-                4: "الجمعة",
-                5: "السبت",
-                6: "الأحد",
-            }
 
-    for mon in monitors:
-        
-        data=[(arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
-        for tas in mon.task:
-            spliteddate = tas.day.split("/")
-            dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
-            data.append((arabic(tas.building),"9:15",tas.day,dayy))
-        if(len(data)==1):continue
-        pdf.add_page()
-        pdf.image("icons\download.png",90,w=35,h=30)
-        pdf.set_font('FreeSerif', size=12)
-        pdf.set_fill_color(237, 240, 149)
-        pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
-        pdf.ln()
-        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2020/2021 "+arabic(" تكليف ملاحظة لجان الامتحانات يناير  "),align="c")
-        pdf.ln()
-        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("السيد/ %s                                                                       قسم:%s"%(mon.user_name,mon.work_place)),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تحية طيبة وبعد ..."),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لملاحظة لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
-        pdf.ln()
-
-        line_height = pdf.font_size * 1.50
-        for i in range(len(data)):
-            row=data[i]
-            for datum in row:
-                if(i==0):
-                    pdf.multi_cell(50, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-                else :pdf.multi_cell(50, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-            pdf.ln()
-        x=len(data)-1
-        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
-        pdf.ln()
-        pdf.set_fill_color(237, 12, 61)
-        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("نظرا لقرار مجلس الكليه فى حالة تبديل يوم مكان اخر لابد من ايجاد البديل "),align="C")
-        pdf.ln()
-
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("1-الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("2-استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("3-توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("4-جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("5-مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("6-يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("7-عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("8-إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("9-عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط"),align="R")
-        pdf.ln()
-        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
-        pdf.ln()
-
-    # pdf.set_font("Times", size=10)
-    # letter='ك'
-    # for font in pdf.core_fonts:
-    #         if any([letter for letter in font if letter.isupper()]):
-    #             # skip this font
-    #             continue
-    #         pdf.set_font(font, size=12)
-
-
-    pdf.output('table_with_cells.pdf')
 def process_single_task(day, tsk, monitors, lst):
 
     if not monitors:
@@ -496,62 +412,62 @@ def send_email(address, name, section, month, year,days,dates,hours,places):
     print("\nplaces: ",end=" ")
     for i in places :
         print (i,end=" ")
-    outlook = client.Dispatch('outlook.application')  # create a Outlook instance
-    mail = outlook.CreateItem(0)  # create Mail Message item
-    mail.To = address
-    mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
-    mail.HTMLBody = f"""
-        <!DOCTYPE html>
-        <html dir="rtl">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            </head>
-            <body>
-                <h2>تكليف ملاحظة لجان الامتحانات {month} {year}</h2>
-                <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
-                    <thead>
-                        <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">السيد</th>
-                        <th style="padding: 10px 20px;border: 1px solid #000;">{name}</th>
-                        <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">قسم</th>
-                        <th style="padding: 10px 20px;border: 1px solid #000;">{section}</th>
-                    </thead>
-                </table>
+#     outlook = client.Dispatch('outlook.application')  # create a Outlook instance
+#     mail = outlook.CreateItem(0)  # create Mail Message item
+#     mail.To = address
+#     mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
+#     mail.HTMLBody = f"""
+#         <!DOCTYPE html>
+#         <html dir="rtl">
+#             <head>
+#                 <meta charset="UTF-8">
+#                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+#             </head>
+#             <body>
+#                 <h2>تكليف ملاحظة لجان الامتحانات {month} {year}</h2>
+#                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
+#                     <thead>
+#                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">السيد</th>
+#                         <th style="padding: 10px 20px;border: 1px solid #000;">{name}</th>
+#                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">قسم</th>
+#                         <th style="padding: 10px 20px;border: 1px solid #000;">{section}</th>
+#                     </thead>
+#                 </table>
 
-                <p style="font-size:120%;">تحية طيبة وبعد....</p>
-                <p style="font-size:120%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
-                <div>
-                    {email_content(days,dates,hours,places)}
-                </div>
-                <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
-                    <thead>
-                        <th style="padding: 10px 20px;border: 1px solid #000;">إجمالي عدد أيام الملاحظة</th>
-                        <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">6</th>
-                    </thead>
-                </table>
-                <p style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem;">نظرًا لقرار مجلس الكلية فى حالة تبديل يوم مكان أخر لابد من إيجاد البديل</p>
-                <ol style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem 2rem;">
-                    <li style="padding:0.5rem;">الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل</li>
-                    <li style="padding:0.5rem;">استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل</li>
-                    <li style="padding:0.5rem;">توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها</li>
-                    <li style="padding:0.5rem;">جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها</li>
-                    <li style="padding:0.5rem;">مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف</li>
-                    <li style="padding:0.5rem;">يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان</li>
-                    <li style="padding:0.5rem;">عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة</li>
-                    <li style="padding:0.5rem;">إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان</li>
-                    <li style="padding:0.5rem;">عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط</li>
-                    <li style="padding:0.5rem;">الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان</li>
-                  </ol>
-                  <div style="font-size: 130%;font-weight:bold;margin-right:40vw;">
-                    <p style="padding:0.5rem; background-color:rgb(7, 105, 105); border-radius:20%; width:fit-content; color:white;">إدارة شئون الطلاب</p>
-                    <p style="margin:0 auto;"><img src="https://upload.wikimedia.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
-                    <p style="margin:0 auto;">كلية الهندسة بشبرا</p>
-                  </div>
+#                 <p style="font-size:120%;">تحية طيبة وبعد....</p>
+#                 <p style="font-size:120%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
+#                 <div>
+#                     {email_content(days,dates,hours,places)}
+#                 </div>
+#                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
+#                     <thead>
+#                         <th style="padding: 10px 20px;border: 1px solid #000;">إجمالي عدد أيام الملاحظة</th>
+#                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">6</th>
+#                     </thead>
+#                 </table>
+#                 <p style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem;">نظرًا لقرار مجلس الكلية فى حالة تبديل يوم مكان أخر لابد من إيجاد البديل</p>
+#                 <ol style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem 2rem;">
+#                     <li style="padding:0.5rem;">الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل</li>
+#                     <li style="padding:0.5rem;">استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل</li>
+#                     <li style="padding:0.5rem;">توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها</li>
+#                     <li style="padding:0.5rem;">جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها</li>
+#                     <li style="padding:0.5rem;">مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف</li>
+#                     <li style="padding:0.5rem;">يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان</li>
+#                     <li style="padding:0.5rem;">عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة</li>
+#                     <li style="padding:0.5rem;">إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان</li>
+#                     <li style="padding:0.5rem;">عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط</li>
+#                     <li style="padding:0.5rem;">الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان</li>
+#                   </ol>
+#                   <div style="font-size: 130%;font-weight:bold;margin-right:40vw;">
+#                     <p style="padding:0.5rem; background-color:rgb(7, 105, 105); border-radius:20%; width:fit-content; color:white;">إدارة شئون الطلاب</p>
+#                     <p style="margin:0 auto;"><img src="https://upload.wikimedia.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
+#                     <p style="margin:0 auto;">كلية الهندسة بشبرا</p>
+#                   </div>
                   
-            </body>
-        </html>
-"""
-    # check if outlook is open
-    if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
-        startfile("outlook.exe")
-    mail.send
+#             </body>
+#         </html>
+# """
+#     # check if outlook is open
+#     if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
+#         startfile("outlook.exe")
+#     mail.send

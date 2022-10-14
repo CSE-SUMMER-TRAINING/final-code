@@ -72,7 +72,7 @@ def get_tables(branch_num, option_num):
 class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
-        loadUi("screen1.ui", self)
+        loadUi("./ui/screen1.ui", self)
 
         self.inv = self.findChild(QPushButton, "inv")
         self.exam = self.findChild(QPushButton, "exam")
@@ -90,7 +90,7 @@ class MainWindow(QWidget):
 class invScreen1(QWidget):
     def __init__(self):
         super(invScreen1, self).__init__()
-        loadUi("screenInv1.ui", self)
+        loadUi("./ui/screenInv1.ui", self)
         self.browse = self.findChild(QPushButton, "browse")
         self.generate = self.findChild(QPushButton, "generate")
         self.back = self.findChild(QPushButton, "back")
@@ -152,10 +152,217 @@ current_index = -1
 nj = 0
 
 
+class Worker(QObject):
+    finished=pyqtSignal()
+    def run(self):
+        pdf = FPDF(orientation='P', unit='mm', format='A4')
+        pdf.core_fonts_encoding='utf-8'
+        #1-find site-package in ur python directory then go to fpdf (after installing it) create folder with the name "font"
+        #2-extrat the zip file their that's all !!!!!!!!!!!!!!!!!!!!!!!!
+        pdf.add_font('FreeSerif', '', 'IBM_Plex_Sans_Arabic/IBMPlexSansArabic-Regular.ttf')
+        mp = {
+                    0: "الأثنين",
+                    1: "الثلاثاء",
+                    2: "الأربعاء",
+                    3: "الخميس",
+                    4: "الجمعة",
+                    5: "السبت",
+                    6: "الأحد",
+                }
+
+        for mon in monitors:
+            
+            data=[(arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
+            for tas in mon.task:
+                spliteddate = tas.day.split("/")
+                dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
+                data.append((arabic(tas.building),"9:15",tas.day,dayy))
+            if(len(data)==1):continue
+            pdf.add_page()
+            pdf.image("icons\download.png",90,w=35,h=30)
+            pdf.set_font('FreeSerif', size=12)
+            pdf.set_fill_color(237, 240, 149)
+            pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
+            pdf.ln()
+            pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2020/2021 "+arabic(" تكليف ملاحظة لجان الامتحانات يناير  "),align="c")
+            pdf.ln()
+            pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("السيد/ %s                                                                       قسم:%s"%(mon.user_name,mon.work_place)),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تحية طيبة وبعد ..."),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لملاحظة لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
+            pdf.ln()
+
+            line_height = pdf.font_size * 1.50
+            for i in range(len(data)):
+                row=data[i]
+                for datum in row:
+                    if(i==0):
+                        pdf.multi_cell(50, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                    else :pdf.multi_cell(50, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                pdf.ln()
+            x=len(data)-1
+            pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
+            pdf.ln()
+            pdf.set_fill_color(237, 12, 61)
+            pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("نظرا لقرار مجلس الكليه فى حالة تبديل يوم مكان اخر لابد من ايجاد البديل "),align="C")
+            pdf.ln()
+
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("1-الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("2-استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("3-توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("4-جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("5-مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("6-يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("7-عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("8-إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("9-عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط"),align="R")
+            pdf.ln()
+            pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
+            pdf.ln()
+
+        # pdf.set_font("Times", size=10)
+        # letter='ك'
+        # for font in pdf.core_fonts:
+        #         if any([letter for letter in font if letter.isupper()]):
+        #             # skip this font
+        #             continue
+        #         pdf.set_font(font, size=12)
+
+
+        pdf.output('table_with_cells.pdf')
+        self.finished.emit()
+       
+class Worker2(QObject):
+    finished=pyqtSignal()
+    def run(self):
+        mp = {
+            0: "الأثنين",
+            1: "الثلاثاء",
+            2: "الأربعاء",
+            3: "الخميس",
+            4: "الجمعة",
+            5: "السبت",
+            6: "الأحد",
+        }
+        for mon in monitors:
+            if len(mon.task) == 0:
+            #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
+               continue
+            days = []
+            dates = []
+            hours = []
+            places = []
+            for tas in mon.task:
+                # print(tas.day," ",tas.building," ",tas.type)
+                spliteddate = tas.day.split("/")
+                # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
+                days.append(
+                        mp[
+                            date(
+                                int(spliteddate[2]),
+                                int(spliteddate[1]),
+                                int(spliteddate[0]),
+                            ).weekday()
+                        ]
+                )
+                dates.append(tas.day)
+                hours.append("9:15")
+                places.append(tas.building)
+            address=mon.email
+            name=mon.user_name
+            section=mon.branch
+            month=11
+            year=mon.task[0].day[-4:]
+            
+            print (f"\n{address}  {name}  {section}  {month}  {year} ")
+            print ("days: ",end=" ")
+            for i in days:
+                print(i,end=" ")
+            print ("\ndates: ")
+            for i in dates :
+                print (i,end=" ")
+            
+            print("\nhours: ",end=" ")
+            for i in hours :
+                print(i,end=" ")
+            print("\nplaces: ",end=" ")
+            for i in places :
+                print (i,end=" ")
+        #     outlook = client.Dispatch('outlook.application')  # create a Outlook instance
+        #     mail = outlook.CreateItem(0)  # create Mail Message item
+        #     mail.To = address
+        #     mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
+        #     mail.HTMLBody = f"""
+        #         <!DOCTYPE html>
+        #         <html dir="rtl">
+        #             <head>
+        #                 <meta charset="UTF-8">
+        #                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        #             </head>
+        #             <body>
+        #                 <h2>تكليف ملاحظة لجان الامتحانات {month} {year}</h2>
+        #                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
+        #                     <thead>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">السيد</th>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000;">{name}</th>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">قسم</th>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000;">{section}</th>
+        #                     </thead>
+        #                 </table>
+
+        #                 <p style="font-size:120%;">تحية طيبة وبعد....</p>
+        #                 <p style="font-size:120%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
+        #                 <div>
+        #                     {email_content(days,dates,hours,places)}
+        #                 </div>
+        #                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
+        #                     <thead>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000;">إجمالي عدد أيام الملاحظة</th>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">6</th>
+        #                     </thead>
+        #                 </table>
+        #                 <p style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem;">نظرًا لقرار مجلس الكلية فى حالة تبديل يوم مكان أخر لابد من إيجاد البديل</p>
+        #                 <ol style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem 2rem;">
+        #                     <li style="padding:0.5rem;">الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل</li>
+        #                     <li style="padding:0.5rem;">استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل</li>
+        #                     <li style="padding:0.5rem;">توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها</li>
+        #                     <li style="padding:0.5rem;">جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها</li>
+        #                     <li style="padding:0.5rem;">مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف</li>
+        #                     <li style="padding:0.5rem;">يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان</li>
+        #                     <li style="padding:0.5rem;">عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة</li>
+        #                     <li style="padding:0.5rem;">إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان</li>
+        #                     <li style="padding:0.5rem;">عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط</li>
+        #                     <li style="padding:0.5rem;">الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان</li>
+        #                   </ol>
+        #                   <div style="font-size: 130%;font-weight:bold;margin-right:40vw;">
+        #                     <p style="padding:0.5rem; background-color:rgb(7, 105, 105); border-radius:20%; width:fit-content; color:white;">إدارة شئون الطلاب</p>
+        #                     <p style="margin:0 auto;"><img src="https://upload.wikimedia.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
+        #                     <p style="margin:0 auto;">كلية الهندسة بشبرا</p>
+        #                   </div>
+                        
+        #             </body>
+        #         </html>
+        # """
+        #     # check if outlook is open
+        #     if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
+        #         startfile("outlook.exe")
+        #     mail.send
+        self.finished.emit()
+
+
 class invScreen2(QWidget):
     def __init__(self):
         super(invScreen2, self).__init__()
-        loadUi("screenInv2.ui", self)
+        loadUi("./ui/screenInv2.ui", self)
         self.combox = self.findChild(QComboBox, "comboBox1")
 
         self.list = ["...اختار"]
@@ -210,10 +417,29 @@ class invScreen2(QWidget):
         # auto complete
         self.completer = QCompleter(self.list)
         self.lineEdit.setCompleter(self.completer)
+    
+    def msg(self):
+        QMessageBox.about(self, "", "تم التنزيل                   ")
+        self.print.setText("طباعة الكل")
+        self.print_2.setEnabled(True)
+        self.print.setEnabled(True)
+        
     def printall_function(self):
         try:
-            printall()
-            QMessageBox.about(self, "", "تم التنزيل                   ")
+            QMessageBox.about(self, "", "سوف يتم التنزيل بعد لحظات                   ")
+            self.print.setEnabled(False)
+            self.print_2.setEnabled(False)
+
+            self.print.setText("...يتم التنزيل")
+            self.thread=QThread()
+            self.worker=Worker()
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.msg)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
         except:
             QMessageBox.about(
                 self, "", "لا يمكن تنزيل الملف اثناء تشغيله برجاء قفل table_with_cells.pdf"
@@ -261,55 +487,33 @@ class invScreen2(QWidget):
         )
 
         self.changes.setText("حفظ التغيرات ")
-
+        
+    def msg2(self):
+        QMessageBox.about(self, "", "تم الارسال                   ")
+        self.print_2.setText("ارسال ايميل للكل")
+        self.print.setEnabled(True)
+        self.print_2.setEnabled(True)
+        
     def print_2_function(self):
-        mp = {
-            0: "الأثنين",
-            1: "الثلاثاء",
-            2: "الأربعاء",
-            3: "الخميس",
-            4: "الجمعة",
-            5: "السبت",
-            6: "الأحد",
-        }
-        for mon in monitors:
-            if len(mon.task) == 0:
-               self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
-               continue
-            days = []
-            dates = []
-            hours = []
-            places = []
-            for tas in mon.task:
-                # print(tas.day," ",tas.building," ",tas.type)
-                spliteddate = tas.day.split("/")
-                # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
-                days.append(
-                        mp[
-                            date(
-                                int(spliteddate[2]),
-                                int(spliteddate[1]),
-                                int(spliteddate[0]),
-                            ).weekday()
-                        ]
-                )
-                dates.append(tas.day)
-                hours.append("9:15")
-                places.append(tas.building)
-
-            send_email(
-                mon.email,
-                mon.user_name,
-                mon.branch,
-                11,
-                mon.task[0].day[-4:],
-                days,
-                dates,
-                hours,
-                places,
-            )
-        pass
-    
+        try:
+            QMessageBox.about(self, "", "سوف يتم الارسال بعد لحظات                   ")
+            self.print.setEnabled(False)
+            self.print_2.setEnabled(False)
+            self.print_2.setText("...يتم الارسال")
+            self.thread=QThread()
+            self.worker=Worker2()
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.msg2)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
+        except:
+            QMessageBox.about(
+                self, "", "لا يمكن الارسال الان حاول مجددا في وقت لاحق"  
+            )  # needed to be errorbox 
+            
     def printone_2_function(self):
         if(current_index==-1):
             self.label_5.setText("من فضلك اختار شخص")
@@ -563,7 +767,7 @@ class exScreen1(QWidget):
     def __init__(self):
 
         super(exScreen1, self).__init__()
-        loadUi("screenEx1.ui", self)
+        loadUi("./ui/screenEx1.ui", self)
         self.browse = self.findChild(QPushButton, "browse")
         self.generate = self.findChild(QPushButton, "generate")
         self.back = self.findChild(QPushButton, "back")
@@ -591,6 +795,8 @@ class exScreen1(QWidget):
         # read_sheet(excelSheet, num_of_branches)
 
     def goBack(self):
+        self.label_not_enough.setText("")
+        self.lineEdit.setText("")
         widget.setCurrentWidget(mainwindow)
 
     def generateTables(self):
@@ -623,7 +829,7 @@ class exScreen2(QWidget):
 
         super(exScreen2, self).__init__()
 
-        loadUi("screenEx2.ui", self)
+        loadUi("./ui/screenEx2.ui", self)
 
         self.back = self.findChild(QPushButton, "back")
         self.back.clicked.connect(self.backfromex_fun)
@@ -664,8 +870,8 @@ class exScreen2(QWidget):
                QTabBar::tab:selected {
                     font-family: Roboto;
                     font-size: 18px;
-                    background: rgb(175,175,175,255);
-                    color: rgb(0,0,0,255);
+                    background: #407991;
+                    color: white;
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
                     border:1px solid rgb(197,197,199,255);
@@ -675,11 +881,10 @@ class exScreen2(QWidget):
                     font-family: Roboto;
                     font-size: 18px;
                     font: italic;
-                    background: rgb(234,234,234,255);
-                    color: rgb(0,0,0,255);
+                    background: #305a6c;
+                    color: white;
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
-
                     border:1px solid rgb(197,197,199,255);
                     padding: 10px 30px 10px 24px;
                 }
@@ -752,7 +957,7 @@ class exScreen2(QWidget):
         self.but1 = QPushButton("اليوم الاول", self.suggest)
         self.but1.setStyleSheet("""
                 QPushButton{
-                background-color:#255;
+                background-color:#305a6c;
                 border-radius:20px;
                 width:300px;
                 height:80px;
@@ -760,10 +965,8 @@ class exScreen2(QWidget):
                 font-size:20px;
                 }
                 QPushButton:hover{
-                        background-color:#555;
-
+                        background-color:#407991;
                 }
-
                 """)
 
         self.but1.clicked.connect(self.day1)
@@ -775,7 +978,7 @@ class exScreen2(QWidget):
         self.but2 = QPushButton("اليوم الثاني", self.suggest)
         self.but2.setStyleSheet("""
                         QPushButton{
-                        background-color:#255;
+                        background-color:#305a6c;
                         border-radius:20px;
                         width:300px;
                         height:80px;
@@ -783,12 +986,10 @@ class exScreen2(QWidget):
                         font-size:20px;
                         }
                         QPushButton:hover{
-                                background-color:#555;
-
+                                background-color:#407991;
                         }
 
-                        """
-                                )
+                        """)
         self.but2.move(1180, 200)
         self.but2.clicked.connect(self.day2)
         self.but2.setCursor(Qt.PointingHandCursor)
@@ -895,8 +1096,8 @@ class exScreen2(QWidget):
             QTabBar::tab:selected {
                  font-family: Roboto;
                  font-size: 18px;
-                 color: rgb(0,0,0,255);
-                 background: rgb(175,175,175,255);
+                 color: white;
+                 background: #407991;
                  border-top-left-radius: 8px;
                  border-top-right-radius: 8px;
                  border:1px solid rgb(197,197,199,255);
@@ -906,12 +1107,12 @@ class exScreen2(QWidget):
                  font-family: Roboto;
                  font-size: 18px;
                  font: italic;
-                color: rgb(0,0,0,255);
+                color: white;
                  border-top-left-radius: 8px;
                  border-top-right-radius: 8px;          
                  border:1px solid rgb(197,197,199,255);
                  padding: 10px 30px 10px 24px;
-                 background: rgb(234,234,234,255);
+                 background: #305a6c;
              }
             """
         )
@@ -920,13 +1121,33 @@ class exScreen2(QWidget):
         self.frame1.resize(1200, 800)
         self.button2_send.resize(0, 0)
         self.but1.move(1220, 100)
+        self.but1.setStyleSheet("""
+                        background-color:#407991;
+                        border-radius:20px;
+                        color:white;
+                        font-size:20px;
+                        """)
         self.but2.move(1180, 200)
+        self.but2.setStyleSheet("""
+                        QPushButton{
+                        background-color:#305a6c;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#407991;
+                        }
+                        """)
+
         size = QSize(30, 30)
         self.backToFrame0.setIconSize(size)
         self.backToFrame0.resize(50, 30)
 
         self.labelgroubs.setText("اختار من هذه الدفعات")
-        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#cfc9c9;padding:3px;border-radius:10px;")
+        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#e6e6e6;color:#141414;padding:3px;border-radius:10px;")
 
         # show checkbox
         for i in range(len(self.choosegroup)):
@@ -945,32 +1166,87 @@ class exScreen2(QWidget):
         # self.button1_send.move(500, 500)
         self.button1_send.clicked.connect(self.send_data1)
         self.button1_send.resize(200, 40)
-        self.button1_send.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#255;padding:5px;border-radius:10px;font-size:17px;")
+        self.button1_send.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
         self.buttonsendall.move(1200, 400)
         self.buttonsendall.resize(200, 60)
         self.buttonsendall.setText("ارسال ")
-        self.buttonsendall.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+        self.buttonsendall.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
         self.buttonback.move(1200, 500)
         self.buttonback.resize(200, 60)
         self.buttonback.setText("تراجع")
-        self.buttonback.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+        self.buttonback.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
     def day2(self):
         self.frame1.resize(1200, 800)
         self.button1_send.resize(0, 0)
         self.but1.move(1180, 100)
+        self.but1.setStyleSheet("""
+                        QPushButton{
+                        background-color:#305a6c;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#407991;
+                        }
+                        """)
         self.but2.move(1220, 200)
+        self.but2.setStyleSheet("""
+                        background-color:#407991;
+                        border-radius:20px;
+                        color:white;
+                        font-size:20px;
+                        """)
         size = QSize(30, 30)
         self.backToFrame0.setIconSize(size)
         self.backToFrame0.resize(50, 30)
 
         self.labelgroubs.setText("اختار من هذه الدفعات")
-        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#cfc9c9;padding:3px;border-radius:10px;")
+        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#e6e6e6;color:#141414;padding:3px;border-radius:10px;")
 
         for i in range(len(self.choosegroup)):
             if self.choosegroup[i].isChecked() != True and self.choosegroup[i].text() not in self.day1list:
@@ -989,20 +1265,56 @@ class exScreen2(QWidget):
         # self.button2_send.move(500, 400)
         self.button2_send.clicked.connect(self.send_data2)
         self.button2_send.resize(200, 40)
-        self.button2_send.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#255;padding:5px;border-radius:10px;font-size:17px;")
+        self.button2_send.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
         self.buttonsendall.move(1200, 400)
         self.buttonsendall.resize(200, 60)
         self.buttonsendall.setText("ارسال ")
-        self.buttonsendall.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+        self.buttonsendall.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
         self.buttonback.move(1200, 500)
         self.buttonback.resize(200, 60)
         self.buttonback.setText("تراجع")
-        self.buttonback.setStyleSheet(
-            "border:1px solid #255;color:white;background-color:#777;padding:5px;border-radius:10px;font-size:20px;")
+        self.buttonback.setStyleSheet("""
+        QPushButton {
+            border:1px solid #255;
+            color:white;
+            background-color:#305a6c;
+            padding:5px;
+            border-radius:10px;
+            font-size:17px;
+        }
+        QPushButton:hover {
+            background-color:#407991;
+            font-size:18px;
+        }
+        """)
 
     def send(self):
         print(self.day1list)
@@ -1024,7 +1336,7 @@ class exScreen2(QWidget):
         self.closeframe2btn.setText("اغلاق")
         self.closeframe2btn.move(1000, 520)
         self.frame2.setStyleSheet("background-color:white;")
-        self.closeframe2btn.setStyleSheet("background-color:#255;color:white;")
+        self.closeframe2btn.setStyleSheet("background-color:#305a6c;color:white;")
 
         # first tab
         DISPLAY(0, num_of_branches)
@@ -1104,6 +1416,32 @@ class exScreen2(QWidget):
         self.backToFrame0.resize(0, 0)
         self.but2.move(1180, 200)
         self.but1.move(1180, 100)
+        self.but2.setStyleSheet("""
+                        QPushButton{
+                        background-color:#305a6c;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#407991;
+                        }
+                        """)
+        self.but1.setStyleSheet("""
+                        QPushButton{
+                        background-color:#305a6c;
+                        border-radius:20px;
+                        width:300px;
+                        height:80px;
+                        color:white;
+                        font-size:20px;
+                        }
+                        QPushButton:hover{
+                                background-color:#407991;
+                        }
+                        """)
         self.buttonsendall.resize(0, 0)
         self.buttonback.resize(0, 0)
 
@@ -1114,7 +1452,7 @@ class exScreen2(QWidget):
 class invHelp(QWidget):
     def __init__(self):
         super(invHelp, self).__init__()
-        loadUi("helpInv.ui", self)
+        loadUi("./ui/helpInv.ui", self)
         self.back = self.findChild(QPushButton, "back")
         self.back.clicked.connect(self.back_func)
         self.save = self.findChild(QPushButton, "save")
@@ -1124,13 +1462,13 @@ class invHelp(QWidget):
         widget.setCurrentWidget(invscreen1)
 
     def save_func(self):
-        wget.download(URL_INV)
+        create_observers_template()
 
 
 class examHelp(QWidget):
     def __init__(self):
         super(examHelp, self).__init__()
-        loadUi("helpEx.ui", self)
+        loadUi("./ui/helpEx.ui", self)
         self.back = self.findChild(QPushButton, "back")
         self.back.clicked.connect(self.back_func)
         self.save = self.findChild(QPushButton, "save")
@@ -1140,7 +1478,7 @@ class examHelp(QWidget):
         widget.setCurrentWidget(exscreen1)
 
     def save_func(self):
-        wget.download(URL_EXAM)
+        create_halls_template()
 
 
 app = QApplication(sys.argv)
