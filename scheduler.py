@@ -72,7 +72,7 @@ def get_tables(branch_num, option_num):
 class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
-        loadUi("screen1.ui", self)
+        loadUi("./ui/screen1.ui", self)
 
         self.inv = self.findChild(QPushButton, "inv")
         self.exam = self.findChild(QPushButton, "exam")
@@ -90,7 +90,7 @@ class MainWindow(QWidget):
 class invScreen1(QWidget):
     def __init__(self):
         super(invScreen1, self).__init__()
-        loadUi("screenInv1.ui", self)
+        loadUi("./ui/screenInv1.ui", self)
         self.browse = self.findChild(QPushButton, "browse")
         self.generate = self.findChild(QPushButton, "generate")
         self.back = self.findChild(QPushButton, "back")
@@ -155,7 +155,7 @@ nj = 0
 class invScreen2(QWidget):
     def __init__(self):
         super(invScreen2, self).__init__()
-        loadUi("screenInv2.ui", self)
+        loadUi("./ui/screenInv2.ui", self)
         self.combox = self.findChild(QComboBox, "comboBox1")
 
         self.list = ["...اختار"]
@@ -563,7 +563,7 @@ class exScreen1(QWidget):
     def __init__(self):
 
         super(exScreen1, self).__init__()
-        loadUi("screenEx1.ui", self)
+        loadUi("./ui/screenEx1.ui", self)
         self.browse = self.findChild(QPushButton, "browse")
         self.generate = self.findChild(QPushButton, "generate")
         self.back = self.findChild(QPushButton, "back")
@@ -625,7 +625,7 @@ class exScreen2(QWidget):
 
         super(exScreen2, self).__init__()
 
-        loadUi("screenEx2.ui", self)
+        loadUi("./ui/screenEx2.ui", self)
 
         self.back = self.findChild(QPushButton, "back")
         self.back.clicked.connect(self.backfromex_fun)
@@ -1248,7 +1248,7 @@ class exScreen2(QWidget):
 class invHelp(QWidget):
     def __init__(self):
         super(invHelp, self).__init__()
-        loadUi("helpInv.ui", self)
+        loadUi("./ui/helpInv.ui", self)
         self.back = self.findChild(QPushButton, "back")
         self.back.clicked.connect(self.back_func)
         self.save = self.findChild(QPushButton, "save")
@@ -1264,7 +1264,7 @@ class invHelp(QWidget):
 class examHelp(QWidget):
     def __init__(self):
         super(examHelp, self).__init__()
-        loadUi("helpEx.ui", self)
+        loadUi("./ui/helpEx.ui", self)
         self.back = self.findChild(QPushButton, "back")
         self.back.clicked.connect(self.back_func)
         self.save = self.findChild(QPushButton, "save")
