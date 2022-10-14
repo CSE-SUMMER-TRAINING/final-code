@@ -431,7 +431,7 @@ class invScreen2(QWidget):
             self.print.setEnabled(False)
             self.print_2.setEnabled(False)
 
-            self.print.setText("Loading...")
+            self.print.setText("...يتم التنزيل")
             self.thread=QThread()
             self.worker=Worker()
             self.worker.moveToThread(self.thread)
@@ -500,7 +500,7 @@ class invScreen2(QWidget):
             QMessageBox.about(self, "", "سوف يتم الارسال بعد لحظات                   ")
             self.print.setEnabled(False)
             self.print_2.setEnabled(False)
-            self.print_2.setText("Sending...")
+            self.print_2.setText("...يتم الارسال")
             self.thread=QThread()
             self.worker=Worker2()
             self.worker.moveToThread(self.thread)
@@ -515,118 +515,6 @@ class invScreen2(QWidget):
                 self, "", "لا يمكن الارسال الان حاول مجددا في وقت لاحق"  
             )  # needed to be errorbox 
             
-    #     mp = {
-    #         0: "الأثنين",
-    #         1: "الثلاثاء",
-    #         2: "الأربعاء",
-    #         3: "الخميس",
-    #         4: "الجمعة",
-    #         5: "السبت",
-    #         6: "الأحد",
-    #     }
-    #     for mon in monitors:
-    #         if len(mon.task) == 0:
-    #         #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
-    #            continue
-    #         days = []
-    #         dates = []
-    #         hours = []
-    #         places = []
-    #         for tas in mon.task:
-    #             # print(tas.day," ",tas.building," ",tas.type)
-    #             spliteddate = tas.day.split("/")
-    #             # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
-    #             days.append(
-    #                     mp[
-    #                         date(
-    #                             int(spliteddate[2]),
-    #                             int(spliteddate[1]),
-    #                             int(spliteddate[0]),
-    #                         ).weekday()
-    #                     ]
-    #             )
-    #             dates.append(tas.day)
-    #             hours.append("9:15")
-    #             places.append(tas.building)
-    #         address=mon.email
-    #         name=mon.user_name
-    #         section=mon.branch
-    #         month=11
-    #         year=mon.task[0].day[-4:]
-            
-    #         print (f"\n{address}  {name}  {section}  {month}  {year} ")
-    #         print ("days: ",end=" ")
-    #         for i in days:
-    #             print(i,end=" ")
-    #         print ("\ndates: ")
-    #         for i in dates :
-    #             print (i,end=" ")
-            
-    #         print("\nhours: ",end=" ")
-    #         for i in hours :
-    #             print(i,end=" ")
-    #         print("\nplaces: ",end=" ")
-    #         for i in places :
-    #             print (i,end=" ")
-    #     #     outlook = client.Dispatch('outlook.application')  # create a Outlook instance
-    #     #     mail = outlook.CreateItem(0)  # create Mail Message item
-    #     #     mail.To = address
-    #     #     mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
-    #     #     mail.HTMLBody = f"""
-    #     #         <!DOCTYPE html>
-    #     #         <html dir="rtl">
-    #     #             <head>
-    #     #                 <meta charset="UTF-8">
-    #     #                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    #     #             </head>
-    #     #             <body>
-    #     #                 <h2>تكليف ملاحظة لجان الامتحانات {month} {year}</h2>
-    #     #                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
-    #     #                     <thead>
-    #     #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">السيد</th>
-    #     #                         <th style="padding: 10px 20px;border: 1px solid #000;">{name}</th>
-    #     #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">قسم</th>
-    #     #                         <th style="padding: 10px 20px;border: 1px solid #000;">{section}</th>
-    #     #                     </thead>
-    #     #                 </table>
-
-    #     #                 <p style="font-size:120%;">تحية طيبة وبعد....</p>
-    #     #                 <p style="font-size:120%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
-    #     #                 <div>
-    #     #                     {email_content(days,dates,hours,places)}
-    #     #                 </div>
-    #     #                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
-    #     #                     <thead>
-    #     #                         <th style="padding: 10px 20px;border: 1px solid #000;">إجمالي عدد أيام الملاحظة</th>
-    #     #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">6</th>
-    #     #                     </thead>
-    #     #                 </table>
-    #     #                 <p style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem;">نظرًا لقرار مجلس الكلية فى حالة تبديل يوم مكان أخر لابد من إيجاد البديل</p>
-    #     #                 <ol style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem 2rem;">
-    #     #                     <li style="padding:0.5rem;">الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل</li>
-    #     #                     <li style="padding:0.5rem;">استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل</li>
-    #     #                     <li style="padding:0.5rem;">توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها</li>
-    #     #                     <li style="padding:0.5rem;">جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها</li>
-    #     #                     <li style="padding:0.5rem;">مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف</li>
-    #     #                     <li style="padding:0.5rem;">يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان</li>
-    #     #                     <li style="padding:0.5rem;">عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة</li>
-    #     #                     <li style="padding:0.5rem;">إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان</li>
-    #     #                     <li style="padding:0.5rem;">عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط</li>
-    #     #                     <li style="padding:0.5rem;">الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان</li>
-    #     #                   </ol>
-    #     #                   <div style="font-size: 130%;font-weight:bold;margin-right:40vw;">
-    #     #                     <p style="padding:0.5rem; background-color:rgb(7, 105, 105); border-radius:20%; width:fit-content; color:white;">إدارة شئون الطلاب</p>
-    #     #                     <p style="margin:0 auto;"><img src="https://upload.wikimedia.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
-    #     #                     <p style="margin:0 auto;">كلية الهندسة بشبرا</p>
-    #     #                   </div>
-                        
-    #     #             </body>
-    #     #         </html>
-    #     # """
-    #     #     # check if outlook is open
-    #     #     if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
-    #     #         startfile("outlook.exe")
-    #     #     mail.send
     def printone_2_function(self):
         if(current_index==-1):
             self.label_5.setText("من فضلك اختار شخص")
@@ -824,6 +712,14 @@ class invScreen2(QWidget):
                     return
                 ts.type = item.text()
                 item = self.table_widget.item(i, 2)
+                if item.text() not in is_bransh.keys():
+                    msg= "هذا الفرع غير موجود بالكلية، يمكنك اختيار احد الاختيارات التالية\n"
+                    cnt= 1 
+                    for k in is_bransh.keys():
+                        msg += str(cnt)+ ' - '+ (k) + '\n'
+                        cnt+=1 
+                    QMessageBox.about(self, "", msg)
+                    return
                 ts.building = item.text()
                 if day_change!= -1:
                     mon.accupied_days[self.current_day(day_change)] = [0,""]
@@ -856,6 +752,14 @@ class invScreen2(QWidget):
                     return
                 ts.type = item.text()
                 item = self.table_widget.item(j, 5)
+                if (item.text()) not in is_bransh.keys():
+                    msg= "هذا الفرع غير موجود بالكلية، يمكنك اختيار احد الاختيارات التالية\n"
+                    cnt= 1 
+                    for k in is_bransh.keys():
+                        msg += str(cnt)+ ' - '+ (k) + '\n'
+                        cnt+=1 
+                    QMessageBox.about(self, "", msg)
+                    return
                 ts.building = item.text()
                 if day_change!= -1:
                     mon.accupied_days[self.current_day(day_change)] = [0,""]

@@ -1,6 +1,7 @@
 from cmath import nan
 from operator import indexOf
 from pickle import GLOBAL
+from tokenize import triple_quoted
 from observers_data import *
 from college import *
 import math
@@ -15,93 +16,9 @@ from fpdf.enums import XPos, YPos
 import psutil
 colDayBranch=[{},{},{}]
 excelhead=[]
+is_bransh={}
 
 
-# def printall():
-#     pdf = FPDF(orientation='P', unit='mm', format='A4')
-#     pdf.core_fonts_encoding='utf-8'
-#     #1-find site-package in ur python directory then go to fpdf (after installing it) create folder with the name "font"
-#     #2-extrat the zip file their that's all !!!!!!!!!!!!!!!!!!!!!!!!
-#     pdf.add_font('FreeSerif', '', 'IBM_Plex_Sans_Arabic/IBMPlexSansArabic-Regular.ttf')
-#     mp = {
-#                 0: "الأثنين",
-#                 1: "الثلاثاء",
-#                 2: "الأربعاء",
-#                 3: "الخميس",
-#                 4: "الجمعة",
-#                 5: "السبت",
-#                 6: "الأحد",
-#             }
-
-#     for mon in monitors:
-        
-#         data=[(arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
-#         for tas in mon.task:
-#             spliteddate = tas.day.split("/")
-#             dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
-#             data.append((arabic(tas.building),"9:15",tas.day,dayy))
-#         if(len(data)==1):continue
-#         pdf.add_page()
-#         pdf.image("icons\download.png",90,w=35,h=30)
-#         pdf.set_font('FreeSerif', size=12)
-#         pdf.set_fill_color(237, 240, 149)
-#         pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
-#         pdf.ln()
-#         pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2020/2021 "+arabic(" تكليف ملاحظة لجان الامتحانات يناير  "),align="c")
-#         pdf.ln()
-#         pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("السيد/ %s                                                                       قسم:%s"%(mon.user_name,mon.work_place)),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تحية طيبة وبعد ..."),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لملاحظة لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
-#         pdf.ln()
-
-#         line_height = pdf.font_size * 1.50
-#         for i in range(len(data)):
-#             row=data[i]
-#             for datum in row:
-#                 if(i==0):
-#                     pdf.multi_cell(50, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-#                 else :pdf.multi_cell(50, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-#             pdf.ln()
-#         x=len(data)-1
-#         pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
-#         pdf.ln()
-#         pdf.set_fill_color(237, 12, 61)
-#         pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("نظرا لقرار مجلس الكليه فى حالة تبديل يوم مكان اخر لابد من ايجاد البديل "),align="C")
-#         pdf.ln()
-
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("1-الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("2-استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("3-توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("4-جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("5-مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("6-يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("7-عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("8-إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("9-عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط"),align="R")
-#         pdf.ln()
-#         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
-#         pdf.ln()
-
-#     # pdf.set_font("Times", size=10)
-#     # letter='ك'
-#     # for font in pdf.core_fonts:
-#     #         if any([letter for letter in font if letter.isupper()]):
-#     #             # skip this font
-#     #             continue
-#     #         pdf.set_font(font, size=12)
-
-
-#     pdf.output('table_with_cells.pdf')
 def process_single_task(day, tsk, monitors, lst):
 
     if not monitors:
@@ -283,13 +200,15 @@ def read_input(exel_name):
     if(len(dataframe1.columns)!=6):return "يجب ان يكون الشيت الاول من 6 اعمدة"
     for i in range(6):        
         values.append(dataframe1.columns[i])
-    ok &= values == ["nameNN", "nik", "job", "place", "email", "num"]
+    ok &= values == ["الاسم", "المسمى الوظيفى", "مكان العمل", "المبنى", "البريد الالكتروني", "التكليف الحالي"]
     if not ok:
         return "اسماء الاعمدة غير صحيحة"
     for index, rows in dataframe1.iterrows():
         my_list = rows.values.tolist()
         observser_data_lst.append(my_list)
     for x in observser_data_lst:
+        if x[3]!= khalafawy and x[3]!= road_el_farag:
+            return "البيانات المدخلة تحتوى على قيم غير معروفة فى خانة المبنى،القيم المتاحة: خلفاوي، روض الفرج"
         monitors.append(Monitor(*x))
 
     def srt(elem):
@@ -325,6 +244,7 @@ def read_input(exel_name):
     excel=pd.ExcelFile("hallsWithAllData.xlsx")
     for i in range(len(excel.sheet_names)):
         dataframe=excel.parse(excel.sheet_names[i])
+        is_bransh[excel.sheet_names[i]]=True
         for ind,row in dataframe.iterrows():
             if(ind==0):continue
             if(row[1]!="فارغه"):

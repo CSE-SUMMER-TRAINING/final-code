@@ -27,7 +27,7 @@ def get_and_store_groups():
         g[3] = int(g[3])                                                    # from
         g[4] = int(g[4])                                                    # to
         # g[0] = arabic_reshaper.reshape(g[0])[::-1]                        # group name
-        g[1] = arabic_reshaper.reshape(g[1])[::-1]                          # branch name 
+                                # branch name 
         brn = branch_index[g[1]]
         branch[brn].groupsInBranch.append(len(group))
         group.append(Group(len(group), g[2], g[3], g[4], brn, g[0]))

@@ -36,8 +36,8 @@ def read_inputt(filename):
     allBranches.pop(0)                          # excepting the classes tab
 
     for i in range(len(allBranches)):
-        if (not (allBranches[i][0] >= 'A' and allBranches[i][0] <= 'z')):
-            allBranches[i] = reshape(allBranches[i])[::-1]
+        # if (not (allBranches[i][0] >= 'A' and allBranches[i][0] <= 'z')):
+        #     allBranches[i] =allBranches[i]
         
         # map branch name to branch index and vice versa
         branch_name[i] = allBranches[i]
