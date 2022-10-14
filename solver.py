@@ -83,7 +83,7 @@ def buildDp(idx, msk, g, h, l)->None:
 def solve(branch :Branch)->None:
     
     groups = branch.groupsInBranch.copy()
-    # print(groups)
+    print(groups)
     allHalls = branch.hallsInBranch.copy() + branch.hallsInBranch.copy() + branch.hallsInBranch.copy()
     l = len(allHalls) // 3
     
@@ -96,12 +96,13 @@ def solve(branch :Branch)->None:
     print("1. Optimal Solution")
     print("2. Test")
 
-    choice = 3
+    choice = 1
     # while choice.isnumeric() == False or int(choice) < 1 or int(choice) > 2:
     #     choice = input("Enter valid number: ")
     # choice = int(choice)
 
     if choice == 1:
+        toPrint.clear()
         buildDp(0, 0, groups, allHalls, l)
         for i in range(len(toPrint)):
             if i % l == 0:
@@ -112,64 +113,19 @@ def solve(branch :Branch)->None:
         print("\n\n==========================================================\n\n")
         return
 
-    mem.clear()
-    toPrint.clear()
+    # mem.clear()
+    # toPrint.clear()
 
     # choice = input("Enter The Number of Dayes which you need to build: ")
     # while choice.isnumeric() == False or int(choice) < 1 or int(choice) > 3:
     #     choice = input("Enter valid number: ")
     # choice = int(choice)
 
-    choice = 2
+    # choice = 2
 
-    if choice == 1:
-        print('1')
-        d1, d2 = list([0]), list([1,2,3, 4])
-
-        # choice = input("Enter The Number of groups in that Day: ")
-        # while choice.isnumeric() == False or int(choice) < 1 or int(choice) > len(groups):
-        #     choice = input("Enter valid number: ")
-        # choice = int(choice)
-
-        for i in range(choice):
-            print('\n\n-------------------\n\n')
-            for j in range(len(groups)):
-                print(j + 1, '. ', reshape(group[groups[j]].name)[::-1])
-            print('\n\n-------------------\n\n')
-            # g = input(f"Choose The Group: ")
-            # while g.isnumeric() == False or int(g) < 1 or int(g) > len(groups):
-            #     g = input("Enter valid number: ")
-            # g = int(g)
-            # d1.append(groups[g - 1])
-            # groups.pop(g - 1)
-        # d2 = groups
-
-        h1 = branch.hallsInBranch.copy()
-        h2 = h1 + branch.hallsInBranch.copy()
-
-        if dp(0, 0, d1, h1, l) == OO:
-            print("NO Valid Option")
-            return
-        mem.clear()
-        if dp(0, 0, d2, h2, l) == OO:
-            print("NO Valid Option")
-            return
-        mem.clear()
-        buildDp(0, 0, d1, h1, l)
-        mem.clear()
-        buildDp(0, 0, d2, h2, l)
-
-        for i in range(len(toPrint)):
-            if i % l == 0:
-                print('\n\n-----------------------------------------------------\n\n')
-                print(f"Day {i // l + 1}.")
-            hall, gro, _from, to = toPrint[i][0], toPrint[i][1], toPrint[i][2], toPrint[i][3]
-            print(f"{hall}  {reshape(gro)[::-1]} {_from}    {to}")
-        print("\n\n==========================================================\n\n")  
-    
-    elif choice == 2:
-        print('2')
-        d1, d2, d3 = list([0]), list([4]), list([1, 2, 3])
+    # if choice == 1:
+    #     print('1')
+    #     d1, d2 = list([0]), list([1,2,3, 4])
 
         # choice = input("Enter The Number of groups in that Day: ")
         # while choice.isnumeric() == False or int(choice) < 1 or int(choice) > len(groups):
@@ -189,30 +145,75 @@ def solve(branch :Branch)->None:
             # groups.pop(g - 1)
         # d2 = groups
 
-        h = branch.hallsInBranch.copy()
+    #     h1 = branch.hallsInBranch.copy()
+    #     h2 = h1 + branch.hallsInBranch.copy()
 
-        if dp(0, 0, d1, h, l) == OO:
-            print("NO Valid Option")
-            return
-        mem.clear()
-        if dp(0, 0, d2, h, l) == OO:
-            print("NO Valid Option")
-            return
-        mem.clear()
-        if dp(0, 0, d3, h, l) == OO:
-            print("NO Valid Option")
-            return
-        mem.clear()
-        buildDp(0, 0, d1, h, l)
-        mem.clear()
-        buildDp(0, 0, d2, h, l)
-        mem.clear()
-        buildDp(0, 0, d3, h, l)
+    #     if dp(0, 0, d1, h1, l) == OO:
+    #         print("NO Valid Option")
+    #         return
+    #     mem.clear()
+    #     if dp(0, 0, d2, h2, l) == OO:
+    #         print("NO Valid Option")
+    #         return
+    #     mem.clear()
+    #     buildDp(0, 0, d1, h1, l)
+    #     mem.clear()
+    #     buildDp(0, 0, d2, h2, l)
 
-        for i in range(len(toPrint)):
-            if i % l == 0:
-                print('\n\n-----------------------------------------------------\n\n')
-                print(f"Day {i // l + 1}.")
-            hall, gro, _from, to = toPrint[i][0], toPrint[i][1], toPrint[i][2], toPrint[i][3]
-            print(f"{hall}  {reshape(gro)[::-1]} {_from}    {to}")
-        print("\n\n==========================================================\n\n")  
+    #     for i in range(len(toPrint)):
+    #         if i % l == 0:
+    #             print('\n\n-----------------------------------------------------\n\n')
+    #             print(f"Day {i // l + 1}.")
+    #         hall, gro, _from, to = toPrint[i][0], toPrint[i][1], toPrint[i][2], toPrint[i][3]
+    #         print(f"{hall}  {reshape(gro)[::-1]} {_from}    {to}")
+    #     print("\n\n==========================================================\n\n")  
+    
+    # elif choice == 2:
+    #     print('2')
+    #     d1, d2, d3 = list([0]), list([4]), list([1, 2, 3])
+
+        # choice = input("Enter The Number of groups in that Day: ")
+        # while choice.isnumeric() == False or int(choice) < 1 or int(choice) > len(groups):
+        #     choice = input("Enter valid number: ")
+        # choice = int(choice)
+
+        # for i in range(choice):
+        #     print('\n\n-------------------\n\n')
+        #     for j in range(len(groups)):
+        #         print(j + 1, '. ', reshape(group[groups[j]].name)[::-1])
+        #     print('\n\n-------------------\n\n')
+            # g = input(f"Choose The Group: ")
+            # while g.isnumeric() == False or int(g) < 1 or int(g) > len(groups):
+            #     g = input("Enter valid number: ")
+            # g = int(g)
+            # d1.append(groups[g - 1])
+            # groups.pop(g - 1)
+        # d2 = groups
+
+        # h = branch.hallsInBranch.copy()
+
+        # if dp(0, 0, d1, h, l) == OO:
+        #     print("NO Valid Option")
+        #     return
+        # mem.clear()
+        # if dp(0, 0, d2, h, l) == OO:
+        #     print("NO Valid Option")
+        #     return
+        # mem.clear()
+        # if dp(0, 0, d3, h, l) == OO:
+        #     print("NO Valid Option")
+        #     return
+        # mem.clear()
+        # buildDp(0, 0, d1, h, l)
+        # mem.clear()
+        # buildDp(0, 0, d2, h, l)
+        # mem.clear()
+        # buildDp(0, 0, d3, h, l)
+
+        # for i in range(len(toPrint)):
+        #     if i % l == 0:
+        #         print('\n\n-----------------------------------------------------\n\n')
+        #         print(f"Day {i // l + 1}.")
+        #     hall, gro, _from, to = toPrint[i][0], toPrint[i][1], toPrint[i][2], toPrint[i][3]
+        #     print(f"{hall}  {reshape(gro)[::-1]} {_from}    {to}")
+        # print("\n\n==========================================================\n\n")  
