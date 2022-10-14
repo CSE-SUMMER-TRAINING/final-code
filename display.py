@@ -51,7 +51,7 @@ def hasSpace(str):
 
 def output_the_distribution(choice1):
     name = branch_name[choice1]
-    workbook = xlsxwriter.Workbook(f"قاعات {arabic(name)}.xlsx")
+    workbook = xlsxwriter.Workbook(f"قاعات {arabic(name)[::-1]}.xlsx")
     if hasSpace(name): name = arabic(branch_name[choice1])
     worksheet = workbook.add_worksheet(name)
 
@@ -128,7 +128,7 @@ def output_the_distribution(choice1):
 
 def output_the_distribution_with_halls_data(choice1):
     name = branch_name[choice1]
-    workbook = xlsxwriter.Workbook('hallsWithAllData.xlsx')
+    workbook = xlsxwriter.Workbook(f'hallsWithAllData{choice1}.xlsx')
     if hasSpace(name): name = arabic(branch_name[choice1])
     worksheet = workbook.add_worksheet(name)
 
@@ -211,5 +211,6 @@ def output_the_distribution_with_halls_data(choice1):
         worksheet.write(R + i, 10, dataframes[choice1][i][1], general_format)
         worksheet.write(R + i, 11, dataframes[choice1][i][2], general_format)
         worksheet.write(R + i, 12, dataframes[choice1][i][3], general_format)
-
+    worksheet2 = workbook.add_worksheet(str(len(branch_name)))
+    worksheet2.right_to_left()
     workbook.close()
