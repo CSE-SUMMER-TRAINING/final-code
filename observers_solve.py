@@ -207,6 +207,8 @@ def read_input(exel_name):
         my_list = rows.values.tolist()
         observser_data_lst.append(my_list)
     for x in observser_data_lst:
+        if x[3]!= khalafawy and x[3]!= road_el_farag:
+            return "البيانات المدخلة تحتوى على قيم غير معروفة فى خانة المبنى،القيم المتاحة: خلفاوي، روض الفرج"
         monitors.append(Monitor(*x))
 
     def srt(elem):

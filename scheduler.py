@@ -711,11 +711,11 @@ class invScreen2(QWidget):
                     return
                 ts.type = item.text()
                 item = self.table_widget.item(i, 2)
-                if arabic(item.text()) not in is_bransh.keys():
+                if item.text() not in is_bransh.keys():
                     msg= "هذا الفرع غير موجود بالكلية، يمكنك اختيار احد الاختيارات التالية\n"
                     cnt= 1 
                     for k in is_bransh.keys():
-                        msg += str(cnt)+ ' - '+ arabic(k) + '\n'
+                        msg += str(cnt)+ ' - '+ (k) + '\n'
                         cnt+=1 
                     QMessageBox.about(self, "", msg)
                     return
@@ -751,11 +751,11 @@ class invScreen2(QWidget):
                     return
                 ts.type = item.text()
                 item = self.table_widget.item(j, 5)
-                if arabic(item.text()) not in is_bransh.keys():
+                if (item.text()) not in is_bransh.keys():
                     msg= "هذا الفرع غير موجود بالكلية، يمكنك اختيار احد الاختيارات التالية\n"
                     cnt= 1 
                     for k in is_bransh.keys():
-                        msg += str(cnt)+ ' - '+ arabic(k) + '\n'
+                        msg += str(cnt)+ ' - '+ (k) + '\n'
                         cnt+=1 
                     QMessageBox.about(self, "", msg)
                     return
