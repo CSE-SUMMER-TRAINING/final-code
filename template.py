@@ -4,7 +4,7 @@ def create_halls_template():
     workbook = xlsxwriter.Workbook('نموذج القاعات.xlsx')
 
     groups = workbook.add_worksheet('الدفعات')
-    branch1 = workbook.add_worksheet('الخلفاوي')
+    branch1 = workbook.add_worksheet('خلفاوي')
     branch2 = workbook.add_worksheet('روض الفرج')
 
     header_format = workbook.add_format()

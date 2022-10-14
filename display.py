@@ -46,13 +46,9 @@ def print_output(choice1, choice2):
     #     mem.clear()
         # break
 
-def hasSpace(str):
-    return True if ' ' in str else False
-
 def output_the_distribution(choice1):
     name = branch_name[choice1]
-    workbook = xlsxwriter.Workbook(f"قاعات {arabic(name)[::-1]}.xlsx")
-    if hasSpace(name): name = arabic(branch_name[choice1])
+    workbook = xlsxwriter.Workbook(f"قاعات {name}.xlsx")
     worksheet = workbook.add_worksheet(name)
 
     general_format = workbook.add_format()
@@ -129,7 +125,6 @@ def output_the_distribution(choice1):
 def output_the_distribution_with_halls_data(choice1):
     name = branch_name[choice1]
     workbook = xlsxwriter.Workbook(f'hallsWithAllData{choice1}.xlsx')
-    if hasSpace(name): name = arabic(branch_name[choice1])
     worksheet = workbook.add_worksheet(name)
 
     general_format = workbook.add_format()
