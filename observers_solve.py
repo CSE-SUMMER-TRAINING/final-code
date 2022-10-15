@@ -41,7 +41,6 @@ def process_single_task(day, tsk, monitors, lst):
     monitors[lst[0]].append_task(tsk)
     monitors[lst[0]].max_days -= 1
     lst[0] = (lst[0] + 1) % lst[1]
-
     return True
 
 
