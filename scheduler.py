@@ -494,16 +494,16 @@ class invScreen2(QWidget):
         
     def msg2(self):
         QMessageBox.about(self, "", "تم الارسال                   ")
-        self.print_2.setText("ارسال ايميل للكل")
+        self.print_2.setText("إرسال التكليفات للكل")
         self.print.setEnabled(True)
         self.print_2.setEnabled(True)
         
     def print_2_function(self):
         try:
-            QMessageBox.about(self, "", "سوف يتم الارسال بعد لحظات                   ")
+            QMessageBox.about(self, "", "سوف يتم الإرسال بعد لحظات                   ")
             self.print.setEnabled(False)
             self.print_2.setEnabled(False)
-            self.print_2.setText("...يتم الارسال")
+            self.print_2.setText("...يتم الإرسال")
             self.thread=QThread()
             self.worker=Worker2()
             self.worker.moveToThread(self.thread)
@@ -515,12 +515,12 @@ class invScreen2(QWidget):
             self.thread.start()
         except:
             QMessageBox.about(
-                self, "", "لا يمكن الارسال الان حاول مجددا في وقت لاحق"  
+                self, "", "لا يمكن الإرسال الان حاول مجددا في وقت لاحق"  
             )  # needed to be errorbox 
             
     def printone_2_function(self):
         if(current_index==-1):
-            self.label_5.setText("من فضلك اختار شخص")
+            self.label_5.setText("من فضلك اِخْتَرْ شحصًا")
            
         elif len(monitors[current_index].task) == 0:
             self.label_5.setText(f"{monitors[current_index].user_name} ليس لديه أيّ تكليفات")
@@ -1200,7 +1200,7 @@ class exScreen2(QWidget):
 
         self.buttonsendall.move(1200, 400)
         self.buttonsendall.resize(200, 60)
-        self.buttonsendall.setText("ارسال ")
+        self.buttonsendall.setText("إرسال ")
         self.buttonsendall.setStyleSheet("""
         QPushButton {
             border:1px solid #255;
