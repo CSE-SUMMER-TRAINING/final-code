@@ -1,4 +1,4 @@
-from calendar import c
+# your code goes herefrom calendar import c
 import sys
 from PyQt5 import QtWidgets, QtPrintSupport, QtGui, QtCore
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
@@ -24,8 +24,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QLineEdit
 import pandas as pd
-from xml.etree.ElementTree import tostring
-from solver import buildDp, solve, mem, toPrint
+from solver import solve
 from college import *
 from display import *
 from groups_input import *
@@ -46,6 +45,7 @@ URL_INV = (
 
 branch_num = -1
 option_num = -1
+branch_sol = []
 
 
 def build(num_of_branches=2):
@@ -53,7 +53,10 @@ def build(num_of_branches=2):
         branch.append(Branch(branch_name[i], i, num_of_builds[i]))
 
     get_and_store_groups()
-    DISPLAY(branch_num, num_of_branches)
+
+    branch_sol.clear()
+    for i in range(num_of_branches):
+        branch_sol.append(solve(branch[i]))
 
 
 def get_tables(branch_num, option_num):
@@ -245,68 +248,118 @@ class Worker(QObject):
 class Worker2(QObject):
     finished=pyqtSignal()
     def run(self):
-        unvalid_emails = {}
+        mp = {
+            0: "الأثنين",
+            1: "الثلاثاء",
+            2: "الأربعاء",
+            3: "الخميس",
+            4: "الجمعة",
+            5: "السبت",
+            6: "الأحد",
+        }
         for mon in monitors:
-            if not is_email(mon.email):
-                unvalid_emails[mon.user_name] = mon.email
-        
-        if unvalid_emails:
-            #هنا بيشوف إذا كان في ايميلات غير صالحة ولأ عشان تهرها الأول وميكملش البرنامج
-            pass
-        else:
-            mp = {
-                0: "الأثنين",
-                1: "الثلاثاء",
-                2: "الأربعاء",
-                3: "الخميس",
-                4: "الجمعة",
-                5: "السبت",
-                6: "الأحد",
-            }
-            startfile("outlook.exe")
-            ok = True
-            if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
-                ok = False
-
-            for mon in monitors:
-                if len(mon.task) == 0:
-                #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
-                   continue
-                days = []
-                dates = []
-                hours = []
-                places = []
-                for tas in mon.task:
-                    # print(tas.day," ",tas.building," ",tas.type)
-                    spliteddate = tas.day.split("/")
-                    # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
-                    days.append(
-                            mp[
-                                date(
-                                    int(spliteddate[2]),
-                                    int(spliteddate[1]),
-                                    int(spliteddate[0]),
-                                ).weekday()
-                            ]
-                    )
-                    dates.append(tas.day)
-                    hours.append("9:15")
-                    places.append(tas.building)
-                    
-                send_email(
-                    mon.email,
-                    mon.user_name,
-                    mon.branch,
-                    11,
-                    mon.task[0].day[-4:],
-                    days,
-                    dates,
-                    hours,
-                    places,
-                    len(mon.task),
-                    ok
+            if len(mon.task) == 0:
+            #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
+               continue
+            days = []
+            dates = []
+            hours = []
+            places = []
+            for tas in mon.task:
+                # print(tas.day," ",tas.building," ",tas.type)
+                spliteddate = tas.day.split("/")
+                # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
+                days.append(
+                        mp[
+                            date(
+                                int(spliteddate[2]),
+                                int(spliteddate[1]),
+                                int(spliteddate[0]),
+                            ).weekday()
+                        ]
                 )
-      
+                dates.append(tas.day)
+                hours.append("9:15")
+                places.append(tas.building)
+            address=mon.email
+            name=mon.user_name
+            section=mon.branch
+            month=11
+            year=mon.task[0].day[-4:]
+            
+            print (f"\n{address}  {name}  {section}  {month}  {year} ")
+            print ("days: ",end=" ")
+            for i in days:
+                print(i,end=" ")
+            print ("\ndates: ")
+            for i in dates :
+                print (i,end=" ")
+            
+            print("\nhours: ",end=" ")
+            for i in hours :
+                print(i,end=" ")
+            print("\nplaces: ",end=" ")
+            for i in places :
+                print (i,end=" ")
+        #     outlook = client.Dispatch('outlook.application')  # create a Outlook instance
+        #     mail = outlook.CreateItem(0)  # create Mail Message item
+        #     mail.To = address
+        #     mail.Subject = 'تكليف ملاحظة لجان الامتحانات'
+        #     mail.HTMLBody = f"""
+        #         <!DOCTYPE html>
+        #         <html dir="rtl">
+        #             <head>
+        #                 <meta charset="UTF-8">
+        #                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        #             </head>
+        #             <body>
+        #                 <h2>تكليف ملاحظة لجان الامتحانات {month} {year}</h2>
+        #                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
+        #                     <thead>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">السيد</th>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000;">{name}</th>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">قسم</th>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000;">{section}</th>
+        #                     </thead>
+        #                 </table>
+
+        #                 <p style="font-size:120%;">تحية طيبة وبعد....</p>
+        #                 <p style="font-size:120%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
+        #                 <div>
+        #                     {email_content(days,dates,hours,places)}
+        #                 </div>
+        #                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
+        #                     <thead>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000;">إجمالي عدد أيام الملاحظة</th>
+        #                         <th style="padding: 10px 20px;border: 1px solid #000; background-color:rgb(7, 105, 105); color :white">6</th>
+        #                     </thead>
+        #                 </table>
+        #                 <p style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem;">نظرًا لقرار مجلس الكلية فى حالة تبديل يوم مكان أخر لابد من إيجاد البديل</p>
+        #                 <ol style="font-size:120%;font-weight:bold; border-style:dotted;border-width: medium; width:fit-content;border-color:rgb(7, 105, 105);padding:0.5rem 2rem;">
+        #                     <li style="padding:0.5rem;">الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل</li>
+        #                     <li style="padding:0.5rem;">استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل</li>
+        #                     <li style="padding:0.5rem;">توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها</li>
+        #                     <li style="padding:0.5rem;">جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها</li>
+        #                     <li style="padding:0.5rem;">مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف</li>
+        #                     <li style="padding:0.5rem;">يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان</li>
+        #                     <li style="padding:0.5rem;">عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة</li>
+        #                     <li style="padding:0.5rem;">إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان</li>
+        #                     <li style="padding:0.5rem;">عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط</li>
+        #                     <li style="padding:0.5rem;">الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان</li>
+        #                   </ol>
+        #                   <div style="font-size: 130%;font-weight:bold;margin-right:40vw;">
+        #                     <p style="padding:0.5rem; background-color:rgb(7, 105, 105); border-radius:20%; width:fit-content; color:white;">إدارة شئون الطلاب</p>
+        #                     <p style="margin:0 auto;"><img src="https://u...content-available-to-author-only...a.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
+        #                     <p style="margin:0 auto;">كلية الهندسة بشبرا</p>
+        #                   </div>
+                        
+        #             </body>
+        #         </html>
+        # """
+        #     # check if outlook is open
+        #     if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
+        #         startfile("outlook.exe")
+        #     mail.send
         self.finished.emit()
 
 
@@ -472,12 +525,7 @@ class invScreen2(QWidget):
         elif len(monitors[current_index].task) == 0:
             self.label_5.setText(f"{monitors[current_index].user_name} ليس لديه أيّ تكليفات")
             
-        elif not is_email(monitors[current_index].email):
-                 self.label_5.setText("البريد الإلكتروني غير صالح\nالبريد يجب أن يكون على هذا النحو:\n'example@feng.bu.edu.eg'\n'أو: example@example.example'")
         else:
-            ok = True
-            if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
-                ok = False
             mp={
                 0:"الأثنين",
                 1:"الثلاثاء",
@@ -499,7 +547,7 @@ class invScreen2(QWidget):
                 hours.append("9:15")
                 places.append(tas.building)
 
-            send_email(tmplst.email,tmplst.user_name,tmplst.branch,11,tmplst.task[0].day[-4:],days,dates,hours,places,len(tmplst.task),ok)
+            send_email(tmplst.email,tmplst.user_name,tmplst.branch,11,tmplst.task[0].day[-4:],days,dates,hours,places)
     def download_function(self):
         cnt = 0
         lst = []
@@ -790,7 +838,7 @@ class exScreen1(QWidget):
             widget.setCurrentWidget(exs2)
             self.lineEdit.setText("")
             self.txt = ""
-
+            
         else:
             self.label_not_enough.setText("برجاء اختيار ملف")
             return
@@ -867,18 +915,19 @@ class exScreen2(QWidget):
         global nj, solveIdx
         index = index
         solveIdx = index
-
+        
         # two tabs for each branch
         self.tabs = QTabWidget(self.listOfFrames[index])
 
         # table optimal solution
-        DISPLAY(index, num_of_branches)
+        # DISPLAY(index, num_of_branches)
 
         vertical = ["  القاعه"]
+        toPrint = branch_sol[index].copy()
 
-        for i in range(len(toPrint)):
-            if toPrint[i][0] not in vertical:
-                vertical.append(toPrint[i][0])
+        for i in range(len(toPrint) // 3):
+            # if toPrint[i][0] not in vertical:
+            vertical.append(toPrint[i][0])
 
         table = QTableWidget(len(vertical), 9)
 
