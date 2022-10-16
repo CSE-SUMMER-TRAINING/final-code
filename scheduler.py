@@ -154,7 +154,6 @@ class invScreen1(QWidget):
 
 current_index = -1
 nj = 0
-solveIdx = 0
 
 
 class Worker(QObject):
@@ -913,9 +912,8 @@ class exScreen2(QWidget):
         self.add_tab_widget.tabBarClicked.connect(self.fill_tabs)
 
     def fill_tabs(self, index=0):
-        global nj, solveIdx
+        global nj
         index = index
-        solveIdx = index
         
         # two tabs for each branch
         self.tabs = QTabWidget(self.listOfFrames[index])
@@ -1407,7 +1405,7 @@ class exScreen2(QWidget):
     #     self.table_suggest.resize(0, 0)
 
     def saveSol(self):
-        output_the_distribution(solveIdx, branch_sol[solveIdx].copy())
+        output_the_distribution(branch_sol.copy())
 
     def return_data(self):
         for i in range(len(self.choosegroup)):

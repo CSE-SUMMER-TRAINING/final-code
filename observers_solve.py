@@ -238,7 +238,7 @@ def read_input(exel_name):
     for i in range(len(days)):
         days[i] = ExamDay(*days[i])
     try:
-        excel=pd.ExcelFile("hallsWithAllData0.xlsx")
+        excel=pd.ExcelFile("hallsWithAllData.xlsx")
     except:
         return "يجب تشغيل جزء القاعات قبل هذا الجزء"
     br=0
