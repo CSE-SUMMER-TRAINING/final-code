@@ -114,7 +114,7 @@ def output_the_distribution(sol):
     output_the_distribution_with_halls_data()
 
 def output_the_distribution_with_halls_data():
-    workbook = xlsxwriter.Workbook('hallsWithAllData.xlsx')
+    workbook = xlsxwriter.Workbook('icons/hallsWithAllData.xlsx')
 
     general_format = workbook.add_format()
     general_format.set_align('center')
