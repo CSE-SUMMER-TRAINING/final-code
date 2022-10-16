@@ -1,6 +1,7 @@
 # your code goes herefrom calendar import c
 from re import I
 import sys
+import win32api
 from PyQt5 import QtWidgets, QtPrintSupport, QtGui, QtCore
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 from PyQt5.QtWidgets import (
@@ -154,6 +155,7 @@ class invScreen1(QWidget):
 
 current_index = -1
 nj = 0
+solveIdx = 0
 
 
 class Worker(QObject):
@@ -232,16 +234,6 @@ class Worker(QObject):
             pdf.ln()
             pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
             pdf.ln()
-
-        # pdf.set_font("Times", size=10)
-        # letter='ك'
-        # for font in pdf.core_fonts:
-        #         if any([letter for letter in font if letter.isupper()]):
-        #             # skip this font
-        #             continue
-        #         pdf.set_font(font, size=12)
-
-
         pdf.output('table_with_cells.pdf')
         self.finished.emit()
        
@@ -450,60 +442,96 @@ class invScreen2(QWidget):
             )  # needed to be errorbox
     def printone_function(self):
         # pdf
-        self.changes.setText("")
+        pdf = FPDF(orientation='P', unit='mm', format='A4')
+        pdf.core_fonts_encoding='utf-8'
+        #1-find site-package in ur python directory then go to fpdf (after installing it) create folder with the name "font"
+        #2-extrat the zip file their that's all !!!!!!!!!!!!!!!!!!!!!!!!
+        pdf.add_font('FreeSerif', '', 'IBM_Plex_Sans_Arabic/IBMPlexSansArabic-Regular.ttf')
+        mp = {
+                    0: "الأثنين",
+                    1: "الثلاثاء",
+                    2: "الأربعاء",
+                    3: "الخميس",
+                    4: "الجمعة",
+                    5: "السبت",
+                    6: "الأحد",
+                }
 
-        self.frame.resize(1000, 780)
+        mon=monitors[current_index]
+        data=[(arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
+        for tas in mon.task:
+            spliteddate = tas.day.split("/")
+            dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
+            data.append((arabic(tas.building),"9:15",tas.day,dayy))
+        pdf.add_page()
+        pdf.image("icons\download.png",90,w=35,h=30)
+        pdf.set_font('FreeSerif', size=12)
+        pdf.set_fill_color(237, 240, 149)
+        pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
+        pdf.ln()
+        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2020/2021 "+arabic(" تكليف ملاحظة لجان الامتحانات يناير  "),align="c")
+        pdf.ln()
+        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("السيد/ %s                                                                       قسم:%s"%(mon.user_name,mon.work_place)),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تحية طيبة وبعد ..."),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لملاحظة لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
+        pdf.ln()
 
-        self.table_widget.setGeometry(20, 170, 850, 560)
+        line_height = pdf.font_size * 1.50
+        for i in range(len(data)):
+            row=data[i]
+            for datum in row:
+                if(i==0):
+                    pdf.multi_cell(50, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                else :pdf.multi_cell(50, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+            pdf.ln()
+        x=len(data)-1
+        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
+        pdf.ln()
+        pdf.set_fill_color(237, 12, 61)
+        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("نظرا لقرار مجلس الكليه فى حالة تبديل يوم مكان اخر لابد من ايجاد البديل "),align="C")
+        pdf.ln()
 
-        self.label_dep.setGeometry(100, 80, 200, 30)
-        self.label_name.setGeometry(550, 80, 200, 30)
-        self.label_dep0.setGeometry(250, 80, 200, 30)
-        self.label_name0.setGeometry(800, 80, 50, 30)
-        self.label_.setGeometry(330, 20, 400, 50)
-        self.frame.setStyleSheet("border:none;background-color:white;")
-        self.table_widget.setStyleSheet(
-            "border:1px solid black;background-color:white;"
-        )
-
-        header = self.table_widget.horizontalHeader()
-        for i in range(6):
-            header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
-
-        printer = QtPrintSupport.QPrinter()
-        painter = QtGui.QPainter()
-        painter.begin(printer)
-        screen = self.frame.grab()
-        painter.drawPixmap(100, 100, screen)
-        painter.end()
-
-        self.frame.resize(1550, 780)
-
-        self.table_widget.setGeometry(40, 170, 1470, 560)
-
-        self.label_dep.setGeometry(150, 80, 470, 30)
-        self.label_name.setGeometry(820, 80, 360, 30)
-        self.label_dep0.setGeometry(640, 80, 121, 30)
-        self.label_name0.setGeometry(1320, 80, 141, 30)
-        self.label_.setGeometry(270, 10, 1060, 40)
-        self.frame.setStyleSheet(
-            "border:1px solid #005580;border-radius:10px;background-color:white;"
-        )
-
-        self.changes.setText("حفظ التغيرات ")
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("1-الحضور بمقر اللجنة قبل بدء الامتحان بنصف ساعة على الأقل"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("2-استلام كراسات الإجابة وتوزيعها على الطلاب قبل بدء الامتحان بخمس دقائق على الأقل"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("3-توزيع أوراق الأسئلة وعدم تدوين اى معلومات عليها أو تبادل الطلاب لها"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("4-جمع كرنيهات الطلاب ومراجعة بياناتها مع البيانات المسجلة على كراسة الإجابة والتوقيع عليها"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("5-مراجعة استمارات الغياب للطلاب الغائبين مع التأكد من توقيع جميع الطلاب الحاضرين فى كشوف الحضور والانصراف"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("6-يمنع الطالب من الخروج من اللجنه قبل نصف مده الامتحان"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("7-عدم توقيع الطالب فى كشوف الانصراف إلا بعد استلام ورقة الإجابة"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("8-إبلاغ رئيس اللجنة عن اى حالة غش أو الشروع فيه أو أى إخلال بنظام الامتحان"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("9-عدم اضافة أي اسم طالب بكشوف الحضور كتابة باليد والالتزام بكشوف الاسماء المدرجه فقط"),align="R")
+        pdf.ln()
+        pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
+        pdf.ln()
+        pdf.output('fl.pdf')
+        
+        try: 
+            win32api.ShellExecute(0, "print", 'fl.pdf', None,".",0)
+        except:
+            pass
         
     def msg2(self):
         QMessageBox.about(self, "", "تم الارسال                   ")
-        self.print_2.setText("إرسال التكليفات للكل")
+        self.print_2.setText("ارسال ايميل للكل")
         self.print.setEnabled(True)
         self.print_2.setEnabled(True)
         
     def print_2_function(self):
         try:
-            QMessageBox.about(self, "", "سوف يتم الإرسال بعد لحظات                   ")
+            QMessageBox.about(self, "", "سوف يتم الارسال بعد لحظات                   ")
             self.print.setEnabled(False)
             self.print_2.setEnabled(False)
-            self.print_2.setText("...يتم الإرسال")
+            self.print_2.setText("...يتم الارسال")
             self.thread=QThread()
             self.worker=Worker2()
             self.worker.moveToThread(self.thread)
@@ -515,12 +543,12 @@ class invScreen2(QWidget):
             self.thread.start()
         except:
             QMessageBox.about(
-                self, "", "لا يمكن الإرسال الان حاول مجددا في وقت لاحق"  
+                self, "", "لا يمكن الارسال الان حاول مجددا في وقت لاحق"  
             )  # needed to be errorbox 
             
     def printone_2_function(self):
         if(current_index==-1):
-            self.label_5.setText("من فضلك اِخْتَرْ شحصًا")
+            self.label_5.setText("من فضلك اختار شخص")
            
         elif len(monitors[current_index].task) == 0:
             self.label_5.setText(f"{monitors[current_index].user_name} ليس لديه أيّ تكليفات")
@@ -912,8 +940,9 @@ class exScreen2(QWidget):
         self.add_tab_widget.tabBarClicked.connect(self.fill_tabs)
 
     def fill_tabs(self, index=0):
-        global nj
+        global nj, solveIdx
         index = index
+        solveIdx = index
         
         # two tabs for each branch
         self.tabs = QTabWidget(self.listOfFrames[index])
@@ -1200,7 +1229,7 @@ class exScreen2(QWidget):
 
         self.buttonsendall.move(1200, 400)
         self.buttonsendall.resize(200, 60)
-        self.buttonsendall.setText("إرسال ")
+        self.buttonsendall.setText("ارسال ")
         self.buttonsendall.setStyleSheet("""
         QPushButton {
             border:1px solid #255;
@@ -1405,7 +1434,7 @@ class exScreen2(QWidget):
     #     self.table_suggest.resize(0, 0)
 
     def saveSol(self):
-        output_the_distribution(branch_sol.copy())
+        output_the_distribution(solveIdx, branch_sol[solveIdx].copy())
 
     def return_data(self):
         for i in range(len(self.choosegroup)):
