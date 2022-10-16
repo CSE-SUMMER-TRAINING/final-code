@@ -24,8 +24,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QLineEdit
 import pandas as pd
-from xml.etree.ElementTree import tostring
-from solver import buildDp, solve, mem, toPrint
+from solver import solve
 from college import *
 from display import *
 from groups_input import *
@@ -46,6 +45,7 @@ URL_INV = (
 
 branch_num = -1
 option_num = -1
+branch_sol = []
 
 
 def build(num_of_branches=2):
@@ -53,7 +53,10 @@ def build(num_of_branches=2):
         branch.append(Branch(branch_name[i], i, num_of_builds[i]))
 
     get_and_store_groups()
-    DISPLAY(branch_num, num_of_branches)
+
+    branch_sol.clear()
+    for i in range(num_of_branches):
+        branch_sol.append(solve(branch[i]))
 
 
 def get_tables(branch_num, option_num):
@@ -835,7 +838,7 @@ class exScreen1(QWidget):
             widget.setCurrentWidget(exs2)
             self.lineEdit.setText("")
             self.txt = ""
-
+            
         else:
             self.label_not_enough.setText("برجاء اختيار ملف")
             return
@@ -912,18 +915,19 @@ class exScreen2(QWidget):
         global nj, solveIdx
         index = index
         solveIdx = index
-
+        
         # two tabs for each branch
         self.tabs = QTabWidget(self.listOfFrames[index])
 
         # table optimal solution
-        DISPLAY(index, num_of_branches)
+        # DISPLAY(index, num_of_branches)
 
         vertical = ["  القاعه"]
+        toPrint = branch_sol[index].copy()
 
-        for i in range(len(toPrint)):
-            if toPrint[i][0] not in vertical:
-                vertical.append(toPrint[i][0])
+        for i in range(len(toPrint) // 3):
+            # if toPrint[i][0] not in vertical:
+            vertical.append(toPrint[i][0])
 
         table = QTableWidget(len(vertical), 9)
 
