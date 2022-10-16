@@ -1,9 +1,6 @@
-from secrets import choice
-from xml.etree.ElementTree import tostring
 import xlsxwriter
 from data_input import *
-from solver import buildDp, solve, mem, toPrint
-from observers_data import arabic
+from solver import solve
 
 to_print1 = []
 to_print2 = []
@@ -46,7 +43,7 @@ def print_output(choice1, choice2):
     #     mem.clear()
         # break
 
-def output_the_distribution(choice1):
+def output_the_distribution(choice1, sol):
     name = branch_name[choice1]
     workbook = xlsxwriter.Workbook(f"قاعات {name}.xlsx")
     worksheet = workbook.add_worksheet(name)
@@ -98,7 +95,8 @@ def output_the_distribution(choice1):
 
     cnt, R = 1, 2
     l = len(branch[choice1].hallsInBranch)
-    
+    global toPrint
+    toPrint = sol.copy()
 
     for i in range(l):
         worksheet.write(R + i, 0, toPrint[i][0], sub_header_format)
@@ -119,6 +117,7 @@ def output_the_distribution(choice1):
         worksheet.write(R + i, 7, toPrint[i + 2 * l][1], general_format)
         worksheet.write(R + i, 8, toPrint[i + 2 * l][2], general_format)
         worksheet.write(R + i, 9, toPrint[i + 2 * l][3], general_format)
+    
     workbook.close()
     output_the_distribution_with_halls_data(choice1)
 
@@ -176,12 +175,7 @@ def output_the_distribution_with_halls_data(choice1):
     worksheet.write(1, 12, 'رقم الدور', sub_header_format)
 
     cnt, R = 1, 2
-
-    # print("\n\n")
-    # print(len(toPrint))
-    # to_print1.extend(list(toPrint))
     l = len(branch[choice1].hallsInBranch)
-    
 
     for i in range(l):
         worksheet.write(R + i, 0, toPrint[i][0], sub_header_format)

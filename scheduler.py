@@ -1,4 +1,5 @@
 # your code goes herefrom calendar import c
+from re import I
 import sys
 from PyQt5 import QtWidgets, QtPrintSupport, QtGui, QtCore
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
@@ -1406,7 +1407,7 @@ class exScreen2(QWidget):
     #     self.table_suggest.resize(0, 0)
 
     def saveSol(self):
-        output_the_distribution(solveIdx)
+        output_the_distribution(solveIdx, branch_sol[solveIdx].copy())
 
     def return_data(self):
         for i in range(len(self.choosegroup)):
