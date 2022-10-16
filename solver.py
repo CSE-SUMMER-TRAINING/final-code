@@ -3,7 +3,7 @@ from college import Branch,Hall
 from groups_input import group
 from arabic_reshaper import reshape
 
-mem, OO = dict(), int(1e18)
+mem, mem2, OO = dict(), dict(), int(1e18)
 wrongForBuild, wrongForFloor, wrongForHall = int(1e6), int(1e3), 1
 toPrint = []
 
@@ -18,27 +18,31 @@ def dp(idx, msk, g, h, l)->int:
 
     for i in range(len(g)):
         if msk & (1 << i): continue
-        sm, j, weight = h[idx].volume, idx + 1, 0
-        while j < len(h) and sm < group[g[i]].volume:
-            sm += h[j].volume
-            if j // l != (j - 1) // l:
-                weight = OO
-                break
-            if h[j].buildNum != h[j - 1].buildNum:
-                weight += wrongForBuild
+        if (i, idx) not in mem2: 
+            sm, j, weight = h[idx].volume, idx + 1, 0
+            while j < len(h) and sm < group[g[i]].volume:
+                sm += h[j].volume
+                if j // l != (j - 1) // l:
+                    weight = OO
+                    break
+                if h[j].buildNum != h[j - 1].buildNum:
+                    weight += wrongForBuild
+                    j += 1
+                    continue
+                if h[j].floorNum != h[j - 1].floorNum:
+                    weight += wrongForFloor
+                    j += 1
+                    continue
+                weight += wrongForHall
                 j += 1
-                continue
-            if h[j].floorNum != h[j - 1].floorNum:
-                weight += wrongForFloor
-                j += 1
-                continue
-            weight += wrongForHall
-            j += 1
-        if sm < group[g[i]].volume or weight == OO: continue
-        mem[(idx, msk)] = min(mem[(idx, msk)], weight + dp(j, msk | (1 << i), g, h, l), OO)
+            if sm < group[g[i]].volume: weight = OO
+            mem2[(i, idx)] = (weight, j)
+
+        wgt, jj = mem2[(i, idx)][0], mem2[(i, idx)][1]
+        if wgt == OO: continue
+        mem[(idx, msk)] = min(mem[(idx, msk)], wgt + dp(jj, msk | (1 << i), g, h, l), OO)
     
     mem[(idx, msk)] = min(mem[(idx, msk)], dp(idx + 1, msk, g, h, l), OO)
-    
     return mem[(idx, msk)]
 
 
@@ -49,24 +53,11 @@ def buildDp(idx, msk, g, h, l)->None:
 
     for i in range(len(g)):
         if msk & (1 << i): continue
-        sm, j, weight = h[idx].volume, idx + 1, 0
-        while j < len(h) and sm < group[g[i]].volume:
-            sm += h[j].volume
-            if j // l != (j - 1) // l:
-                weight = OO
-                break
-            if h[j].buildNum != h[j - 1].buildNum:
-                weight += wrongForBuild
-                j += 1
-                continue
-            if h[j].floorNum != h[j - 1].floorNum:
-                weight += wrongForFloor
-                j += 1
-                continue
-            weight += wrongForHall
-            j += 1
-        if sm < group[g[i]].volume or weight == OO: continue
-        if (weight + dp(j, msk | (1 << i), g, h, l) == optimal):
+
+        wgt, jj = mem2[(i, idx)][0], mem2[(i, idx)][1]
+        if wgt == OO: continue
+   
+        if (wgt + dp(jj, msk | (1 << i), g, h, l) == optimal):
             sm, j, initial = 0, idx, group[g[i]]._from
             while j < len(h) and sm < group[g[i]].volume:
                 toPrint.append((h[j].name, group[g[i]].name, initial, min(initial + h[j].volume - 1, group[g[i]].to)))
@@ -80,38 +71,51 @@ def buildDp(idx, msk, g, h, l)->None:
     buildDp(idx + 1, msk, g, h, l)
     return
 
-def solve(branch :Branch)->None:
+def solve(branch :Branch):
     
     groups = branch.groupsInBranch.copy()
-    print(groups)
     allHalls = branch.hallsInBranch.copy() + branch.hallsInBranch.copy() + branch.hallsInBranch.copy()
     l = len(allHalls) // 3
     
     mem.clear()
+    mem2.clear()
 
     if dp(0, 0, groups, allHalls, l) == OO:
-        print("NO Valid Option")
-        return
+        return []
     
-    print("1. Optimal Solution")
-    print("2. Test")
+    toPrint.clear()
+    buildDp(0, 0, groups, allHalls, l)
+    return toPrint.copy()
 
-    choice = 1
+
+
+
+
+
+
+
+    ### version 2
+
+    # print("1. Optimal Solution")
+    # print("2. Test")
+
+    # choice = 1
+    # if choice == 1:
+    #     toPrint.clear()
+    #     buildDp(0, 0, groups, allHalls, l)
+    #     return
+
     # while choice.isnumeric() == False or int(choice) < 1 or int(choice) > 2:
     #     choice = input("Enter valid number: ")
     # choice = int(choice)
 
-    if choice == 1:
-        toPrint.clear()
-        buildDp(0, 0, groups, allHalls, l)
-        for i in range(len(toPrint)):
-            if i % l == 0:
-                print('\n\n-----------------------------------------------------\n\n')
-                print(f"Day {i // l + 1}.")
-            hall, gro, _from, to = toPrint[i][0], toPrint[i][1], toPrint[i][2], toPrint[i][3]
-            print(f"{hall}  {reshape(gro)[::-1]} {_from}    {to}")
-        print("\n\n==========================================================\n\n")
-        return
+    # for i in range(len(toPrint)):
+    #     if i % l == 0:
+    #         print('\n\n-----------------------------------------------------\n\n')
+    #         print(f"Day {i // l + 1}.")
+    #     hall, gro, _from, to = toPrint[i][0], toPrint[i][1], toPrint[i][2], toPrint[i][3]
+    #     print(f"{hall}  {reshape(gro)[::-1]} {_from}    {to}")
+    # print("\n\n==========================================================\n\n")
 
     # mem.clear()
     # toPrint.clear()
