@@ -640,7 +640,7 @@ font-size:16px;
 </string>
     </property>
     <property name="text">
-     <string>ارسال ايميل للشخص</string>
+     <string>إرسال التكليف</string>
     </property>
    </widget>
   </widget>
@@ -669,7 +669,7 @@ background-color:#b1b1b1;
 }</string>
    </property>
    <property name="text">
-    <string>ارسال ايميل للكل</string>
+    <string>إرسال التكليفات للكل</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
