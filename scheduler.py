@@ -318,7 +318,7 @@ class invScreen2(QWidget):
         loadUi("./ui/screenInv2.ui", self)
         self.combox = self.findChild(QComboBox, "comboBox1")
 
-        self.list = ["...اختار"]
+        self.list = ["...اختر"]
         for mon in monitors:
             self.list.append(mon.user_name)
 
@@ -1033,7 +1033,7 @@ class exScreen2(QWidget):
         self.table_suggest.move(5, 30)
 
         self.tabs.addTab(table, "حل مقترح")
-        self.tabs.addTab(self.suggest, "اضافة حل؟")
+        self.tabs.addTab(self.suggest, "إضافة حل؟")
 
         # groups choosen
         self.day1list = []
@@ -1117,7 +1117,7 @@ class exScreen2(QWidget):
         self.backToFrame0.setIconSize(size)
         self.backToFrame0.resize(50, 30)
 
-        self.labelgroubs.setText("اختار من هذه الدفعات")
+        self.labelgroubs.setText("اختر من هذه الدفعات")
         self.labelgroubs.setStyleSheet("font-size:25px;background-color:#e6e6e6;color:#141414;padding:3px;border-radius:10px;")
 
         # show checkbox
@@ -1216,7 +1216,7 @@ class exScreen2(QWidget):
         self.backToFrame0.setIconSize(size)
         self.backToFrame0.resize(50, 30)
 
-        self.labelgroubs.setText("اختار من هذه الدفعات")
+        self.labelgroubs.setText("اختر من هذه الدفعات")
         self.labelgroubs.setStyleSheet("font-size:25px;background-color:#e6e6e6;color:#141414;padding:3px;border-radius:10px;")
 
         for i in range(len(self.choosegroup)):
