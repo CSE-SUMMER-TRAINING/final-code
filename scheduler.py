@@ -1,4 +1,4 @@
-from calendar import c
+# your code goes herefrom calendar import c
 import sys
 from PyQt5 import QtWidgets, QtPrintSupport, QtGui, QtCore
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
@@ -349,7 +349,7 @@ class Worker2(QObject):
         #                   </ol>
         #                   <div style="font-size: 130%;font-weight:bold;margin-right:40vw;">
         #                     <p style="padding:0.5rem; background-color:rgb(7, 105, 105); border-radius:20%; width:fit-content; color:white;">إدارة شئون الطلاب</p>
-        #                     <p style="margin:0 auto;"><img src="https://upload.wikimedia.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
+        #                     <p style="margin:0 auto;"><img src="https://u...content-available-to-author-only...a.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
         #                     <p style="margin:0 auto;">كلية الهندسة بشبرا</p>
         #                   </div>
                         
