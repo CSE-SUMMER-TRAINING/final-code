@@ -5,7 +5,7 @@ from tokenize import triple_quoted
 from observers_data import *
 from college import *
 import math
-from datetime import date
+from datetime import date, datetime
 
 import win32com.client as client
 from tabulate import tabulate
@@ -218,9 +218,11 @@ def read_input(exel_name):
     day = []
     cnt = 0
     for x, y in dataframe2.items():
-        if len(x.split(".")[0].split("/")) == 1:
+        my_format = "%m/%d/%Y"
+        if(type(x)==datetime):x=datetime.strftime(x, my_format)
+        if len(str(x).split(".")[0].split("/")) == 1:
             continue
-        day.append(tuple(x.split(".")[0].split("/")))
+        day.append(tuple(str(x).split(".")[0].split("/")))
         removeNAN = y.values.tolist()
         newlist = []
         temp = []
@@ -228,9 +230,10 @@ def read_input(exel_name):
             if not pd.isnull(a):
                 newlist.append(a)
         temp.append(newlist)
-        temp.insert(0, x.split(".")[0])
+        temp.insert(0, str(x).split(".")[0])
         days.append(temp)
     day = sorted(day, key=srt)
+    print(day)
     for x in day:
         if x not in daynumber.keys():
             cnt += 1
@@ -257,7 +260,6 @@ def read_input(exel_name):
                 if(row[1]!="فارغه"):
                     if row[1] not in colDayBranch[0].keys():
                         colDayBranch[0][row[1]]=[]
-                    print(row[3],row[2])
                     colDayBranch[0][row[1]].append((Hall(br,row[-1],row[-2],row[-3],row[0]),int(row[3])-int(row[2])+1))
                 if(row[4]!="فارغه"):
                     if row[4] not in colDayBranch[1].keys():
@@ -276,6 +278,7 @@ def read_input(exel_name):
     seen = set()
     seen_add = seen.add
     res= [x for x in day if not (x in seen or seen_add(x))]
+    print(day)
     for i in res:
         x=''
         for ele in i:
@@ -382,7 +385,7 @@ def process_exam_day(exam_days, collage_days):
 
 
 def observers_on_volume(volume, size):
-    return (volume + size - 1)*130 // (size*100)
+    return (volume + size - 1)*110 // (size*100)
 
 # days dates hours places
 def email_content(days,dates,hours,places):
