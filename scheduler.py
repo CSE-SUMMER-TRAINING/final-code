@@ -1,7 +1,6 @@
 # your code goes herefrom calendar import c
 from re import I
 import sys
-from typing_extensions import Self
 import win32api
 from PyQt5 import QtWidgets, QtPrintSupport, QtGui, QtCore
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
@@ -1105,7 +1104,7 @@ class exScreen2(QWidget):
     def backfromex_fun(self):
         widget.setCurrentWidget(exscreen1)
     def saveSol(self):
-        output_the_distribution(solveIdx, branch_sol[solveIdx].copy())
+        output_the_distribution(branch_sol.copy())
 
 class invHelp(QWidget):
     def __init__(self):
