@@ -12,6 +12,14 @@ A computer software Program to solve this problem.
 ### Solution
 A desktop Application using Python Language that shows the solutions to the user including the Optimal Sol with a little contribution of a user to choose one of the available solutions or to interact with the App itself. Such as Printing the Observers ExcelSheet or halls sheet or the task of each Observer.
 ## Setup
+before reunning the Program You need to Install some Libraries:
+- 
+-
+-
+-
+-
+-
+-
 
 
 
