@@ -242,66 +242,62 @@ class Worker2(QObject):
     finished=pyqtSignal()
     def run(self):
         unvalid_emails = {}
+        mp = {
+            0: "الأثنين",
+            1: "الثلاثاء",
+            2: "الأربعاء",
+            3: "الخميس",
+            4: "الجمعة",
+            5: "السبت",
+            6: "الأحد",
+        }
+        startfile("outlook.exe")
+        ok = True
+        if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
+            ok = False
+
         for mon in monitors:
             if not is_email(mon.email):
-                        unvalid_emails[mon.user_name] = mon.email
-
-        if unvalid_emails:
-            #هنا بيشوف إذا كان في ايميلات غير صالحة ولأ عشان تهرها الأول وميكملش البرنامج
-            pass
-        else:
-            mp = {
-                0: "الأثنين",
-                1: "الثلاثاء",
-                2: "الأربعاء",
-                3: "الخميس",
-                4: "الجمعة",
-                5: "السبت",
-                6: "الأحد",
-            }
-            startfile("outlook.exe")
-            ok = True
-            if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
-                ok = False
-
-            for mon in monitors:
-                if len(mon.task) == 0:
-                #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
+                    unvalid_emails[mon.user_name] = mon.email
                     continue
-                days = []
-                dates = []
-                hours = []
-                places = []
-                for tas in mon.task:
-                    # print(tas.day," ",tas.building," ",tas.type)
-                    spliteddate = tas.day.split("/")
-                    # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
-                    days.append(
-                            mp[
-                                date(
-                                    int(spliteddate[2]),
-                                    int(spliteddate[1]),
-                                    int(spliteddate[0]),
-                                ).weekday()
-                            ]
-                    )
-                    dates.append(tas.day)
-                    hours.append("9:15")
-                    places.append(tas.building)
-
-                send_email(
-                    mon.email,
-                    mon.user_name,
-                    mon.branch,
-                    11,
-                    mon.task[0].day[-4:],
-                    days,
-                    dates,
-                    hours,
-                    places,
-                    len(mon.task),
-                    ok
+                    
+            if len(mon.task) == 0:
+            #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
+                continue
+            days = []
+            dates = []
+            hours = []
+            places = []
+            for tas in mon.task:
+                # print(tas.day," ",tas.building," ",tas.type)
+                spliteddate = tas.day.split("/")
+                # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
+                days.append(
+                        mp[
+                            date(
+                                int(spliteddate[2]),
+                                int(spliteddate[1]),
+                                int(spliteddate[0]),
+                            ).weekday()
+                        ]
                 )
+                dates.append(tas.day)
+                hours.append("9:15")
+                places.append(tas.building)
+
+            send_email(
+                mon.email,
+                mon.user_name,
+                mon.branch,
+                11,
+                mon.task[0].day[-4:],
+                days,
+                dates,
+                hours,
+                places,
+                len(mon.task),
+                ok
+            )
         self.finished.emit()
 
 

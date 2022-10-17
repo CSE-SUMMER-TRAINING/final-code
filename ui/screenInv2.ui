@@ -233,7 +233,7 @@ margin-bottom: 20px;
 </string>
         </property>
         <property name="text">
-         <string>ارسال ايميل</string>
+         <string>إرسال التكليف للكل</string>
         </property>
        </widget>
       </item>
