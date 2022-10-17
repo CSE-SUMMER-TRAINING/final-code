@@ -36,21 +36,21 @@ A desktop Application using Python Language that shows the solutions to the user
 ### Halls Distribution
 
 ### observers distribution over halls
-***this part must be runned after the halls part<br />
-what this part do:***
+*this part must be runned after the halls part<br />*
+what this part do:
 - take the halls data form halls part and where each degree in the collage will be examed.
 - take the exam time table from the user .
 - do some validation on the gathered data then start solving the problem.
 - display the solution on the screen u can change things in it then save it as you like but the rightness of the anwser is on you.
 - print his/her data.
 - output excel all obsevers data combined.
-- output pdf containing all data for all ovservers a page for each one ease to be printed !!this can last for 30 sec at most.
+- output pdf containing all data for all ovservers a page for each one ease to be printed !!this can last for `30 sec` at most.
 
 ### E-mail Automation by using Outlook
 Another feature in our App is automated e-mails. This feature is used to send assignment schedule to every employee.<br />
-E-mail automation was done by using Outlook App through a module in python.<br />
+E-mail automation was done by using `Outlook App` through a module in python.<br />
 This feature do two main functions:
 - Send an e-mail to the only chosen employee.
 - Send an email to all employees at once.
-- send email to all observers  !!this can last for 2 min at most.
+- send email to all observers this can last for `2 min` at most.
 
