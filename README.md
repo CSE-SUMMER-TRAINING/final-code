@@ -23,13 +23,23 @@ A computer software Program to solve this problem.
 A desktop Application using Python Language that shows the solutions to the user including the Optimal Sol with a little contribution of a user to choose one of the available solutions or to interact with the App itself. Such as Printing the Observers ExcelSheet or halls sheet or the task of each Observer.
 
 ## Setup
-- 
--
--
--
--
--
--
+- download any Version for Python (We Recommended Version 3.8.10).
+- download any IDE for Python (We Recommended VScode).
+- open Your Terminal and Write These Instructions to download The Libraries which used.
+    - pip install pyqt5
+    - pip install pyqt5-tools
+    - pip install QT-PyQt-PySide-Custom-Widgets
+    - pip install typing_extensions
+    - pip install pywin32
+    - pip install pandas
+    - pip install arabic_reshaper
+    - pip install xlsxwriter
+    - pip install tabulate
+    - pip install pretty_html_table
+    - pip install fpdf
+    - pip install psutil
+    - pip install wget
+    - pip install openpyxl
 
 ## Features Of The Program
 
