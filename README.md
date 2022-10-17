@@ -26,7 +26,7 @@ A desktop Application using Python Language that shows the solutions to the user
 -
 ## Features Of The Program
 ### Halls Distribution
-### observers distribution over halls<br>
+### observers distribution over halls<br />
 what this part do:
 this part must be runned after the halls part 
 - take the halls data form halls part and where each degree in the collage will be examed.
