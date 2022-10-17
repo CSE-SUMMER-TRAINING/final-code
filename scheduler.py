@@ -1,6 +1,7 @@
 # your code goes herefrom calendar import c
 from re import I
 import sys
+from typing_extensions import Self
 import win32api
 from PyQt5 import QtWidgets, QtPrintSupport, QtGui, QtCore
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
@@ -310,7 +311,7 @@ class invScreen2(QWidget):
         loadUi("./ui/screenInv2.ui", self)
         self.combox = self.findChild(QComboBox, "comboBox1")
 
-        self.list = ["...اختر"]
+        self.list = ["...اختار"]
         for mon in monitors:
             self.list.append(mon.user_name)
 
@@ -318,13 +319,17 @@ class invScreen2(QWidget):
 
         self.combox.currentIndexChanged.connect(self.valueOfCombo)
 
-        self.label_name = self.findChild(QLabel, "label_4")
-        self.label_dep = self.findChild(QLabel, "label_10")
-        self.label_dep0 = self.findChild(QLabel, "label_3")
-        self.label_name0 = self.findChild(QLabel, "label_6")
+        self.label_name = self.findChild(QLabel, "name")
+        self.label_dep = self.findChild(QLabel, "dap")
+        self.label_dep0 = self.findChild(QLabel, "dap0")
+        self.label_name0 = self.findChild(QLabel, "name0")
         self.label_ = self.findChild(QLabel, "label_2")
-        self.label_5 = self.findChild(QLabel, "label_5")
+        # self.label_5 = self.findChild(QLabel, "label_5")
         self.table_widget = self.findChild(QTableWidget, "tableWidget")
+        table_ho = self.table_widget.horizontalHeader()
+        
+        for i in range(6):
+            table_ho.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
 
         self.lineEdit = self.findChild(QLineEdit, "lineEdit")
 
@@ -342,7 +347,6 @@ class invScreen2(QWidget):
         self.download = self.findChild(QPushButton, "download")
         self.download.clicked.connect(self.download_function)
 
-        self.frame = self.findChild(QFrame, "frame")
 
         # print one
         self.printone = self.findChild(QPushButton, "printone")
@@ -497,13 +501,13 @@ class invScreen2(QWidget):
             
     def printone_2_function(self):
         if(current_index==-1):
-            self.label_5.setText("من فضلك اختار شخص")
+            QMessageBox.about(self,"","من فضلك اختار شخص")
            
         elif len(monitors[current_index].task) == 0:
-            self.label_5.setText(f"{monitors[current_index].user_name} ليس لديه أيّ تكليفات")
+            QMessageBox.about(self,"",f"{monitors[current_index].user_name} ليس لديه أيّ تكليفات")
         
         elif not is_email(monitors[current_index].email):
-                 self.label_5.setText("البريد الإلكتروني غير صالح\nالبريد يجب أن يكون على هذا النحو:\n'example@feng.bu.edu.eg'\n'أو: example@example.example'")
+                 QMessageBox.about(self,"","البريد الإلكتروني غير صالح\nالبريد يجب أن يكون على هذا النحو:\n'example@feng.bu.edu.eg'\n'أو: example@example.example'")
         else:
             ok = True
             if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
@@ -552,7 +556,7 @@ class invScreen2(QWidget):
 
     def set_items(self, index):
         # clear table rows
-        self.label_5.setText("")
+       # self.label_5.setText("")
         for i in range(self.table_widget.rowCount()):
             self.table_widget.removeRow(self.table_widget.rowCount() - 1)
         # clear labels
@@ -829,628 +833,280 @@ class exScreen1(QWidget):
 class exScreen2(QWidget):
     def __init__(self, file):
         super(exScreen2, self).__init__()
-        loadUi("./ui/screenEx2.ui", self)
+        loadUi("./ui/hallsTable.ui", self)
 
         self.back = self.findChild(QPushButton, "back")
         self.back.clicked.connect(self.backfromex_fun)
         self.saveBtn = self.findChild(QPushButton, "save")
         self.saveBtn.clicked.connect(self.saveSol)
+        
+        # khal but
+        self.khal = self.findChild(QPushButton, "khal")
+        self.khal.clicked.connect(lambda :self.fill(0))
+        self.rod = self.findChild(QPushButton, "rod")
+        self.rod.clicked.connect(lambda :self.fill(1))
 
-        # set tabs of branches
-        self.add_tab_widget = QTabWidget(self)
-        self.add_tab_widget.move(200, 100)  # position
-        self.add_tab_widget.resize(1480, 800)  # size
-        # get name of branches
-        excelSheet = pd.ExcelFile(file)
-        self.listOfBranches = excelSheet.sheet_names
-        # groups
-        self.groups = pd.read_excel(file, usecols='A')
-        self.groups.head()
+        self.table = self.findChild(QTableWidget,"tableWidget")
+        self.table.setColumnCount(4)
+        
+        self.but1 = self.findChild(QPushButton, "but1")
 
-        self.listOfBranches.pop(0)
-        self.listOfFrames = []
+        self.but2 = self.findChild(QPushButton, "but2")
+        self.but3 = self.findChild(QPushButton, "but3")
 
-        for i in range(len(self.listOfBranches)):
-            frame = QFrame(self)
-            self.listOfFrames.append(frame)
+        # get name of halls
+        
+  
+        self.fill(0)
 
-        for i in range(len(self.listOfBranches)):
-            self.add_tab_widget.addTab(self.listOfFrames[i], self.listOfBranches[i])
-            # change direction
-            # self.add_tab_widget.setTabPosition(QTabWidget.South)
-            self.add_tab_widget.setLayoutDirection(Qt.RightToLeft)
-
-        self.add_tab_widget.setStyleSheet(
-            """
-                QTabBar::tab {
-                    width: 300px;
-                    height:50px;
-                }
-               QTabBar::tab:selected {
-                    font-family: Roboto;
-                    font-size: 18px;
-                    background: #407991;
-                    color: white;
-                    border-top-left-radius: 8px;
-                    border-top-right-radius: 8px;
-                    border:1px solid rgb(197,197,199,255);
-                    padding: 10px 30px 10px 24px;
-               }
-               QTabBar::tab:!selected{
-                    font-family: Roboto;
-                    font-size: 18px;
-                    font: italic;
-                    background: #305a6c;
-                    color: white;
-                    border-top-left-radius: 8px;
-                    border-top-right-radius: 8px;
-                    border:1px solid rgb(197,197,199,255);
-                    padding: 10px 30px 10px 24px;
-                }
-            """
-        )
-
-        self.fill_tabs(0)
-        self.add_tab_widget.tabBarClicked.connect(self.fill_tabs)
-
-    def fill_tabs(self, index=0):
+    def fill(self, index=0):
         global nj, solveIdx
         index = index
         solveIdx = index
-        
-        # two tabs for each branch
-        self.tabs = QTabWidget(self.listOfFrames[index])
+        print(index)
+        if index==0 :
+            self.khal.setStyleSheet("background-color: #F5F8FA;border-radius: 5px;color: black;margin-bottom: 20px;")
+            self.rod.setStyleSheet("color:#F5F8FA;margin-bottom: 20px")
+
+            
+        else:
+            self.rod.setStyleSheet("background-color: #F5F8FA;border-radius: 5px;color: black;margin-bottom: 20px;")
+            self.khal.setStyleSheet("color:#F5F8FA;margin-bottom: 20px")
 
         # table optimal solution
         # DISPLAY(index, num_of_branches)
 
-        vertical = ["  القاعه"]
-        toPrint = branch_sol[index].copy()
-
-        for i in range(len(toPrint) // 3):
-            # if toPrint[i][0] not in vertical:
-            vertical.append(toPrint[i][0])
-
-        table = QTableWidget(len(vertical), 9)
-
-        header = ["الدفعه", "من", "الي", "الدفعه", "من", "الي", "الدفعه", "من", "الي"]
-        table.setHorizontalHeaderLabels(header)
-        table_ho = table.horizontalHeader()
-        for i in range(9):
-            table_ho.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
-
-        table.setVerticalHeaderLabels(vertical)
-        table_ve = table.verticalHeader()
-        table_ve.setStyleSheet("font-size:20px;")
-
-        for i in range(3):
-            for j in range(len(vertical) - 1):
-                item = QtWidgets.QTableWidgetItem(str(toPrint[j][i + 1]))
-                item.setTextAlignment(QtCore.Qt.AlignCenter)
-                item.setFlags(QtCore.Qt.ItemIsEnabled)
-
-                table.setItem(j + 1, i, item)
-
-        for i in range(3):
-            for j in range(len(vertical) - 1):
-                item = QtWidgets.QTableWidgetItem(
-                    str(toPrint[j + len(vertical) - 1][i + 1])
-                )
-                item.setTextAlignment(QtCore.Qt.AlignCenter)
-                item.setFlags(QtCore.Qt.ItemIsEnabled)
-
-                table.setItem(j + 1, i + 3, item)
-
-        nj = 2 * len(vertical) - 2
-        for i in range(3):
-            for j in range(len(vertical) - 1):
-                item = QtWidgets.QTableWidgetItem(str(toPrint[j + nj][i + 1]))
-                item.setTextAlignment(QtCore.Qt.AlignCenter)
-                item.setFlags(QtCore.Qt.ItemIsEnabled)
-
-                table.setItem(j + 1, i + 6, item)
-
-        # suggest tab
-        self.suggest = QWidget()
-
-        # for day1
-        self.but1 = QPushButton("اليوم الاول", self.suggest)
-        self.but1.setStyleSheet("""
-                QPushButton{
-                background-color:#305a6c;
-                border-radius:20px;
-                width:300px;
-                height:80px;
-                color:white;
-                font-size:20px;
-                }
-                QPushButton:hover{
-                        background-color:#407991;
-                }
-                """)
-        self.but1.clicked.connect(self.day1)
-        self.but1.move(1180, 100)
-        self.but1.setCursor(Qt.PointingHandCursor)
-
-        # for day 2
-        self.but2 = QPushButton("اليوم الثاني", self.suggest)
-        self.but2.setStyleSheet("""
-                        QPushButton{
-                        background-color:#305a6c;
-                        border-radius:20px;
-                        width:300px;
-                        height:80px;
-                        color:white;
-                        font-size:20px;
-                        }
-                        QPushButton:hover{
-                                background-color:#407991;
-                        }
-
-                        """)
-        self.but2.move(1180, 200)
-        self.but2.clicked.connect(self.day2)
-        self.but2.setCursor(Qt.PointingHandCursor)
-
-        # groups area
-        self.frame1 = QFrame(self.suggest)
-        self.frame1.move(40, 30)
-
-        # choose from label 
-        self.labelgroubs = QLabel(self.frame1)
-        self.labelgroubs.resize(800, 40)
-        self.labelgroubs.move(180, 10)
-        self.labelgroubs.setAlignment(QtCore.Qt.AlignCenter)
-
-        # names of groups
-        self.checkboxlist = []
-
-        # after saving data for day1 or both
-        self.buttonsendall = QPushButton(self.suggest)
-        self.buttonsendall.resize(0, 0)
-        self.buttonsendall.clicked.connect(self.send)
-        self.buttonsendall.setCursor(Qt.PointingHandCursor)
-
-        # return checkboxes not checked
-        self.buttonback = QPushButton(self.suggest)
-        self.buttonback.resize(0, 0)
-        self.buttonback.clicked.connect(self.return_data)
-        self.buttonback.setCursor(Qt.PointingHandCursor)
-
-        # get groups
-        for i in self.groups.values:
-            self.checkboxlist.append(i[0])
-
-        # for each check box
-        self.choosegroup = []
-        xch = 800
-        ych = 100
-        for x in range(len(self.checkboxlist)):
-            c = QCheckBox(self.frame1)
-            c.move(xch, ych)
-            c.resize(0, 0)
-            c.setStyleSheet("font-size:24px;")
-            self.choosegroup.append(c)
-            if xch >= 300:
-                xch -= 300
-
-            else:
-                xch = 800
-                ych += 50
-
-        self.button1_send = QPushButton(self.frame1)
-        self.button1_send.setStyleSheet("border:none;")
-        self.button1_send.move(100, 500)
-        self.button2_send = QPushButton(self.frame1)
-        self.button2_send.setStyleSheet("border:none;")
-        self.button2_send.move(100, 500)
-
-        self.button2_send.setCursor(Qt.PointingHandCursor)
-        self.button1_send.setCursor(Qt.PointingHandCursor)
-
-        # frame table by person 
-        self.frame2 = QFrame(self.suggest)
-        self.frame2.move(40, 30)
-        self.frame2.resize(0, 0)
+        vertical = []
+        self.toPrint = []
+        #toPrint = branch_sol[index].copy()
+        self.toPrint = branch_sol[index].copy()
         
-        # self.closeframe2btn = QPushButton(self.frame2)
-        # self.closeframe2btn.resize(0, 0)
-        # self.closeframe2btn.setCursor(Qt.PointingHandCursor)
-        # self.closeframe2btn.clicked.connect(self.closeframe2fun)
+        
+        
 
-        self.table_suggest = QTableWidget(self.frame2)
-        self.table_suggest.move(5, 30)
+        for i in range(len(self.toPrint) // 3):
+            # if toPrint[i][0] not in vertical:
+            vertical.append(self.toPrint[i][0])
 
-        self.tabs.addTab(table, "حل مقترح")
-        self.tabs.addTab(self.suggest, "إضافة حل؟")
+        self.but1.clicked.connect(lambda: self.day1(len(vertical)))
+        self.but2.clicked.connect(lambda: self.day2(len(vertical)))
+        self.but3.clicked.connect(lambda: self.day3(len(vertical)))
+        self.day1(len(vertical))
+        
+       
+       
 
-        # groups choosen
-        self.day1list = []
-        self.day2list = []
+    def day1(self,halls):
 
-        # return from frame1
-        self.backToFrame0 = QPushButton(self.frame1)
-        self.backToFrame0.setIcon(QIcon("icons\go-back-arrow.png"))
-        self.backToFrame0.setCursor(Qt.PointingHandCursor)
-        self.backToFrame0.setStyleSheet("background-color:white;border:none;")
-        size = QSize(0, 0)
-        self.backToFrame0.resize(0, 0)
-        self.backToFrame0.setIconSize(size)
-        self.backToFrame0.clicked.connect(self.backToFrame0Function)
-        self.backToFrame0.setToolTip("رجوع")
-        self.backToFrame0.move(0, 0)
 
-        self.tabs.move(10, 10)  # position
-        self.tabs.resize(1450, 700)  # size
-        self.tabs.setTabPosition(QTabWidget.South)
-
-        self.tabs.setStyleSheet(
-            """QTabWidget::tab-bar
-            {
-                alignment: center;
-            }
-              QTabBar::tab {
-                width: 100px;
-                height:50px;
-            }
-            QTabBar::tab:selected {
-                 font-family: Roboto;
-                 font-size: 18px;
-                 color: white;
-                 background: #407991;
-                 border-top-left-radius: 8px;
-                 border-top-right-radius: 8px;
-                 border:1px solid rgb(197,197,199,255);
-                 padding: 10px 30px 10px 24px;
-            }
-            QTabBar::tab:!selected{
-                 font-family: Roboto;
-                 font-size: 18px;
-                 font: italic;
-                color: white;
-                 border-top-left-radius: 8px;
-                 border-top-right-radius: 8px;          
-                 border:1px solid rgb(197,197,199,255);
-                 padding: 10px 30px 10px 24px;
-                 background: #305a6c;
-             }
-            """
-        )
-
-    def day1(self):
-        self.frame1.resize(1200, 800)
-        self.button2_send.resize(0, 0)
-        self.but1.move(1220, 100)
         self.but1.setStyleSheet("""
-                        background-color:#407991;
-                        border-radius:20px;
-                        color:white;
-                        font-size:20px;
+                        background-color: #006aff;
+                        border-radius: 6px;
                         """)
-        self.but2.move(1180, 200)
+
         self.but2.setStyleSheet("""
-                        QPushButton{
-                        background-color:#305a6c;
-                        border-radius:20px;
-                        width:300px;
-                        height:80px;
-                        color:white;
-                        font-size:20px;
-                        }
-                        QPushButton:hover{
-                                background-color:#407991;
-                        }
+                       background-color: #F5F8FA;
+                        border-radius: 6px;
                         """)
+        self.but3.setStyleSheet("""
+                               background-color: #F5F8FA;
+                                border-radius: 6px;
+                                """)
+        # delete data 
+        for i in range(self.table.rowCount()):
+            self.table.removeRow(self.table.rowCount() - 1)
+        
+        
+        # set new
+        for i in range(-1,halls):
+            row = self.table.rowCount()
+            self.table.setRowCount(row + 1)
+            if i == -1:
+                # header 
+                item = QtWidgets.QTableWidgetItem(str("القاعه"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
 
-        size = QSize(30, 30)
-        self.backToFrame0.setIconSize(size)
-        self.backToFrame0.resize(50, 30)
+                self.table.setItem(0, 0, item)
+                item = QtWidgets.QTableWidgetItem(str("الدفعه"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
 
-        self.labelgroubs.setText("اختر من هذه الدفعات")
-        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#e6e6e6;color:#141414;padding:3px;border-radius:10px;")
+                self.table.setItem(0, 1, item)
+                item = QtWidgets.QTableWidgetItem(str("من"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
 
-        # show checkbox
-        for i in range(len(self.choosegroup)):
-            if self.choosegroup[i].isChecked() != True and self.choosegroup[i].text() not in self.day2list:
-                self.choosegroup[i].resize(230, 100)
-                self.choosegroup[i].setText(self.checkboxlist[i])
+                self.table.setItem(0, 2, item)
+                item = QtWidgets.QTableWidgetItem(str("الي"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(0, 3, item)
             else:
-                if self.choosegroup[i].text() in self.day1list:
-                    self.choosegroup[i].resize(230, 100)
-                    self.choosegroup[i].setText(self.checkboxlist[i])
-                    self.choosegroup[i].setChecked(True)
-                else:
-                    self.choosegroup[i].resize(0, 0)
-
-        self.button1_send.setText("حفظ لليوم الاول")
-        # self.button1_send.move(500, 500)
-        self.button1_send.clicked.connect(self.send_data1)
-        self.button1_send.resize(200, 40)
-        self.button1_send.setStyleSheet("""
-        QPushButton {
-            border:1px solid #255;
-            color:white;
-            background-color:#305a6c;
-            padding:5px;
-            border-radius:10px;
-            font-size:17px;
-        }
-        QPushButton:hover {
-            background-color:#407991;
-            font-size:18px;
-        }
-        """)
-
-        self.buttonsendall.move(1200, 400)
-        self.buttonsendall.resize(200, 60)
-        self.buttonsendall.setText("ارسال ")
-        self.buttonsendall.setStyleSheet("""
-        QPushButton {
-            border:1px solid #255;
-            color:white;
-            background-color:#305a6c;
-            padding:5px;
-            border-radius:10px;
-            font-size:17px;
-        }
-        QPushButton:hover {
-            background-color:#407991;
-            font-size:18px;
-        }
-        """)
-
-        self.buttonback.move(1200, 500)
-        self.buttonback.resize(200, 60)
-        self.buttonback.setText("تراجع")
-        self.buttonback.setStyleSheet("""
-        QPushButton {
-            border:1px solid #255;
-            color:white;
-            background-color:#305a6c;
-            padding:5px;
-            border-radius:10px;
-            font-size:17px;
-        }
-        QPushButton:hover {
-            background-color:#407991;
-            font-size:18px;
-        }
-        """)
-
-    def day2(self):
-        self.frame1.resize(1200, 800)
-        self.button1_send.resize(0, 0)
-        self.but1.move(1180, 100)
-        self.but1.setStyleSheet("""
-                        QPushButton{
-                        background-color:#305a6c;
-                        border-radius:20px;
-                        width:300px;
-                        height:80px;
-                        color:white;
-                        font-size:20px;
-                        }
-                        QPushButton:hover{
-                                background-color:#407991;
-                        }
-                        """)
-        self.but2.move(1220, 200)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][0]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+    
+                self.table.setItem(row, 0, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][1]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+    
+                self.table.setItem(row, 1, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][2]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+    
+                self.table.setItem(row, 2, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][3]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+    
+                self.table.setItem(row, 3, item)
+                row += 1
+            
+                
+       
+  
+    def day2(self,halls):
         self.but2.setStyleSheet("""
-                        background-color:#407991;
-                        border-radius:20px;
-                        color:white;
-                        font-size:20px;
-                        """)
-        size = QSize(30, 30)
-        self.backToFrame0.setIconSize(size)
-        self.backToFrame0.resize(50, 30)
+                                background-color: #006aff;
+                                border-radius: 6px;
+                                """)
 
-        self.labelgroubs.setText("اختر من هذه الدفعات")
-        self.labelgroubs.setStyleSheet("font-size:25px;background-color:#e6e6e6;color:#141414;padding:3px;border-radius:10px;")
+        self.but1.setStyleSheet("""
+                               background-color: #F5F8FA;
+                                border-radius: 6px;
+                                """)
+        self.but3.setStyleSheet("""
+                                       background-color: #F5F8FA;
+                                        border-radius: 6px;
+                                        """)
+        # delete data 
+        for i in range(self.table.rowCount()):
+            self.table.removeRow(self.table.rowCount() - 1)
 
-        for i in range(len(self.choosegroup)):
-            if self.choosegroup[i].isChecked() != True and self.choosegroup[i].text() not in self.day1list:
-                self.choosegroup[i].resize(230, 100)
-                self.choosegroup[i].setText(self.checkboxlist[i])
+        # set new
+        for i in range(halls-1,(halls*2)):
+            row = self.table.rowCount()
+            self.table.setRowCount(row + 1)
+            if i == halls-1:
+                # header 
+                item = QtWidgets.QTableWidgetItem(str("القاعه"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
 
+                self.table.setItem(0, 0, item)
+                item = QtWidgets.QTableWidgetItem(str("الدفعه"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(0, 1, item)
+                item = QtWidgets.QTableWidgetItem(str("من"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(0, 2, item)
+                item = QtWidgets.QTableWidgetItem(str("الي"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(0, 3, item)
             else:
-                if self.choosegroup[i].text() in self.day2list:
-                    self.choosegroup[i].resize(230, 100)
-                    self.choosegroup[i].setText(self.checkboxlist[i])
-                    self.choosegroup[i].setChecked(True)
-                else:
-                    self.choosegroup[i].resize(0, 0)
-
-        self.button2_send.setText("حفظ لليوم الثاني")
-        # self.button2_send.move(500, 400)
-        self.button2_send.clicked.connect(self.send_data2)
-        self.button2_send.resize(200, 40)
-        self.button2_send.setStyleSheet("""
-        QPushButton {
-            border:1px solid #255;
-            color:white;
-            background-color:#305a6c;
-            padding:5px;
-            border-radius:10px;
-            font-size:17px;
-        }
-        QPushButton:hover {
-            background-color:#407991;
-            font-size:18px;
-        }
-        """)
-
-        self.buttonsendall.move(1200, 400)
-        self.buttonsendall.resize(200, 60)
-        self.buttonsendall.setText("ارسال ")
-        self.buttonsendall.setStyleSheet("""
-        QPushButton {
-            border:1px solid #255;
-            color:white;
-            background-color:#305a6c;
-            padding:5px;
-            border-radius:10px;
-            font-size:17px;
-        }
-        QPushButton:hover {
-            background-color:#407991;
-            font-size:18px;
-        }
-        """)
-
-        self.buttonback.move(1200, 500)
-        self.buttonback.resize(200, 60)
-        self.buttonback.setText("تراجع")
-        self.buttonback.setStyleSheet("""
-        QPushButton {
-            border:1px solid #255;
-            color:white;
-            background-color:#305a6c;
-            padding:5px;
-            border-radius:10px;
-            font-size:17px;
-        }
-        QPushButton:hover {
-            background-color:#407991;
-            font-size:18px;
-        }
-        """)
-
-    def send(self):
-        print(self.day1list)
-        print(self.day2list)
-
-        ret = QMessageBox.question(self, 'MessageBox', "هل تريد عرض الجدول",
-                                   QMessageBox.Yes | QMessageBox.No)
-
-        if ret == QMessageBox.Yes:
-            self.show_table()
-
-        self.return_data()
-
-    def show_table(self):
-        # self.frame2.setStyleSheet("background-color:black;")
-        self.frame2.resize(1420, 700)
-        self.frame2.setStyleSheet("background-color:white;")
-        self.table_suggest.resize(1300, 450)
-        # self.closeframe2btn.resize(200, 50)
-        # self.closeframe2btn.setText("اغلاق")
-        # self.closeframe2btn.move(1000, 520)
-        # self.closeframe2btn.setStyleSheet("background-color:#305a6c;color:white;")
-
-        # first tab
-        DISPLAY(0, num_of_branches)
-        # print(toPrint)
-        vertical = ["  القاعه"]
-
-        for i in range(len(toPrint)):
-            if toPrint[i][0] not in vertical:
-                vertical.append(toPrint[i][0])
-
-        self.table_suggest.setColumnCount(9)
-        self.table_suggest.setRowCount(len(vertical))
-
-        header = ["الدفعه", "من", "الي", "الدفعه", "من", "الي", "الدفعه", "من", "الي"]
-        self.table_suggest.setHorizontalHeaderLabels(header)
-        table_ho = self.table_suggest.horizontalHeader()
-        for i in range(9):
-            table_ho.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
-
-        self.table_suggest.setVerticalHeaderLabels(vertical)
-        table_ve = self.table_suggest.verticalHeader()
-        table_ve.setStyleSheet("font-size:20px;")
-        # print(len(toPrint))
-        for i in range(3):
-            for j in range(len(vertical) - 1):
-                item = QtWidgets.QTableWidgetItem(str(toPrint[j][i + 1]))
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][0]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 item.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.table_suggest.setItem(j + 1, i, item)
 
-        for i in range(3):
-            for j in range(len(vertical) - 1):
-                item = QtWidgets.QTableWidgetItem(str(toPrint[j + len(vertical) - 1][i + 1]))
+                self.table.setItem(row, 0, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][1]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 item.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.table_suggest.setItem(j + 1, i + 3, item)
 
-        nj = 2 * len(vertical) - 2
-        for i in range(3):
-            for j in range(len(vertical) - 1):
-                item = QtWidgets.QTableWidgetItem(str(toPrint[j + nj][i + 1]))
+                self.table.setItem(row, 1, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][2]))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 item.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.table_suggest.setItem(j + 1, i + 6, item)
 
-    # def closeframe2fun(self):
-    #     self.frame2.resize(0, 0)
-    #     self.closeframe2btn.resize(0, 0)
-    #     self.table_suggest.resize(0, 0)
+                self.table.setItem(row, 2, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][3]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
 
-    def saveSol(self):
-        output_the_distribution(solveIdx, branch_sol[solveIdx].copy())
+                self.table.setItem(row, 3, item)
+                row += 1
 
-    def return_data(self):
-        for i in range(len(self.choosegroup)):
-            self.choosegroup[i].setChecked(False)
-            self.choosegroup[i].resize(230, 100)
+    def day3(self, halls):
 
-        self.day2list.clear()
-        self.day1list.clear()
+        self.but3.setStyleSheet("""
+                        background-color: #006aff;
+                        border-radius: 6px;
+                        """)
 
-    def send_data2(self):
-
-        for i in range(len(self.choosegroup)):
-            if self.choosegroup[i].isChecked() == True and self.choosegroup[i].text() not in self.day1list and \
-                self.choosegroup[i].text() not in self.day2list:
-                self.day2list.append(self.choosegroup[i].text())
-
-        print(self.day2list)
-
-    def send_data1(self):
-        for i in range(len(self.choosegroup)):
-            if self.choosegroup[i].isChecked() == True and self.choosegroup[i].text() not in self.day2list and \
-                self.choosegroup[i].text() not in self.day1list:
-                self.day1list.append(self.choosegroup[i].text())
-        print(self.day1list)
-
-    def backToFrame0Function(self):
-        self.frame1.resize(0, 0)
-        self.backToFrame0.resize(0, 0)
-        self.but2.move(1180, 200)
-        self.but1.move(1180, 100)
         self.but2.setStyleSheet("""
-                        QPushButton{
-                        background-color:#305a6c;
-                        border-radius:20px;
-                        width:300px;
-                        height:80px;
-                        color:white;
-                        font-size:20px;
-                        }
-                        QPushButton:hover{
-                                background-color:#407991;
-                        }
+                       background-color: #F5F8FA;
+                        border-radius: 6px;
                         """)
         self.but1.setStyleSheet("""
-                        QPushButton{
-                        background-color:#305a6c;
-                        border-radius:20px;
-                        width:300px;
-                        height:80px;
-                        color:white;
-                        font-size:20px;
-                        }
-                        QPushButton:hover{
-                                background-color:#407991;
-                        }
-                        """)
-        self.buttonsendall.resize(0, 0)
-        self.buttonback.resize(0, 0)
+                               background-color: #F5F8FA;
+                                border-radius: 6px;
+                                """)
+        # delete data 
+        for i in range(self.table.rowCount()):
+            self.table.removeRow(self.table.rowCount() - 1)
 
+        # set new
+        for i in range(halls*2-1, halls*3):
+            row = self.table.rowCount()
+            self.table.setRowCount(row + 1)
+            if i == halls*2-1:
+                # header 
+                item = QtWidgets.QTableWidgetItem(str("القاعه"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(0, 0, item)
+                item = QtWidgets.QTableWidgetItem(str("الدفعه"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(0, 1, item)
+                item = QtWidgets.QTableWidgetItem(str("من"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(0, 2, item)
+                item = QtWidgets.QTableWidgetItem(str("الي"))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(0, 3, item)
+            else:
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][0]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(row, 0, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][1]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(row, 1, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][2]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(row, 2, item)
+                item = QtWidgets.QTableWidgetItem(str(self.toPrint[i][3]))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+                self.table.setItem(row, 3, item)
+                row += 1
     def backfromex_fun(self):
         widget.setCurrentWidget(exscreen1)
-
+    def saveSol(self):
+        output_the_distribution(solveIdx, branch_sol[solveIdx].copy())
 
 class invHelp(QWidget):
     def __init__(self):
@@ -1497,7 +1153,8 @@ widget.addWidget(exscreen1)
 widget.addWidget(invscreen1)
 widget.addWidget(helpinv)
 widget.addWidget(helpexam)
-
-widget.move(2, 2)
+widget.setMinimumWidth(1200)
+widget.setMinimumHeight(850)
+widget.move(300, 0)
 widget.show()
 sys.exit(app.exec_())

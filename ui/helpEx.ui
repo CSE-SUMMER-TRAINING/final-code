@@ -12,8 +12,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1920</width>
-    <height>1080</height>
+    <width>1200</width>
+    <height>850</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -101,7 +101,9 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:#305a6c</string>
+    <string notr="true">background-color: #006aff;
+color: white;
+border-radius: 7px;</string>
    </property>
    <property name="text">
     <string/>
@@ -118,12 +120,12 @@ font: 20px &quot;MS Shell Dlg 2&quot; center
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{
-background-color:#305a6c;font: 10pt &quot;MS Shell Dlg 2&quot;;color:white;
+background-color: #006aff;
+color: white;
+border-radius: 7px;
+font-size:17px;
 }
-QPushButton:hover{
-background-color:#407991;
-font-size:11pt;
-}</string>
+</string>
    </property>
    <property name="text">
     <string>رجوع</string>
@@ -132,9 +134,9 @@ font-size:11pt;
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>1030</x>
+     <x>960</x>
      <y>190</y>
-     <width>525</width>
+     <width>331</width>
      <height>600</height>
     </rect>
    </property>
@@ -159,12 +161,12 @@ font-size:11pt;
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{
-background-color:#305a6c;font: 10pt &quot;MS Shell Dlg 2&quot;;color:white;
+background-color: #006aff;
+color: white;
+border-radius: 7px;
+font-size:17px;
 }
-QPushButton:hover{
-background-color:#407991;
-font-size:11pt;
-}</string>
+</string>
    </property>
    <property name="text">
     <string>تنزيل نموذج</string>
@@ -173,9 +175,9 @@ font-size:11pt;
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>599</x>
      <y>190</y>
-     <width>600</width>
+     <width>321</width>
      <height>600</height>
     </rect>
    </property>
