@@ -46,7 +46,13 @@ what this part do:***
 - output excel all obsevers data combined.
 - output pdf containing all data for all ovservers a page for each one ease to be printed !!this can last for 30 sec at most.
 
-###  
+### E-mail Automation by using Outlook
+Another feature in our App is automated e-mails. This feature is used to send assignment schedule to every employee.<br />
+E-mail automation was done by using Outlook App through a module in python.<br />
+This feature do two main functions:
+- Send an e-mail to the only chosen employee.
+- Send an email to all employees at once.
+
 
 
 
