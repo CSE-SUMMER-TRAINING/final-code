@@ -246,12 +246,21 @@ border-radius: 7px;</string>
                      </font>
                     </property>
                     <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
+                     <cursorShape>ArrowCursor</cursorShape>
                     </property>
                     <property name="styleSheet">
-                     <string notr="true">background-color: #000;
+                     <string notr="true">QPushButton
+{
+	background-color: #000;
 color: white;
 border-radius: 7px;
+}
+QPushButton:hover
+{
+background-color:#000;
+color:#f4eade;
+font-size:22px;
+}
 </string>
                     </property>
                     <property name="text">
@@ -445,14 +454,14 @@ tr:hover {background-color: coral;}
                        <attribute name="horizontalHeaderCascadingSectionResizes">
                         <bool>false</bool>
                        </attribute>
+                       <attribute name="horizontalHeaderMinimumSectionSize">
+                        <number>50</number>
+                       </attribute>
                        <attribute name="horizontalHeaderDefaultSectionSize">
                         <number>175</number>
                        </attribute>
                        <attribute name="horizontalHeaderHighlightSections">
                         <bool>true</bool>
-                       </attribute>
-                       <attribute name="horizontalHeaderMinimumSectionSize">
-                        <number>50</number>
                        </attribute>
                        <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                         <bool>false</bool>
@@ -584,6 +593,9 @@ tr:hover {background-color: coral;}
                                <height>12</height>
                               </size>
                              </property>
+                             <property name="cursor">
+                              <cursorShape>PointingHandCursor</cursorShape>
+                             </property>
                              <property name="styleSheet">
                               <string notr="true">background-color: #006aff;
 border-radius: 6px;</string>
@@ -607,6 +619,9 @@ border-radius: 6px;</string>
                                <height>12</height>
                               </size>
                              </property>
+                             <property name="cursor">
+                              <cursorShape>PointingHandCursor</cursorShape>
+                             </property>
                              <property name="styleSheet">
                               <string notr="true">background-color: #F5F8FA;
 border-radius: 6px;</string>
@@ -629,6 +644,9 @@ border-radius: 6px;</string>
                                <width>12</width>
                                <height>12</height>
                               </size>
+                             </property>
+                             <property name="cursor">
+                              <cursorShape>PointingHandCursor</cursorShape>
                              </property>
                              <property name="styleSheet">
                               <string notr="true">background-color: #F5F8FA;
@@ -849,6 +867,9 @@ padding: 0;</string>
                     <pointsize>12</pointsize>
                    </font>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">background-color: #F5F8FA;
 border-radius: 5px;
@@ -873,6 +894,9 @@ margin-bottom: 20px;</string>
                     <family>Harrington</family>
                     <pointsize>12</pointsize>
                    </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">color:#F5F8FA;
