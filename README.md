@@ -23,7 +23,7 @@ A desktop Application using Python Language that shows the solutions to the user
 -
 -
 ## How To Use The Program
-Our App is divided into 3 parts halls distribution, Observers Scheduling and the UI (User Interface).Line
+Our App is divided into 3 parts *`halls distribution`*, *`Observers Scheduling`* and the *`UI (User Interface)`*.
 It has Some features such as it can inform the observer about the days and the times of his observation in any branch of our college.
 
 
