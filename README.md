@@ -33,6 +33,9 @@ what this part do:***
 - take the exam time table from the user .
 - do some validation on the gathered data then start solving the problem.
 - display the solution on the screen u can change things in it then save it as you like but the rightness of the anwser is on you.
+- print his/her data.
+- output excel all obsevers data combined.
+- output pdf containing all data for all ovservers a page for each one ease to be printed !!this can last for 30 sec at most.
 
 
 
