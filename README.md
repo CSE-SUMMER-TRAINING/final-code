@@ -24,8 +24,8 @@ A desktop Application using Python Language that shows the solutions to the user
 
 ## Setup
 Follow These Steps to ba able to run Our Program:
-- download any Version for Python (We Recommended Version 3.8.10).
-- download any IDE for Python (We Recommended VScode).
+- download any Version for Python (We Recommended Version `3.8.10`).
+- download any IDE for Python (We Recommended `VScode`).
 - open Your Terminal and write These Instructions to download The Libraries which used:
     - pip install pyqt5
     - pip install pyqt5-tools
