@@ -38,6 +38,7 @@ Follow These Steps to ba able to run Our Program:
     - pip install tabulate
     - pip install pretty_html_table
     - pip install fpdf
+    - pip install fpdf2
     - pip install psutil
     - pip install wget
     - pip install openpyxl
