@@ -118,6 +118,9 @@ border-radius: 7px;</string>
      <height>41</height>
     </rect>
    </property>
+   <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{
 background-color: #006aff;
@@ -170,6 +173,9 @@ font-size:17px;
    </property>
    <property name="text">
     <string>تنزيل نموذج</string>
+   </property>
+   <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
