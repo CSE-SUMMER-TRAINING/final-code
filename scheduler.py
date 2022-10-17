@@ -881,20 +881,22 @@ class exScreen2(QWidget):
         #toPrint = branch_sol[index].copy()
         self.toPrint = branch_sol[index].copy()
         
+        # print(len(self.toPrint))
+
+        # print("\n\n\n")
         
         
 
-        for i in range(len(self.toPrint) // 3):
-            # if toPrint[i][0] not in vertical:
-            vertical.append(self.toPrint[i][0])
+        # for i in range(len(self.toPrint) // 3):
+        #     vertical.append(self.toPrint[i][0])
 
-        self.but1.clicked.connect(lambda: self.day1(len(vertical)))
-        self.but2.clicked.connect(lambda: self.day2(len(vertical)))
-        self.but3.clicked.connect(lambda: self.day3(len(vertical)))
-        self.day1(len(vertical))
+        self.but1.clicked.connect(lambda: self.day1(len(self.toPrint) // 3))
+        self.but2.clicked.connect(lambda: self.day2(len(self.toPrint) // 3))
+        self.but3.clicked.connect(lambda: self.day3(len(self.toPrint) // 3))
+        self.day1(len(self.toPrint) // 3)
         
        
-       
+
 
     def day1(self,halls):
 
@@ -1057,6 +1059,7 @@ class exScreen2(QWidget):
 
         # set new
         for i in range(halls*2-1, halls*3):
+            # print(i, halls * 2 - 1, halls * 3, len(self.toPrint))
             row = self.table.rowCount()
             self.table.setRowCount(row + 1)
             if i == halls*2-1:
