@@ -50,8 +50,8 @@ Follow These Steps to ba able to run Our Program:
 The first feature in our App is to have an optimal distribution for study groups over days and distribute them in the halls of college.<br />
 We divide this problem to three subproblems:
 - create a containers for all information about college `branches`, `buildings`, `halls`  and `study groups` within the college  to have the full control during solving the problem.
-- read the data form 'excel sheet' which contains all the data about college and study groups
-- solving the problem using some technique ('dynamic programming', 'bit masking')  taking into account that the halls where each study group exam must Consecutive and no two groups exams in the same hall
+- read the data form `excel sheet` which contains all the data about college and study groups
+- solving the problem using some technique (`dynamic programming`, `bit masking`)  taking into account that the halls where each study group exam must Consecutive and no two groups exams in the same hall
 
 ### observers distribution over halls
 *this part must be runned after the halls part<br />*
