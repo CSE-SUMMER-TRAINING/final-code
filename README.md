@@ -52,7 +52,5 @@ E-mail automation was done by using Outlook App through a module in python.<br /
 This feature do two main functions:
 - Send an e-mail to the only chosen employee.
 - Send an email to all employees at once.
-
-
-
+- send email to all observers  !!this can last for 2 min at most.
 
