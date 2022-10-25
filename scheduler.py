@@ -187,10 +187,9 @@ class Worker(QObject):
                 data.append((arabic(tas.type),arabic(tas.building),"9:15",tas.day,dayy))
             if(len(data)==1):continue
             pdf.add_page()
-            pdf.image("icons\download.png",90,w=35,h=30)
+            pdf.image("icons\logo.jpg",90,w=35,h=50)
             pdf.set_font('FreeSerif', size=12)
             pdf.set_fill_color(237, 240, 149)
-            pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
             pdf.ln()
             pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2022/2023 "+arabic(" تكليف لجان الامتحانات يناير  "),align="c")
             pdf.ln()
@@ -426,10 +425,9 @@ class invScreen2(QWidget):
             dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
             data.append((arabic(tas.type),arabic(tas.building),"9:15",tas.day,dayy))
         pdf.add_page()
-        pdf.image("icons\download.png",90,w=35,h=30)
+        pdf.image("icons\logo.jpg",90,w=35,h=50)
         pdf.set_font('FreeSerif', size=12)
         pdf.set_fill_color(237, 240, 149)
-        pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
         pdf.ln()
         pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2022/2023 "+arabic(" تكليف  لجان الامتحانات يناير  "),align="c")
         pdf.ln()
@@ -445,8 +443,8 @@ class invScreen2(QWidget):
             row=data[i]
             for datum in row:
                 if(i==0):
-                    pdf.multi_cell(35, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-                else :pdf.multi_cell(35, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                    pdf.multi_cell(39, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                else :pdf.multi_cell(39, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
             pdf.ln()
         x=len(data)-1
         pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
@@ -475,10 +473,10 @@ class invScreen2(QWidget):
         pdf.ln()
         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
         pdf.ln()
-       pdf.output(f'{mon.user_name}.pdf')
+        pdf.output('fl.pdf')
         
         try: 
-            win32api.ShellExecute(0, "print", f'{mon.user_name}.pdf', None,".",0)
+            win32api.ShellExecute(0, "print", 'fl.pdf', None,".",0)
         except:
             pass
         
