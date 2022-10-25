@@ -473,10 +473,10 @@ class invScreen2(QWidget):
         pdf.ln()
         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
         pdf.ln()
-        pdf.output('fl.pdf')
+        pdf.output(f'{mon.user_name}.pdf')
         
         try: 
-            win32api.ShellExecute(0, "print", 'fl.pdf', None,".",0)
+            win32api.ShellExecute(0, "print", f'{mon.user_name}.pdf', None,".",0)
         except:
             pass
         
