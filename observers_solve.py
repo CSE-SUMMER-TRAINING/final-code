@@ -214,7 +214,7 @@ def read_input(exel_name):
         monitors.append(Monitor(*x))
 
     def srt(elem):
-        return (elem[2], elem[1], elem[0])
+        return (int(elem[2]), int(elem[1]), int(elem[0]))
 
     dataframe2 = allExcelFile.parse(sheets[1])
     day = []
