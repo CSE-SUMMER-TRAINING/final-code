@@ -180,11 +180,11 @@ class Worker(QObject):
 
         for mon in monitors:
             
-            data=[(arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
+            data=[(arabic("التكليف"),arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
             for tas in mon.task:
                 spliteddate = tas.day.split("/")
                 dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
-                data.append((arabic(tas.building),"9:15",tas.day,dayy))
+                data.append((arabic(tas.type),arabic(tas.building),"9:15",tas.day,dayy))
             if(len(data)==1):continue
             pdf.add_page()
             pdf.image("icons\download.png",90,w=35,h=30)
@@ -192,13 +192,13 @@ class Worker(QObject):
             pdf.set_fill_color(237, 240, 149)
             pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
             pdf.ln()
-            pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2020/2021 "+arabic(" تكليف ملاحظة لجان الامتحانات يناير  "),align="c")
+            pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2022/2023 "+arabic(" تكليف لجان الامتحانات يناير  "),align="c")
             pdf.ln()
             pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("السيد/ %s                                                                       قسم:%s"%(mon.user_name,mon.work_place)),align="R")
             pdf.ln()
             pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تحية طيبة وبعد ..."),align="R")
             pdf.ln()
-            pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لملاحظة لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
+            pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
             pdf.ln()
 
             line_height = pdf.font_size * 1.50
@@ -206,8 +206,8 @@ class Worker(QObject):
                 row=data[i]
                 for datum in row:
                     if(i==0):
-                        pdf.multi_cell(50, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-                    else :pdf.multi_cell(50, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                        pdf.multi_cell(35, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                    else :pdf.multi_cell(35, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
                 pdf.ln()
             x=len(data)-1
             pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
@@ -408,24 +408,24 @@ class invScreen2(QWidget):
                 }
 
         mon=monitors[current_index]
-        data=[(arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
+        data=[(arabic("التكليف"),arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
         for tas in mon.task:
             spliteddate = tas.day.split("/")
             dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
-            data.append((arabic(tas.building),"9:15",tas.day,dayy))
+            data.append((arabic(tas.type),arabic(tas.building),"9:15",tas.day,dayy))
         pdf.add_page()
         pdf.image("icons\download.png",90,w=35,h=30)
         pdf.set_font('FreeSerif', size=12)
         pdf.set_fill_color(237, 240, 149)
         pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
         pdf.ln()
-        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2020/2021 "+arabic(" تكليف ملاحظة لجان الامتحانات يناير  "),align="c")
+        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2022/2023 "+arabic(" تكليف  لجان الامتحانات يناير  "),align="c")
         pdf.ln()
         pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("السيد/ %s                                                                       قسم:%s"%(mon.user_name,mon.work_place)),align="R")
         pdf.ln()
         pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تحية طيبة وبعد ..."),align="R")
         pdf.ln()
-        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لملاحظة لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
+        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور  لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
         pdf.ln()
 
         line_height = pdf.font_size * 1.50
@@ -433,8 +433,8 @@ class invScreen2(QWidget):
             row=data[i]
             for datum in row:
                 if(i==0):
-                    pdf.multi_cell(50, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-                else :pdf.multi_cell(50, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                    pdf.multi_cell(35, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                else :pdf.multi_cell(35, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
             pdf.ln()
         x=len(data)-1
         pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
@@ -541,9 +541,8 @@ class invScreen2(QWidget):
             cnt = cnt + 1
 
         try:
-            # print(excelhead)
+            
             dataframeout = pd.DataFrame(lst, columns=excelhead)
-            # print(dataframeout)
             dataframeout.to_excel("observer_output.xlsx")
             QMessageBox.about(self, "", "تم التنزيل                   ")
         except:
@@ -600,7 +599,6 @@ class invScreen2(QWidget):
         global current_index
         # clear search input
         self.lineEdit.setText("")
-        # print(self.combox.currentIndex())
         if self.combox.currentIndex():
             current_index = self.combox.currentIndex() - 1
             self.set_items(self.combox.currentIndex() - 1)
@@ -684,7 +682,6 @@ class invScreen2(QWidget):
         # load data
         mon = monitors[index]
         i, j, ok = 0, 0, 0
-        print("###############################")
         for ts in mon.task:
             if ok == 0:
                 day_change= -1
@@ -728,7 +725,6 @@ class invScreen2(QWidget):
             else:
                 day_change= -1
                 item = self.table_widget.item(j, 3)
-                print(item.text())
                 if not self.valid_day(item.text()):
                     QMessageBox.about(self, "", "صيغة التاريخ غير صحيحة\nاكتب التاريخ كالتالى 10/10/2000")
                     return
@@ -765,7 +761,6 @@ class invScreen2(QWidget):
                     mon.accupied_days[ts.current_day()] = [1,ts.building]
                 j += 1
                 ok = 0
-            print(mon.accupied_days[ts.current_day()])
         monitors[index] = mon
         QMessageBox.about(self, "", "تم حفظ التغيرات                  ")
 
