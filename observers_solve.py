@@ -282,7 +282,11 @@ def read_input(exel_name):
         y.pop()
         dd, mm, yy = y
         x=x[:-1:]
-        day_name = date(int(yy), int(mm), int(dd)).strftime("%A")
+        day_name = 0
+        try:
+            day_name = date(int(yy), int(mm), int(dd)).strftime("%A")
+        except:
+            return "أحد التوايخ المدخلة غير صحيحة"
         excelhead[0].append(x)
         excelhead[0].append(x)
         excelhead[1].append(arabicWeekDays[day_name])
