@@ -785,9 +785,11 @@ class exScreen1(QWidget):
         self.txt = ""
 
     def help_func(self):
+        self.label_not_enough.setText("")
         widget.setCurrentWidget(helpexam)
 
     def browsefiles(self):
+        self.label_not_enough.setText("")
         fname = QFileDialog.getOpenFileName(
             self, "Open file", "", "Excel (*.csv *xlsx)"
         )
@@ -804,9 +806,9 @@ class exScreen1(QWidget):
 
     def generateTables(self):
         if self.txt != "":
-            ok = check_data(self.txt)
-            if not ok:
-                self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
+            msg = check_data(self.txt)
+            if msg:
+                self.label_not_enough.setText(msg)
                 return
 
             self.label_not_enough.setText("")
@@ -892,9 +894,6 @@ class exScreen2(QWidget):
         self.but3.clicked.connect(lambda: self.day3(len(self.toPrint) // 3))
         self.day1(len(self.toPrint) // 3)
         
-       
-
-
     def day1(self,halls):
 
 
@@ -964,10 +963,7 @@ class exScreen2(QWidget):
     
                 self.table.setItem(row, 3, item)
                 row += 1
-            
-                
-       
-  
+              
     def day2(self,halls):
         self.but2.setStyleSheet("""
                                 background-color: #006aff;
@@ -1106,7 +1102,10 @@ class exScreen2(QWidget):
     def backfromex_fun(self):
         widget.setCurrentWidget(exscreen1)
     def saveSol(self):
-        output_the_distribution(branch_sol.copy())
+        ok = output_the_distribution(branch_sol.copy())
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
+
 
 class invHelp(QWidget):
     def __init__(self):
@@ -1121,7 +1120,9 @@ class invHelp(QWidget):
         widget.setCurrentWidget(invscreen1)
 
     def save_func(self):
-        create_observers_template()
+        ok = create_observers_template()
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
 
 
 class examHelp(QWidget):
@@ -1137,7 +1138,9 @@ class examHelp(QWidget):
         widget.setCurrentWidget(exscreen1)
 
     def save_func(self):
-        create_halls_template()
+        ok = create_halls_template()
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
 
 
 app = QApplication(sys.argv)

@@ -1,6 +1,6 @@
 import pandas as pd
-from arabic_reshaper import *
-from observers_data import arabic
+from datetime import datetime
+
 
 branch_name = dict()                    # to get the branch name with branch index
 branch_index = dict()                   # to get branch index with branch name
@@ -80,16 +80,18 @@ def check_data(fileName):
     worksheets = excelSheet.sheet_names
     
     if len(worksheets) < 2: 
-        return False
+        return "الملف غير مطابق للمواصفات، يجب ان يحتوي على شيت الدفعات وشيت لكل فرع"
+
 
     for i in range(1, len(worksheets)):
         sheet = excelSheet.parse(worksheets[i])
         header = []
 
         for p, v in enumerate(sheet.keys()):
-            header.append(reshape(v)[::-1])
-        if sorted(header) != sorted([arabic('اسم القاعه'), arabic('السعه'), arabic('رقم المبني'), arabic('رقم الدور')]):
-            return False
+            header.append(v)
+        
+        if header != ['اسم القاعه', 'السعه', 'رقم المبني', 'رقم الدور']:
+            return "الملف غير مطابق للمواصفات، يمكن تنزيل نموذج من (مساعدة)"
         
         for index, rows in sheet.iterrows():
             hall, c = rows.values.tolist(), 0
@@ -98,16 +100,16 @@ def check_data(fileName):
             c += (not validInt(hall[2]))
             c += (not validInt(hall[3]))
             if c == 4 or c == 0: continue
-            else: return False
+            else: return "البيانات غير كاملة، بعض الخانات فارغه"
 
 
     sheet = excelSheet.parse(worksheets[0])
     header = []
 
     for p, v in enumerate(sheet.keys()):
-        header.append(reshape(v)[::-1])
-    if sorted(header) != sorted([arabic('اسم الدفعه'), arabic('الفرع'), arabic('عدد الطلاب'), arabic('من'), arabic('الي')]):
-        return False
+        header.append(v)
+    if header != ['اسم الدفعه', 'الفرع', 'عدد الطلاب', 'من', 'الي']:
+        return "الملف غير مطابق للمواصفات، يمكن تنزيل نموذج من (مساعدة)"
 
     for index, rows in sheet.iterrows():
         g, c = rows.values.tolist(), 0
@@ -116,7 +118,7 @@ def check_data(fileName):
         c += (not validInt(g[2]))
         c += (not validInt(g[3]))
         c += (not validInt(g[4]))
-        if c == 5 or c == 0: continue
-        else: return False
+        if (c != 5 and c != 0): return "البيانات غير كاملة، بعض الخانات فارغه"
+        elif g[1] not in ['خلفاوي', 'روض الفرج']: return "بعض الدفعات ليست من الفروع المتاحة، القيم المتاحة: خلفاوي، روض الفرج"
 
-    return True
+    return False
