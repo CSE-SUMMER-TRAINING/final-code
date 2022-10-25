@@ -826,6 +826,8 @@ class exScreen1(QWidget):
         self.browse.setEnabled(True)
         self.generate.setEnabled(True)
         self.back.setEnabled(True)
+        self.lineEdit.setReadOnly(False)
+
      
     def generateTables(self):
         if self.txt != "":
@@ -836,9 +838,6 @@ class exScreen1(QWidget):
 
             self.label_not_enough.setText("")
             
-            # global __txt
-            # __txt=self.txt
-            # print(__txt)
             self.thread=QThread()
             self.worker=Worker3(self.txt)
             self.worker.moveToThread(self.thread)
@@ -851,6 +850,7 @@ class exScreen1(QWidget):
             self.browse.setEnabled(False)
             self.generate.setEnabled(False)
             self.back.setEnabled(False)
+            self.lineEdit.setReadOnly(True)
             self.label_2.clear()
             self.movie=QMovie("icons\loading4.gif")
             self.label_2.setMovie(self.movie)
