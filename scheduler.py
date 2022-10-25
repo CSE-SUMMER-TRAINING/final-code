@@ -242,7 +242,7 @@ class Worker2(QObject):
     finished=pyqtSignal()
     def run(self):
         unvalid_emails = {}
-        mp = {
+        mp_day = {
             0: "الأثنين",
             1: "الثلاثاء",
             2: "الأربعاء",
@@ -250,6 +250,20 @@ class Worker2(QObject):
             4: "الجمعة",
             5: "السبت",
             6: "الأحد",
+        }
+        mp_month = {
+            1: "يناير",
+            2: "فبراير",
+            3: "مارس",
+            4: "إبريل",
+            5: "مايو",
+            6: "يونيو",
+            7: "يوليو",
+            8: "أغسطس",
+            9: "سبتمبر",
+            10: "أكتوبر",
+            11: "نوفمبر",
+            12: "ديسمبر"
         }
         startfile("outlook.exe")
         ok = True
@@ -267,13 +281,14 @@ class Worker2(QObject):
             days = []
             dates = []
             hours = []
+            types = []
             places = []
             for tas in mon.task:
                 # print(tas.day," ",tas.building," ",tas.type)
                 spliteddate = tas.day.split("/")
                 # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
                 days.append(
-                        mp[
+                        mp_day[
                             date(
                                 int(spliteddate[2]),
                                 int(spliteddate[1]),
@@ -283,17 +298,19 @@ class Worker2(QObject):
                 )
                 dates.append(tas.day)
                 hours.append("9:15")
+                types.append(tas.type)
                 places.append(tas.building)
 
             send_email(
                 mon.email,
                 mon.user_name,
                 mon.branch,
-                11,
-                mon.task[0].day[-4:],
+                mp_month[datetime.strptime(mon.task[0].day, '%d/%m/%Y').month],
+                datetime.strptime(mon.task[0].day, '%d/%m/%Y').year,
                 days,
                 dates,
                 hours,
+                types,
                 places,
                 len(mon.task),
                 ok
@@ -473,10 +490,10 @@ class invScreen2(QWidget):
         pdf.ln()
         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
         pdf.ln()
-        pdf.output('fl.pdf')
+        pdf.output(f'{mon.user_name}.pdf')
         
         try: 
-            win32api.ShellExecute(0, "print", 'fl.pdf', None,".",0)
+            win32api.ShellExecute(0, "print", f'{mon.user_name}.pdf', None,".",0)
         except:
             pass
         
@@ -519,28 +536,44 @@ class invScreen2(QWidget):
             ok = True
             if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
                 ok = False
-            mp={
-                0:"الأثنين",
-                1:"الثلاثاء",
-                2:"الأربعاء",
-                3:"الخميس",
-                4:"الجمعة",
-                5:"السبت",
-                6:"الأحد",
+            mp_day = {
+            0: "الأثنين",
+            1: "الثلاثاء",
+            2: "الأربعاء",
+            3: "الخميس",
+            4: "الجمعة",
+            5: "السبت",
+            6: "الأحد",
+            }
+            mp_month = {
+                1: "يناير",
+                2: "فبراير",
+                3: "مارس",
+                4: "إبريل",
+                5: "مايو",
+                6: "يونيو",
+                7: "يوليو",
+                8: "أغسطس",
+                9: "سبتمبر",
+                10: "أكتوبر",
+                11: "نوفمبر",
+                12: "ديسمبر"
             }
             tmplst=monitors[current_index]
             days=[]
             dates=[]
             hours=[]
+            types = []
             places=[]
             for tas in tmplst.task:
                 spliteddate=tas.day.split("/")
-                days.append(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()])
+                days.append(mp_day[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()])
                 dates.append(tas.day)
                 hours.append("9:15")
+                types.append(tas.type)
                 places.append(tas.building)
 
-            send_email(tmplst.email,tmplst.user_name,tmplst.branch,11,tmplst.task[0].day[-4:],days,dates,hours,places,len(tmplst.task),ok)
+            send_email(tmplst.email,tmplst.user_name,tmplst.branch, mp_month[datetime.strptime(tmplst.task[0].day, '%d/%m/%Y').month], datetime.strptime(tmplst.task[0].day, '%d/%m/%Y').year, days,dates,hours,types,places,len(tmplst.task),ok)
     def download_function(self):
         cnt = 0
         lst = []
@@ -798,9 +831,11 @@ class exScreen1(QWidget):
         self.txt = ""
 
     def help_func(self):
+        self.label_not_enough.setText("")
         widget.setCurrentWidget(helpexam)
 
     def browsefiles(self):
+        self.label_not_enough.setText("")
         fname = QFileDialog.getOpenFileName(
             self, "Open file", "", "Excel (*.csv *xlsx)"
         )
@@ -831,9 +866,9 @@ class exScreen1(QWidget):
      
     def generateTables(self):
         if self.txt != "":
-            ok = check_data(self.txt)
-            if not ok:
-                self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
+            msg = check_data(self.txt)
+            if msg:
+                self.label_not_enough.setText(msg)
                 return
 
             self.label_not_enough.setText("")
@@ -926,9 +961,6 @@ class exScreen2(QWidget):
         self.but3.clicked.connect(lambda: self.day3(len(self.toPrint) // 3))
         self.day1(len(self.toPrint) // 3)
         
-       
-
-
     def day1(self,halls):
 
 
@@ -998,10 +1030,7 @@ class exScreen2(QWidget):
     
                 self.table.setItem(row, 3, item)
                 row += 1
-            
-                
-       
-  
+              
     def day2(self,halls):
         self.but2.setStyleSheet("""
                                 background-color: #006aff;
@@ -1140,7 +1169,10 @@ class exScreen2(QWidget):
     def backfromex_fun(self):
         widget.setCurrentWidget(exscreen1)
     def saveSol(self):
-        output_the_distribution(branch_sol.copy())
+        ok = output_the_distribution(branch_sol.copy())
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
+
 
 class invHelp(QWidget):
     def __init__(self):
@@ -1155,7 +1187,9 @@ class invHelp(QWidget):
         widget.setCurrentWidget(invscreen1)
 
     def save_func(self):
-        create_observers_template()
+        ok = create_observers_template()
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
 
 
 class examHelp(QWidget):
@@ -1171,7 +1205,9 @@ class examHelp(QWidget):
         widget.setCurrentWidget(exscreen1)
 
     def save_func(self):
-        create_halls_template()
+        ok = create_halls_template()
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
 
 
 app = QApplication(sys.argv)
