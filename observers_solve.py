@@ -223,7 +223,14 @@ def read_input(exel_name):
         if(type(x)==datetime):x=datetime.strftime(x, my_format)
         if len(str(x).split(".")[0].split("/")) == 1:
             continue
-        day.append(tuple(str(x).split(".")[0].split("/")))
+        
+        v=str(x).split(".")[0].split("/")
+        v[0]=str(int(v[0]))
+        v[1]=str(int(v[1]))
+        v[2]=str(int(v[2]))
+        xx=v[0]+"/"+v[1]+"/"+v[2]
+        print(v)
+        day.append(tuple(v))
         removeNAN = y.values.tolist()
         newlist = []
         temp = []
@@ -231,7 +238,7 @@ def read_input(exel_name):
             if not pd.isnull(a):
                 newlist.append(a)
         temp.append(newlist)
-        temp.insert(0, str(x).split(".")[0])
+        temp.insert(0, xx)
         days.append(temp)
     day = sorted(day, key=srt)
     print(day)

@@ -674,7 +674,11 @@ class invScreen2(QWidget):
         return True
         
     def current_day(self,day):
-        x = tuple(day.split("/"))
+        v=str(day).split(".")[0].split("/")
+        v[0]=str(int(v[0]))
+        v[1]=str(int(v[1]))
+        v[2]=str(int(v[2]))
+        x = tuple(v)
         return daynumber[x]
     def changes_function(self, index):
         # load data
