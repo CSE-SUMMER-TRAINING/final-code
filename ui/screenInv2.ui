@@ -693,7 +693,7 @@ border-radius:5px;
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../icons/prev.png</iconset>
+                ../icons/prev.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -795,7 +795,7 @@ border-radius: 5px;
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../icons/next.png</iconset>
+                ../icons/next.png</iconset>
               </property>
               <property name="iconSize">
                <size>
