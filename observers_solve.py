@@ -31,14 +31,15 @@ def process_single_task(day, tsk, monitors, lst):
     except KeyError:
         pass
 
-    monitors[lst[0]].accupied_days[day.current_day()] = [1, tsk.work_place()]
+    
 
     if not monitors[lst[0]].max_days:
         lst[1] = lst[0]
         lst[0] = 0
-
+    
     if not lst[1]:
         return False
+    monitors[lst[0]].accupied_days[day.current_day()] = [1, tsk.work_place()]
     monitors[lst[0]].append_task(tsk)
     monitors[lst[0]].max_days -= 1
     lst[0] = (lst[0] + 1) % lst[1]
