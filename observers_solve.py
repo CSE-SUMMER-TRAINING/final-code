@@ -387,11 +387,12 @@ def observers_on_volume(volume, size):
     return (volume + size - 1)*110 // (size*100)
 
 # days dates hours places
-def email_content(days,dates,hours,places):
+def email_content(days,dates,hours,types,places):
     dic = {
         "اليوم": [],
         "التاريخ": [],
         "حضور الساعة": [],
+        "نوع التكليف": [],
         "مكان اللجان": [],
     }
     # days = ["السبت", "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس"]
@@ -407,7 +408,10 @@ def email_content(days,dates,hours,places):
 
     for a in hours:
         dic["حضور الساعة"].append(a)
-
+    
+    for a in types:
+        dic["نوع التكليف"].append(a)
+        
     for a in places:
         dic["مكان اللجان"].append(a)
 
@@ -416,7 +420,7 @@ def email_content(days,dates,hours,places):
     return table
 
 
-def send_email(address, name, section, month, year,days,dates,hours,places,no_of_days,ok):
+def send_email(address, name, section, month, year,days,dates,hours,types,places,no_of_days,ok):
    
     outlook = client.Dispatch('outlook.application')  # create a Outlook instance
     mail = outlook.CreateItem(0)  # create Mail Message item
@@ -443,7 +447,7 @@ def send_email(address, name, section, month, year,days,dates,hours,places,no_of
                 <p style="font-size:120%;">تحية طيبة وبعد....</p>
                 <p style="font-size:120%;">تكليف بالحضور لملاحظة لجان امتحانات  دور {month} لعام {year} فى الايام والمواعيد التالية :</p>
                 <div>
-                    {email_content(days,dates,hours,places)}
+                    {email_content(days,dates,hours,types,places)}
                 </div>
                 <table style="border-collapse: collapse;border-spacing: 0; font-size:auto">
                     <thead>
@@ -466,8 +470,7 @@ def send_email(address, name, section, month, year,days,dates,hours,places,no_of
                   </ol>
                   <div style="font-size: 130%;font-weight:bold;margin-right:40vw;">
                     <p style="padding:0.5rem; background-color:rgb(7, 105, 105); border-radius:20%; width:fit-content; color:white;">إدارة شئون الطلاب</p>
-                    <p style="margin:0 auto;"><img src="https://upload.wikimedia.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AC%D8%A7%D9%85%D8%B9%D8%A9_%D8%A8%D9%86%D9%87%D8%A7.png" alt="شعار جامعة بنها" width="130vw" height="80vw"></p>
-                    <p style="margin:0 auto;">كلية الهندسة بشبرا</p>
+                    <p style="margin:0 auto;"><img src="https://bu.edu.eg/Flogo/FENG.jpg" alt="شعار جامعة بنها" width="150vw" height="120vw"></p>
                   </div>
                   
             </body>

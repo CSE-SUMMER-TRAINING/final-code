@@ -243,7 +243,7 @@ class Worker2(QObject):
     finished=pyqtSignal()
     def run(self):
         unvalid_emails = {}
-        mp = {
+        mp_day = {
             0: "الأثنين",
             1: "الثلاثاء",
             2: "الأربعاء",
@@ -251,6 +251,20 @@ class Worker2(QObject):
             4: "الجمعة",
             5: "السبت",
             6: "الأحد",
+        }
+        mp_month = {
+            1: "يناير",
+            2: "فبراير",
+            3: "مارس",
+            4: "إبريل",
+            5: "مايو",
+            6: "يونيو",
+            7: "يوليو",
+            8: "أغسطس",
+            9: "سبتمبر",
+            10: "أكتوبر",
+            11: "نوفمبر",
+            12: "ديسمبر"
         }
         startfile("outlook.exe")
         ok = True
@@ -268,13 +282,14 @@ class Worker2(QObject):
             days = []
             dates = []
             hours = []
+            types = []
             places = []
             for tas in mon.task:
                 # print(tas.day," ",tas.building," ",tas.type)
                 spliteddate = tas.day.split("/")
                 # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
                 days.append(
-                        mp[
+                        mp_day[
                             date(
                                 int(spliteddate[2]),
                                 int(spliteddate[1]),
@@ -284,17 +299,19 @@ class Worker2(QObject):
                 )
                 dates.append(tas.day)
                 hours.append("9:15")
+                types.append(tas.type)
                 places.append(tas.building)
 
             send_email(
                 mon.email,
                 mon.user_name,
                 mon.branch,
-                11,
-                mon.task[0].day[-4:],
+                mp_month[datetime.strptime(mon.task[0].day, '%d/%m/%Y').month],
+                datetime.strptime(mon.task[0].day, '%d/%m/%Y').year,
                 days,
                 dates,
                 hours,
+                types,
                 places,
                 len(mon.task),
                 ok
@@ -509,28 +526,44 @@ class invScreen2(QWidget):
             ok = True
             if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
                 ok = False
-            mp={
-                0:"الأثنين",
-                1:"الثلاثاء",
-                2:"الأربعاء",
-                3:"الخميس",
-                4:"الجمعة",
-                5:"السبت",
-                6:"الأحد",
+            mp_day = {
+            0: "الأثنين",
+            1: "الثلاثاء",
+            2: "الأربعاء",
+            3: "الخميس",
+            4: "الجمعة",
+            5: "السبت",
+            6: "الأحد",
+            }
+            mp_month = {
+                1: "يناير",
+                2: "فبراير",
+                3: "مارس",
+                4: "إبريل",
+                5: "مايو",
+                6: "يونيو",
+                7: "يوليو",
+                8: "أغسطس",
+                9: "سبتمبر",
+                10: "أكتوبر",
+                11: "نوفمبر",
+                12: "ديسمبر"
             }
             tmplst=monitors[current_index]
             days=[]
             dates=[]
             hours=[]
+            types = []
             places=[]
             for tas in tmplst.task:
                 spliteddate=tas.day.split("/")
-                days.append(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()])
+                days.append(mp_day[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()])
                 dates.append(tas.day)
                 hours.append("9:15")
+                types.append(tas.type)
                 places.append(tas.building)
 
-            send_email(tmplst.email,tmplst.user_name,tmplst.branch,11,tmplst.task[0].day[-4:],days,dates,hours,places,len(tmplst.task),ok)
+            send_email(tmplst.email,tmplst.user_name,tmplst.branch, mp_month[datetime.strptime(tmplst.task[0].day, '%d/%m/%Y').month], datetime.strptime(tmplst.task[0].day, '%d/%m/%Y').year, days,dates,hours,types,places,len(tmplst.task),ok)
     def download_function(self):
         cnt = 0
         lst = []
