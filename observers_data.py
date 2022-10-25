@@ -131,7 +131,11 @@ class Day:
         self.building = building
 
     def current_day(self):
-        x = tuple(self.day.split("/"))
+        v=str(self.day).split(".")[0].split("/")
+        v[0]=str(int(v[0]))
+        v[1]=str(int(v[1]))
+        v[2]=str(int(v[2]))
+        x = tuple(v)
         return daynumber[x]
 
     def observers(self):

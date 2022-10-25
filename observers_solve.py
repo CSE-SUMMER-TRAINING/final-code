@@ -31,14 +31,15 @@ def process_single_task(day, tsk, monitors, lst):
     except KeyError:
         pass
 
-    monitors[lst[0]].accupied_days[day.current_day()] = [1, tsk.work_place()]
+    
 
     if not monitors[lst[0]].max_days:
         lst[1] = lst[0]
         lst[0] = 0
-
+    
     if not lst[1]:
         return False
+    monitors[lst[0]].accupied_days[day.current_day()] = [1, tsk.work_place()]
     monitors[lst[0]].append_task(tsk)
     monitors[lst[0]].max_days -= 1
     lst[0] = (lst[0] + 1) % lst[1]
@@ -165,6 +166,7 @@ monitors, days, observser_data_lst = [], [], []
 
 
 def read_input(exel_name):
+    daynumber.clear();
     monitors.clear()
     days.clear()
     excelhead.clear()
@@ -212,7 +214,7 @@ def read_input(exel_name):
         monitors.append(Monitor(*x))
 
     def srt(elem):
-        return (elem[2], elem[1], elem[0])
+        return (int(elem[2]), int(elem[1]), int(elem[0]))
 
     dataframe2 = allExcelFile.parse(sheets[1])
     day = []
@@ -222,7 +224,13 @@ def read_input(exel_name):
         if(type(x)==datetime):x=datetime.strftime(x, my_format)
         if len(str(x).split(".")[0].split("/")) == 1:
             continue
-        day.append(tuple(str(x).split(".")[0].split("/")))
+        
+        v=str(x).split(".")[0].split("/")
+        v[0]=str(int(v[0]))
+        v[1]=str(int(v[1]))
+        v[2]=str(int(v[2]))
+        xx=v[0]+"/"+v[1]+"/"+v[2]
+        day.append(tuple(v))
         removeNAN = y.values.tolist()
         newlist = []
         temp = []
@@ -230,10 +238,9 @@ def read_input(exel_name):
             if not pd.isnull(a):
                 newlist.append(a)
         temp.append(newlist)
-        temp.insert(0, str(x).split(".")[0])
+        temp.insert(0, xx)
         days.append(temp)
     day = sorted(day, key=srt)
-    print(day)
     for x in day:
         if x not in daynumber.keys():
             cnt += 1
@@ -265,7 +272,6 @@ def read_input(exel_name):
     seen = set()
     seen_add = seen.add
     res= [x for x in day if not (x in seen or seen_add(x))]
-    print(day)
     for i in res:
         x=''
         for ele in i:
@@ -274,7 +280,11 @@ def read_input(exel_name):
         y.pop()
         dd, mm, yy = y
         x=x[:-1:]
-        day_name = date(int(yy), int(mm), int(dd)).strftime("%A")
+        day_name = 0
+        try:
+            day_name = date(int(yy), int(mm), int(dd)).strftime("%A")
+        except:
+            return "أحد التوايخ المدخلة غير صحيحة"
         excelhead[0].append(x)
         excelhead[0].append(x)
         excelhead[1].append(arabicWeekDays[day_name])
