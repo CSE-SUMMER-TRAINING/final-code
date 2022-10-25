@@ -301,7 +301,19 @@ class Worker2(QObject):
             )
         self.finished.emit()
 
-
+class Worker3(QObject):
+    finished=pyqtSignal()
+    def __init__(self,txt,parent=None):
+        QThread.__init__(self,parent)
+        self.txt=txt
+    def run(self):
+        print(self.txt)
+        global num_of_branches, allBranches
+        excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
+        read_sheet(excelSheet, num_of_branches)
+        build(num_of_branches)
+        self.finished.emit()
+        
 class invScreen2(QWidget):
     def __init__(self):
         super(invScreen2, self).__init__()
@@ -769,7 +781,7 @@ class invScreen2(QWidget):
         monitors[index] = mon
         QMessageBox.about(self, "", "تم حفظ التغيرات                  ")
 
-
+#  global __txt 
 class exScreen1(QWidget):
     def __init__(self):
 
@@ -780,11 +792,15 @@ class exScreen1(QWidget):
         self.back = self.findChild(QPushButton, "back")
         self.label = self.findChild(QLabel, "lineEdit")
         self.help = self.findChild(QPushButton, "help")
+        self.label_2=self.findChild(QLabel, "label_2")
+        self.label_3=self.findChild(QLabel, "label_3")
+        self.pixmap =QPixmap(r"icons\uploadFile.png")
         self.help.clicked.connect(self.help_func)
         self.label_not_enough = self.findChild(QLabel, "label_not_enough")
         self.browse.clicked.connect(self.browsefiles)
         self.generate.clicked.connect(self.generateTables)
         self.back.clicked.connect(self.goBack)
+        
 
         self.txt = ""
 
@@ -806,6 +822,18 @@ class exScreen1(QWidget):
         self.lineEdit.setText("")
         widget.setCurrentWidget(mainwindow)
 
+    def msg(self):
+        exs2 = exScreen2(self.txt)
+        widget.addWidget(exs2)
+        widget.setCurrentWidget(exs2)
+        self.lineEdit.setText("")
+        self.txt = ""
+        self.label_2.clear()
+        self.label_2.setPixmap(self.pixmap)
+        self.browse.setEnabled(True)
+        self.generate.setEnabled(True)
+        self.back.setEnabled(True)
+     
     def generateTables(self):
         if self.txt != "":
             ok = check_data(self.txt)
@@ -814,17 +842,26 @@ class exScreen1(QWidget):
                 return
 
             self.label_not_enough.setText("")
-            # create_halls_template()
-            global num_of_branches, allBranches
-            excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
-            read_sheet(excelSheet, num_of_branches)
-            build(num_of_branches)
-
-            exs2 = exScreen2(self.txt)
-            widget.addWidget(exs2)
-            widget.setCurrentWidget(exs2)
-            self.lineEdit.setText("")
-            self.txt = ""
+            
+            # global __txt
+            # __txt=self.txt
+            # print(__txt)
+            self.thread=QThread()
+            self.worker=Worker3(self.txt)
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.msg)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
+            self.browse.setEnabled(False)
+            self.generate.setEnabled(False)
+            self.back.setEnabled(False)
+            self.label_2.clear()
+            self.movie=QMovie("icons\loading4.gif")
+            self.label_2.setMovie(self.movie)
+            self.movie.start()
             
         else:
             self.label_not_enough.setText("برجاء اختيار ملف")
