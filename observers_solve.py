@@ -166,6 +166,7 @@ monitors, days, observser_data_lst = [], [], []
 
 
 def read_input(exel_name):
+    daynumber.clear();
     monitors.clear()
     days.clear()
     excelhead.clear()
@@ -213,7 +214,7 @@ def read_input(exel_name):
         monitors.append(Monitor(*x))
 
     def srt(elem):
-        return (elem[2], elem[1], elem[0])
+        return (int(elem[2]), int(elem[1]), int(elem[0]))
 
     dataframe2 = allExcelFile.parse(sheets[1])
     day = []
@@ -229,7 +230,6 @@ def read_input(exel_name):
         v[1]=str(int(v[1]))
         v[2]=str(int(v[2]))
         xx=v[0]+"/"+v[1]+"/"+v[2]
-        print(v)
         day.append(tuple(v))
         removeNAN = y.values.tolist()
         newlist = []
@@ -241,7 +241,6 @@ def read_input(exel_name):
         temp.insert(0, xx)
         days.append(temp)
     day = sorted(day, key=srt)
-    print(day)
     for x in day:
         if x not in daynumber.keys():
             cnt += 1
@@ -273,7 +272,6 @@ def read_input(exel_name):
     seen = set()
     seen_add = seen.add
     res= [x for x in day if not (x in seen or seen_add(x))]
-    print(day)
     for i in res:
         x=''
         for ele in i:

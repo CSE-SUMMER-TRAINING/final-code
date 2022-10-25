@@ -180,25 +180,24 @@ class Worker(QObject):
 
         for mon in monitors:
             
-            data=[(arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
+            data=[(arabic("التكليف"),arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
             for tas in mon.task:
                 spliteddate = tas.day.split("/")
                 dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
-                data.append((arabic(tas.building),"9:15",tas.day,dayy))
+                data.append((arabic(tas.type),arabic(tas.building),"9:15",tas.day,dayy))
             if(len(data)==1):continue
             pdf.add_page()
-            pdf.image("icons\download.png",90,w=35,h=30)
+            pdf.image("icons\logo.jpg",90,w=35,h=50)
             pdf.set_font('FreeSerif', size=12)
             pdf.set_fill_color(237, 240, 149)
-            pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
             pdf.ln()
-            pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2020/2021 "+arabic(" تكليف ملاحظة لجان الامتحانات يناير  "),align="c")
+            pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2022/2023 "+arabic(" تكليف لجان الامتحانات يناير  "),align="c")
             pdf.ln()
             pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("السيد/ %s                                                                       قسم:%s"%(mon.user_name,mon.work_place)),align="R")
             pdf.ln()
             pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تحية طيبة وبعد ..."),align="R")
             pdf.ln()
-            pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لملاحظة لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
+            pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
             pdf.ln()
 
             line_height = pdf.font_size * 1.50
@@ -206,8 +205,8 @@ class Worker(QObject):
                 row=data[i]
                 for datum in row:
                     if(i==0):
-                        pdf.multi_cell(50, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-                    else :pdf.multi_cell(50, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                        pdf.multi_cell(35, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                    else :pdf.multi_cell(35, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
                 pdf.ln()
             x=len(data)-1
             pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
@@ -318,7 +317,19 @@ class Worker2(QObject):
             )
         self.finished.emit()
 
-
+class Worker3(QObject):
+    finished=pyqtSignal()
+    def __init__(self,txt,parent=None):
+        QThread.__init__(self,parent)
+        self.txt=txt
+    def run(self):
+        print(self.txt)
+        global num_of_branches, allBranches
+        excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
+        read_sheet(excelSheet, num_of_branches)
+        build(num_of_branches)
+        self.finished.emit()
+        
 class invScreen2(QWidget):
     def __init__(self):
         super(invScreen2, self).__init__()
@@ -425,24 +436,23 @@ class invScreen2(QWidget):
                 }
 
         mon=monitors[current_index]
-        data=[(arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
+        data=[(arabic("التكليف"),arabic("المكان"),arabic( "الساعة"), arabic("التاريخ"), arabic("اليوم"))]
         for tas in mon.task:
             spliteddate = tas.day.split("/")
             dayy=arabic(mp[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0]),).weekday()])
-            data.append((arabic(tas.building),"9:15",tas.day,dayy))
+            data.append((arabic(tas.type),arabic(tas.building),"9:15",tas.day,dayy))
         pdf.add_page()
-        pdf.image("icons\download.png",90,w=35,h=30)
+        pdf.image("icons\logo.jpg",90,w=35,h=50)
         pdf.set_font('FreeSerif', size=12)
         pdf.set_fill_color(237, 240, 149)
-        pdf.cell(w=195,h=5,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("كلية الهندسة بشبرا"),align="C")
         pdf.ln()
-        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2020/2021 "+arabic(" تكليف ملاحظة لجان الامتحانات يناير  "),align="c")
+        pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="2022/2023 "+arabic(" تكليف  لجان الامتحانات يناير  "),align="c")
         pdf.ln()
         pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("السيد/ %s                                                                       قسم:%s"%(mon.user_name,mon.work_place)),align="R")
         pdf.ln()
         pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تحية طيبة وبعد ..."),align="R")
         pdf.ln()
-        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور لملاحظة لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
+        pdf.cell(w=195,h=10,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("تكليف بالحضور  لجان امتحانات  فى الايام والمواعيد التالية :"),align="R")
         pdf.ln()
 
         line_height = pdf.font_size * 1.50
@@ -450,8 +460,8 @@ class invScreen2(QWidget):
             row=data[i]
             for datum in row:
                 if(i==0):
-                    pdf.multi_cell(50, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
-                else :pdf.multi_cell(50, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                    pdf.multi_cell(39, line_height,datum,fill=1 , border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
+                else :pdf.multi_cell(39, line_height, datum, border=1,new_x=XPos.RIGHT, new_y=YPos.TOP)
             pdf.ln()
         x=len(data)-1
         pdf.cell(w=195,h=5,fill=1,new_x=XPos.RIGHT, new_y=YPos.TOP,txt="%d    "%(x) + arabic("اجمالى عدد ايام الملاحظة  "),align="C")
@@ -480,10 +490,10 @@ class invScreen2(QWidget):
         pdf.ln()
         pdf.cell(w=195,h=4,new_x=XPos.RIGHT, new_y=YPos.TOP,txt=arabic("الالتزام الكامل بالاجراءات الاحترازيه وارتداء الكمامه مع عدم تداول الادوات الشخصيه داخل اللجان")+"-10",align="R")
         pdf.ln()
-        pdf.output('fl.pdf')
+        pdf.output(f'{mon.user_name}.pdf')
         
         try: 
-            win32api.ShellExecute(0, "print", 'fl.pdf', None,".",0)
+            win32api.ShellExecute(0, "print", f'{mon.user_name}.pdf', None,".",0)
         except:
             pass
         
@@ -574,9 +584,8 @@ class invScreen2(QWidget):
             cnt = cnt + 1
 
         try:
-            # print(excelhead)
+            
             dataframeout = pd.DataFrame(lst, columns=excelhead)
-            # print(dataframeout)
             dataframeout.to_excel("observer_output.xlsx")
             QMessageBox.about(self, "", "تم التنزيل                   ")
         except:
@@ -633,7 +642,6 @@ class invScreen2(QWidget):
         global current_index
         # clear search input
         self.lineEdit.setText("")
-        # print(self.combox.currentIndex())
         if self.combox.currentIndex():
             current_index = self.combox.currentIndex() - 1
             self.set_items(self.combox.currentIndex() - 1)
@@ -717,7 +725,6 @@ class invScreen2(QWidget):
         # load data
         mon = monitors[index]
         i, j, ok = 0, 0, 0
-        print("###############################")
         for ts in mon.task:
             if ok == 0:
                 day_change= -1
@@ -761,7 +768,6 @@ class invScreen2(QWidget):
             else:
                 day_change= -1
                 item = self.table_widget.item(j, 3)
-                print(item.text())
                 if not self.valid_day(item.text()):
                     QMessageBox.about(self, "", "صيغة التاريخ غير صحيحة\nاكتب التاريخ كالتالى 10/10/2000")
                     return
@@ -798,11 +804,10 @@ class invScreen2(QWidget):
                     mon.accupied_days[ts.current_day()] = [1,ts.building]
                 j += 1
                 ok = 0
-            print(mon.accupied_days[ts.current_day()])
         monitors[index] = mon
         QMessageBox.about(self, "", "تم حفظ التغيرات                  ")
 
-
+#  global __txt 
 class exScreen1(QWidget):
     def __init__(self):
 
@@ -813,18 +818,24 @@ class exScreen1(QWidget):
         self.back = self.findChild(QPushButton, "back")
         self.label = self.findChild(QLabel, "lineEdit")
         self.help = self.findChild(QPushButton, "help")
+        self.label_2=self.findChild(QLabel, "label_2")
+        self.label_3=self.findChild(QLabel, "label_3")
+        self.pixmap =QPixmap(r"icons\uploadFile.png")
         self.help.clicked.connect(self.help_func)
         self.label_not_enough = self.findChild(QLabel, "label_not_enough")
         self.browse.clicked.connect(self.browsefiles)
         self.generate.clicked.connect(self.generateTables)
         self.back.clicked.connect(self.goBack)
+        
 
         self.txt = ""
 
     def help_func(self):
+        self.label_not_enough.setText("")
         widget.setCurrentWidget(helpexam)
 
     def browsefiles(self):
+        self.label_not_enough.setText("")
         fname = QFileDialog.getOpenFileName(
             self, "Open file", "", "Excel (*.csv *xlsx)"
         )
@@ -839,25 +850,46 @@ class exScreen1(QWidget):
         self.lineEdit.setText("")
         widget.setCurrentWidget(mainwindow)
 
+    def msg(self):
+        exs2 = exScreen2(self.txt)
+        widget.addWidget(exs2)
+        widget.setCurrentWidget(exs2)
+        self.lineEdit.setText("")
+        self.txt = ""
+        self.label_2.clear()
+        self.label_2.setPixmap(self.pixmap)
+        self.browse.setEnabled(True)
+        self.generate.setEnabled(True)
+        self.back.setEnabled(True)
+     
     def generateTables(self):
         if self.txt != "":
-            ok = check_data(self.txt)
-            if not ok:
-                self.label_not_enough.setText("البيانات المدخلة غير صحيحة")
+            msg = check_data(self.txt)
+            if msg:
+                self.label_not_enough.setText(msg)
                 return
 
             self.label_not_enough.setText("")
-            # create_halls_template()
-            global num_of_branches, allBranches
-            excelSheet, num_of_branches, allBranches = read_inputt(self.txt)
-            read_sheet(excelSheet, num_of_branches)
-            build(num_of_branches)
-
-            exs2 = exScreen2(self.txt)
-            widget.addWidget(exs2)
-            widget.setCurrentWidget(exs2)
-            self.lineEdit.setText("")
-            self.txt = ""
+            
+            # global __txt
+            # __txt=self.txt
+            # print(__txt)
+            self.thread=QThread()
+            self.worker=Worker3(self.txt)
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.msg)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
+            self.browse.setEnabled(False)
+            self.generate.setEnabled(False)
+            self.back.setEnabled(False)
+            self.label_2.clear()
+            self.movie=QMovie("icons\loading4.gif")
+            self.label_2.setMovie(self.movie)
+            self.movie.start()
             
         else:
             self.label_not_enough.setText("برجاء اختيار ملف")
@@ -929,9 +961,6 @@ class exScreen2(QWidget):
         self.but3.clicked.connect(lambda: self.day3(len(self.toPrint) // 3))
         self.day1(len(self.toPrint) // 3)
         
-       
-
-
     def day1(self,halls):
 
 
@@ -1001,10 +1030,7 @@ class exScreen2(QWidget):
     
                 self.table.setItem(row, 3, item)
                 row += 1
-            
-                
-       
-  
+              
     def day2(self,halls):
         self.but2.setStyleSheet("""
                                 background-color: #006aff;
@@ -1143,7 +1169,10 @@ class exScreen2(QWidget):
     def backfromex_fun(self):
         widget.setCurrentWidget(exscreen1)
     def saveSol(self):
-        output_the_distribution(branch_sol.copy())
+        ok = output_the_distribution(branch_sol.copy())
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
+
 
 class invHelp(QWidget):
     def __init__(self):
@@ -1158,7 +1187,9 @@ class invHelp(QWidget):
         widget.setCurrentWidget(invscreen1)
 
     def save_func(self):
-        create_observers_template()
+        ok = create_observers_template()
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
 
 
 class examHelp(QWidget):
@@ -1174,7 +1205,9 @@ class examHelp(QWidget):
         widget.setCurrentWidget(exscreen1)
 
     def save_func(self):
-        create_halls_template()
+        ok = create_halls_template()
+        if not ok:
+            QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
 
 
 app = QApplication(sys.argv)
