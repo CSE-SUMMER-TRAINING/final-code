@@ -841,7 +841,7 @@ class exScreen1(QWidget):
         self.help = self.findChild(QPushButton, "help")
         self.label_2=self.findChild(QLabel, "label_2")
         self.label_3=self.findChild(QLabel, "label_3")
-        self.pixmap =QPixmap(r"icons\uploadFile.png")
+        self.pixmap =QPixmap(r"icons\UploaD.png")
         self.help.clicked.connect(self.help_func)
         self.label_not_enough = self.findChild(QLabel, "label_not_enough")
         self.browse.clicked.connect(self.browsefiles)
