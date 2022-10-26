@@ -124,10 +124,16 @@ class Ui_Form(object):
         self.save.setFont(font1)
         self.save.setCursor(QCursor(Qt.PointingHandCursor))
         self.save.setLayoutDirection(Qt.LeftToRight)
-        self.save.setStyleSheet(u"background-color: #006aff;\n"
+        self.save.setStyleSheet(u"QPushButton{\n"
+"background-color: #006aff;\n"
 "color: white;\n"
 "border-radius: 7px;\n"
-"")
+"}\n"
+"QPushButton:hover{\n"
+"background-color:#0052cc;\n"
+"\n"
+"\n"
+"}")
 
         self.horizontalLayout_5.addWidget(self.save)
 
@@ -212,13 +218,13 @@ class Ui_Form(object):
         self.horizontalLayout_6.setSpacing(0)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(100, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_6.addItem(self.horizontalSpacer_4)
 
         self.widget_10 = QWidget(self.widget_9)
         self.widget_10.setObjectName(u"widget_10")
-        self.widget_10.setMinimumSize(QSize(200, 0))
+        self.widget_10.setMinimumSize(QSize(500, 0))
         self.horizontalLayout_8 = QHBoxLayout(self.widget_10)
         self.horizontalLayout_8.setSpacing(20)
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
@@ -227,6 +233,20 @@ class Ui_Form(object):
         self.label_3.setObjectName(u"label_3")
 
         self.horizontalLayout_8.addWidget(self.label_3)
+
+        self.next = QPushButton(self.widget_10)
+        self.next.setObjectName(u"next")
+        self.next.setCursor(QCursor(Qt.PointingHandCursor))
+        icon = QIcon()
+        icon.addFile(u"../icons/prev.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.next.setIcon(icon)
+        self.next.setIconSize(QSize(16, 16))
+
+        self.horizontalLayout_8.addWidget(self.next)
+
+        self.horizontalSpacer_6 = QSpacerItem(270, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_8.addItem(self.horizontalSpacer_6)
 
         self.widget_11 = QWidget(self.widget_10)
         self.widget_11.setObjectName(u"widget_11")
@@ -238,7 +258,7 @@ class Ui_Form(object):
         self.but3.setObjectName(u"but3")
         self.but3.setMinimumSize(QSize(12, 12))
         self.but3.setMaximumSize(QSize(12, 12))
-        self.but3.setCursor(QCursor(Qt.PointingHandCursor))
+        self.but3.setCursor(QCursor(Qt.ArrowCursor))
         self.but3.setStyleSheet(u"background-color: #006aff;\n"
 "border-radius: 6px;")
 
@@ -248,7 +268,7 @@ class Ui_Form(object):
         self.but2.setObjectName(u"but2")
         self.but2.setMinimumSize(QSize(12, 12))
         self.but2.setMaximumSize(QSize(12, 12))
-        self.but2.setCursor(QCursor(Qt.PointingHandCursor))
+        self.but2.setCursor(QCursor(Qt.ArrowCursor))
         self.but2.setStyleSheet(u"background-color: #F5F8FA;\n"
 "border-radius: 6px;")
 
@@ -258,7 +278,7 @@ class Ui_Form(object):
         self.but1.setObjectName(u"but1")
         self.but1.setMinimumSize(QSize(12, 12))
         self.but1.setMaximumSize(QSize(12, 12))
-        self.but1.setCursor(QCursor(Qt.PointingHandCursor))
+        self.but1.setCursor(QCursor(Qt.ArrowCursor))
         self.but1.setStyleSheet(u"background-color: #F5F8FA;\n"
 "border-radius: 6px;")
 
@@ -266,6 +286,20 @@ class Ui_Form(object):
 
 
         self.horizontalLayout_8.addWidget(self.widget_11)
+
+        self.horizontalSpacer_7 = QSpacerItem(270, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_8.addItem(self.horizontalSpacer_7)
+
+        self.prev = QPushButton(self.widget_10)
+        self.prev.setObjectName(u"prev")
+        self.prev.setCursor(QCursor(Qt.PointingHandCursor))
+        icon1 = QIcon()
+        icon1.addFile(u"../icons/next.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.prev.setIcon(icon1)
+        self.prev.setIconSize(QSize(16, 16))
+
+        self.horizontalLayout_8.addWidget(self.prev)
 
         self.label_4 = QLabel(self.widget_10)
         self.label_4.setObjectName(u"label_4")
@@ -275,7 +309,7 @@ class Ui_Form(object):
 
         self.horizontalLayout_6.addWidget(self.widget_10)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(100, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_6.addItem(self.horizontalSpacer_5)
 
@@ -406,9 +440,17 @@ class Ui_Form(object):
 #endif // QT_CONFIG(shortcut)
         self.save.setText(QCoreApplication.translate("Form", u"\u062a\u0646\u0632\u064a\u0644", None))
         self.label_3.setText("")
+        self.next.setText("")
+#if QT_CONFIG(shortcut)
+        self.next.setShortcut(QCoreApplication.translate("Form", u"Left", None))
+#endif // QT_CONFIG(shortcut)
         self.but3.setText("")
         self.but2.setText("")
         self.but1.setText("")
+        self.prev.setText("")
+#if QT_CONFIG(shortcut)
+        self.prev.setShortcut(QCoreApplication.translate("Form", u"Right", None))
+#endif // QT_CONFIG(shortcut)
         self.label_4.setText("")
         self.label_2.setText("")
         self.khal.setText(QCoreApplication.translate("Form", u"\u0627\u0644\u062e\u0644\u0641\u0627\u0648\u064a", None))
