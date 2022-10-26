@@ -512,7 +512,7 @@ class invScreen2(QWidget):
         
     def msg2(self):
         if unvalid_emails:
-            QMessageBox.about(self, "", "برجاء مراجعة عناوين البريد الإلكتروني الغير صحيحة\nفي ملف الإكسيل الذي  أدخلته الخاص ببيانات الملاحظين\nفقد تم تظليل عناوين البريد الإلكتروني الغير صالحة باللون الأحمر\nقم بتصحيح هذه البيانات و أعد الإرسال مرة أخرى\nتنبيه: يجب أن يكون البريد الإلكتروني على هذا الشكل:\nexample@feng.bu.edu.eg                    ")
+            QMessageBox.about(self, "", "برجاء مراجعة عناوين البريد الإلكتروني الغير صحيحة<br>في ملف الإكسيل الذي  أدخلته الخاص ببيانات الملاحظين<br>فقد تم تظليل عناوين البريد الإلكتروني الغير صالحة باللون الأحمر<br>قم بتصحيح هذه البيانات و أعد الإرسال مرة أخرى<br>تنبيه: يجب أن يكون البريد الإلكتروني على هذا الشكل:<br>example@feng.bu.edu.eg                    ")
         else:
             QMessageBox.about(self, "", "تم الارسال                   ")
         self.print_2.setText("ارسال ايميل للكل")
@@ -551,7 +551,7 @@ class invScreen2(QWidget):
             QMessageBox.about(self,"","لم يتم إدخال بريد إلكتروني")
             
         elif not is_email(monitors[current_index].email):
-                 QMessageBox.about(self,"","البريد الإلكتروني غير صالح\nالبريد يجب أن يكون على هذا النحو:\n'example@feng.bu.edu.eg'")
+                 QMessageBox.about(self,"","البريد الإلكتروني غير صالح<br>البريد يجب أن يكون على هذا النحو:<br>'example@feng.bu.edu.eg'")
         else:
             ok = True
             if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
@@ -751,7 +751,7 @@ class invScreen2(QWidget):
                 day_change= -1
                 item = self.table_widget.item(i, 0)
                 if not self.valid_day(item.text()):
-                    QMessageBox.about(self, "", "صيغة التاريخ غير صحيحة\nاكتب التاريخ كالتالى 10/10/2000")
+                    QMessageBox.about(self, "", "صيغة التاريخ غير صحيحة<br>اكتب التاريخ كالتالى 10/10/2000")
                     return
                 else :
                     if ts.day != item.text():
@@ -759,15 +759,15 @@ class invScreen2(QWidget):
                     ts.day = item.text()
                 item = self.table_widget.item(i, 1)
                 if item.text() not in tasks_known_names.keys():
-                    QMessageBox.about(self, "", "هذا التكليف غير معروف يمكنك اختيار احدى التكاليف التالية\n1-رئيس لجنة\n2-مراقب دور\n3-ملاحظ\n4-احتياطى")
+                    QMessageBox.about(self, "", "هذا التكليف غير معروف يمكنك اختيار احدى التكاليف التالية<br>1-رئيس لجنة<br>2-مراقب دور<br>3-ملاحظ<br>4-احتياطى")
                     return
                 ts.type = item.text()
                 item = self.table_widget.item(i, 2)
                 if item.text() not in is_bransh.keys():
-                    msg= "هذا الفرع غير موجود بالكلية، يمكنك اختيار احد الاختيارات التالية\n"
+                    msg= "هذا الفرع غير موجود بالكلية، يمكنك اختيار احد الاختيارات التالية<br>"
                     cnt= 1 
                     for k in is_bransh.keys():
-                        msg += str(cnt)+ ' - '+ (k) + '\n'
+                        msg += str(cnt)+ ' - '+ (k) + '<br>'
                         cnt+=1 
                     QMessageBox.about(self, "", msg)
                     return
@@ -778,7 +778,7 @@ class invScreen2(QWidget):
                     ts.current_day()
                 except:
                     ts.day= day_change
-                    QMessageBox.about(self, "", "هذا اليوم ليس من ضمن ايام الامتحانات\nلا يمكن تنفيذ العملية")
+                    QMessageBox.about(self, "", "هذا اليوم ليس من ضمن ايام الامتحانات<br>لا يمكن تنفيذ العملية")
                     return
                 if ts.current_day() in mon.accupied_days.keys():
                     mon.accupied_days[ts.current_day()][1] = ts.building
@@ -790,7 +790,7 @@ class invScreen2(QWidget):
                 day_change= -1
                 item = self.table_widget.item(j, 3)
                 if not self.valid_day(item.text()):
-                    QMessageBox.about(self, "", "صيغة التاريخ غير صحيحة\nاكتب التاريخ كالتالى 10/10/2000")
+                    QMessageBox.about(self, "", "صيغة التاريخ غير صحيحة<br>اكتب التاريخ كالتالى 10/10/2000")
                     return
                 else :
                     if ts.day != item.text():
@@ -798,15 +798,15 @@ class invScreen2(QWidget):
                     ts.day = item.text()
                 item = self.table_widget.item(j, 4)
                 if item.text() not in tasks_known_names.keys():
-                    QMessageBox.about(self, "", "هذا التكليف غير معروف يمكنك اختيار احدى التكاليف التالية\n1-رئيس لجنة\n2-مراقب دور\n3-ملاحظ\n4-احتياطى")
+                    QMessageBox.about(self, "", "هذا التكليف غير معروف يمكنك اختيار احدى التكاليف التالية<br>1-رئيس لجنة<br>2-مراقب دور<br>3-ملاحظ<br>4-احتياطى")
                     return
                 ts.type = item.text()
                 item = self.table_widget.item(j, 5)
                 if (item.text()) not in is_bransh.keys():
-                    msg= "هذا الفرع غير موجود بالكلية، يمكنك اختيار احد الاختيارات التالية\n"
+                    msg= "هذا الفرع غير موجود بالكلية، يمكنك اختيار احد الاختيارات التالية<br>"
                     cnt= 1 
                     for k in is_bransh.keys():
-                        msg += str(cnt)+ ' - '+ (k) + '\n'
+                        msg += str(cnt)+ ' - '+ (k) + '<br>'
                         cnt+=1 
                     QMessageBox.about(self, "", msg)
                     return
@@ -817,7 +817,7 @@ class invScreen2(QWidget):
                     ts.current_day()
                 except:
                     ts.day= day_change
-                    QMessageBox.about(self, "", "هذا اليوم ليس من ضمن ايام الامتحانات\nلا يمكن تنفيذ العملية")
+                    QMessageBox.about(self, "", "هذا اليوم ليس من ضمن ايام الامتحانات<br>لا يمكن تنفيذ العملية")
                     return
                 if ts.current_day() in mon.accupied_days.keys():
                     mon.accupied_days[ts.current_day()][1] = ts.building
