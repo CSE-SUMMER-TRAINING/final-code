@@ -688,7 +688,7 @@ border-radius:5px;
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>C:/Users/Lenovo/Downloads/final-code-main(7)/final-code-main/icons/prev.png</normaloff>C:/Users/Lenovo/Downloads/final-code-main(7)/final-code-main/icons/prev.png</iconset>
+                   <normaloff>../icons/prev.png</normaloff>../icons/prev.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -790,7 +790,8 @@ border-radius: 5px;
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>C:/Users/Lenovo/Downloads/final-code-main(7)/final-code-main/icons/next.png</normaloff>C:/Users/Lenovo/Downloads/final-code-main(7)/final-code-main/icons/next.png</iconset>
+                   <normaloff>../icons/next.png</normaloff>../icons/next.png
+                </iconset>
               </property>
               <property name="iconSize">
                <size>
