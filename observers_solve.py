@@ -484,10 +484,11 @@ def send_email(address, name, section, month, year,days,dates,hours,types,places
 
 def is_email(address):
     #this is function is used  to validate the email addess using regex
-    check1 = re.search("^[A-z0-9\.]+@[A-z0-9]+\.[A-z]+$", address)
+    
+    #check1 = re.search("^[A-z0-9\.]+@[A-z0-9]+\.[A-z]+$", address)
     check2 = re.search("^[A-z0-9\.]+@feng.bu.edu.eg$", address)
     
-    return check1 or check2
+    return check2
 
 def color_invalid_email(excel_file, indices):
     data_frame = pd.read_excel(excel_file)

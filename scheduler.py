@@ -241,87 +241,92 @@ class Worker(QObject):
             pdf.ln()
         pdf.output('table_with_cells.pdf')
         self.finished.emit()
-       
+unvalid_emails = []        
 class Worker2(QObject):
     finished=pyqtSignal()
     def run(self):
-        mp_day = {
-            0: "الأثنين",
-            1: "الثلاثاء",
-            2: "الأربعاء",
-            3: "الخميس",
-            4: "الجمعة",
-            5: "السبت",
-            6: "الأحد",
-        }
-        mp_month = {
-            1: "يناير",
-            2: "فبراير",
-            3: "مارس",
-            4: "إبريل",
-            5: "مايو",
-            6: "يونيو",
-            7: "يوليو",
-            8: "أغسطس",
-            9: "سبتمبر",
-            10: "أكتوبر",
-            11: "نوفمبر",
-            12: "ديسمبر"
-        }
-        startfile("outlook.exe")
-        ok = True
-        if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
-            ok = False
-            
-        unvalid_emails = []   
         cnt = -1
         for mon in monitors:
-            cnt += 1 
+            cnt += 1
+            if not isinstance((mon.email), str):
+                unvalid_emails.append(cnt)
+                continue 
             if not is_email(mon.email):
-                    unvalid_emails.append(cnt)
-                    continue
-                
-            if len(mon.task) == 0:
-            #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
+                unvalid_emails.append(cnt)
                 continue
-            days = []
-            dates = []
-            hours = []
-            types = []
-            places = []
-            for tas in mon.task:
-                # print(tas.day," ",tas.building," ",tas.type)
-                spliteddate = tas.day.split("/")
-                # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
-                days.append(
-                        mp_day[
-                            date(
-                                int(spliteddate[2]),
-                                int(spliteddate[1]),
-                                int(spliteddate[0]),
-                            ).weekday()
-                        ]
-                )
-                dates.append(tas.day)
-                hours.append("9:15")
-                types.append(tas.type)
-                places.append(tas.building)
+        if unvalid_emails:
+            color_invalid_email(my_file_name, unvalid_emails)
+        else:
+            mp_day = {
+                0: "الأثنين",
+                1: "الثلاثاء",
+                2: "الأربعاء",
+                3: "الخميس",
+                4: "الجمعة",
+                5: "السبت",
+                6: "الأحد",
+            }
+            mp_month = {
+                1: "يناير",
+                2: "فبراير",
+                3: "مارس",
+                4: "إبريل",
+                5: "مايو",
+                6: "يونيو",
+                7: "يوليو",
+                8: "أغسطس",
+                9: "سبتمبر",
+                10: "أكتوبر",
+                11: "نوفمبر",
+                12: "ديسمبر"
+            }
+            startfile("outlook.exe")
+            ok = True
+            if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
+                ok = False
+                
+            for mon in monitors:
+                if len(mon.task) == 0:
+                #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
+                    continue
+                days = []
+                dates = []
+                hours = []
+                types = []
+                places = []
+                for tas in mon.task:
+                    # print(tas.day," ",tas.building," ",tas.type)
+                    spliteddate = tas.day.split("/")
+                    # print(date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])))
+                    days.append(
+                            mp_day[
+                                date(
+                                    int(spliteddate[2]),
+                                    int(spliteddate[1]),
+                                    int(spliteddate[0]),
+                                ).weekday()
+                            ]
+                    )
+                    dates.append(tas.day)
+                    hours.append("9:15")
+                    types.append(tas.type)
+                    places.append(tas.building)
 
-            send_email(
-                mon.email,
-                mon.user_name,
-                mon.branch,
-                mp_month[datetime.strptime(mon.task[0].day, '%d/%m/%Y').month],
-                datetime.strptime(mon.task[0].day, '%d/%m/%Y').year,
-                days,
-                dates,
-                hours,
-                types,
-                places,
-                len(mon.task),
-                ok
-            )
-        color_invalid_email(my_file_name, unvalid_emails)
+                send_email(
+                    mon.email,
+                    mon.user_name,
+                    mon.branch,
+                    mp_month[datetime.strptime(mon.task[0].day, '%d/%m/%Y').month],
+                    datetime.strptime(mon.task[0].day, '%d/%m/%Y').year,
+                    days,
+                    dates,
+                    hours,
+                    types,
+                    places,
+                    len(mon.task),
+                    ok
+                )
+        
         self.finished.emit()
 
 class Worker3(QObject):
@@ -387,6 +392,7 @@ class invScreen2(QWidget):
         self.printone_2 = self.findChild(QPushButton, "printone_2")
         self.printone_2.clicked.connect(self.printone_2_function)
         self.print_2 = self.findChild(QPushButton, "print_2")
+      
         self.print_2.clicked.connect(self.print_2_function)
         # print all not comp
         self.printall = self.findChild(QPushButton,"print")
@@ -505,7 +511,10 @@ class invScreen2(QWidget):
             pass
         
     def msg2(self):
-        QMessageBox.about(self, "", "تم الارسال                   ")
+        if unvalid_emails:
+            QMessageBox.about(self, "", "برجاء مراجعة عناوين البريد الإلكتروني الغير صحيحة\nفي ملف الإكسيل الذي  أدخلته الخاص ببيانات الملاحظين\nفقد تم تظليل عناوين البريد الإلكتروني الغير صالحة باللون الأحمر\nقم بتصحيح هذه البيانات و أعد الإرسال مرة أخرى\nتنبيه: يجب أن يكون البريد الإلكتروني على هذا الشكل:\nexample@feng.bu.edu.eg                    ")
+        else:
+            QMessageBox.about(self, "", "تم الارسال                   ")
         self.print_2.setText("ارسال ايميل للكل")
         self.print.setEnabled(True)
         self.print_2.setEnabled(True)
@@ -531,14 +540,18 @@ class invScreen2(QWidget):
             )  # needed to be errorbox 
             
     def printone_2_function(self):
+        print(type(monitors[current_index].email))
         if(current_index==-1):
             QMessageBox.about(self,"","من فضلك اختار شخص")
            
         elif len(monitors[current_index].task) == 0:
             QMessageBox.about(self,"",f"{monitors[current_index].user_name} ليس لديه أيّ تكليفات")
-        
+            
+        elif not isinstance((monitors[current_index].email), str):
+            QMessageBox.about(self,"","لم يتم إدخال بريد إلكتروني")
+            
         elif not is_email(monitors[current_index].email):
-                 QMessageBox.about(self,"","البريد الإلكتروني غير صالح\nالبريد يجب أن يكون على هذا النحو:\n'example@feng.bu.edu.eg'\n'أو: example@example.example'")
+                 QMessageBox.about(self,"","البريد الإلكتروني غير صالح\nالبريد يجب أن يكون على هذا النحو:\n'example@feng.bu.edu.eg'")
         else:
             ok = True
             if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
@@ -572,6 +585,7 @@ class invScreen2(QWidget):
             hours=[]
             types = []
             places=[]
+            
             for tas in tmplst.task:
                 spliteddate=tas.day.split("/")
                 days.append(mp_day[date(int(spliteddate[2]),int(spliteddate[1]),int(spliteddate[0])).weekday()])
