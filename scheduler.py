@@ -1193,6 +1193,8 @@ class exScreen2(QWidget):
         ok = output_the_distribution(branch_sol.copy())
         if not ok:
             QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
+            return
+        QMessageBox.about(self, "", "تم التنزيل                   ")
 
 
 class invHelp(QWidget):
@@ -1211,6 +1213,8 @@ class invHelp(QWidget):
         ok = create_observers_template()
         if not ok:
             QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
+            return
+        QMessageBox.about(self, "", "تم التنزيل                   ")
 
 
 class examHelp(QWidget):
@@ -1229,6 +1233,8 @@ class examHelp(QWidget):
         ok = create_halls_template()
         if not ok:
             QMessageBox.about(self, "", "لا يمكن تنزيل الملف اثناء تشغيله")
+            return
+        QMessageBox.about(self, "", "تم التنزيل                   ")
 
 
 app = QApplication(sys.argv)
