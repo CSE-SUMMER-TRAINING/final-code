@@ -298,7 +298,7 @@ color: white;
 border-radius: 7px;</string>
                  </property>
                  <property name="text">
-                  <string>انشاء جدول الإمتحانات</string>
+                  <string>إنشاء جدول الإمتحانات</string>
                  </property>
                 </widget>
                </item>
@@ -366,7 +366,7 @@ color: white;
 border-radius: 7px;</string>
                  </property>
                  <property name="text">
-                  <string>انشاء جدول الملاحظين</string>
+                  <string>إنشاء جدول الملاحظين</string>
                  </property>
                 </widget>
                </item>
