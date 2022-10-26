@@ -15,6 +15,8 @@ from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 import psutil
 import re
+import xlwings as xw
+
 colDayBranch=[{},{},{}]
 excelhead=[]
 is_bransh={}
@@ -486,3 +488,12 @@ def is_email(address):
     check2 = re.search("^[A-z0-9\.]+@feng.bu.edu.eg$", address)
     
     return check1 or check2
+
+def color_invalid_email(excel_file, indices):
+    data_frame = pd.read_excel(excel_file)
+    wb = xw.Book(excel_file)
+    sht = wb.sheets["Sheet1"]
+    wb.sheets["Sheet1"].autofit()
+    for index in indices:
+        xw.Range(f'E{2 + index}').color = (255, 0, 0)
+    wb.save(excel_file)

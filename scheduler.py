@@ -93,6 +93,7 @@ class MainWindow(QWidget):
 
 current_index = -1
 
+my_file_name = ""     # I made this var to use it in email_validation
 class invScreen1(QWidget):
     def __init__(self):
         super(invScreen1, self).__init__()
@@ -119,6 +120,9 @@ class invScreen1(QWidget):
         self.txt = fname
         self.file_name = fname[0]
         self.linefileedit.setText(fname[0])
+        global my_file_name
+        my_file_name = self.file_name
+        
 
     def help_func(self):
         widget.setCurrentWidget(helpinv)
@@ -241,7 +245,6 @@ class Worker(QObject):
 class Worker2(QObject):
     finished=pyqtSignal()
     def run(self):
-        unvalid_emails = {}
         mp_day = {
             0: "الأثنين",
             1: "الثلاثاء",
@@ -269,12 +272,15 @@ class Worker2(QObject):
         ok = True
         if "outlook.exe" in (i.name() for i in psutil.process_iter()) == False:
             ok = False
-
+            
+        unvalid_emails = []   
+        cnt = -1
         for mon in monitors:
+            cnt += 1 
             if not is_email(mon.email):
-                    unvalid_emails[mon.user_name] = mon.email
+                    unvalid_emails.append(cnt)
                     continue
-                    
+                
             if len(mon.task) == 0:
             #    self.label_5.setText(f"{mon.user_name} ليس لديه أيّ تكليفات")
                 continue
@@ -315,6 +321,7 @@ class Worker2(QObject):
                 len(mon.task),
                 ok
             )
+        color_invalid_email(my_file_name, unvalid_emails)
         self.finished.emit()
 
 class Worker3(QObject):
