@@ -705,7 +705,7 @@ font-size:17px;
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../../../final-code-main(7)/final-code-main/icons/prev.png</normaloff>../../../final-code-main(7)/final-code-main/icons/prev.png</iconset>
+                    <normaloff>../icons/prev.png</normaloff>../icons/prev.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -809,7 +809,8 @@ font-size:17px;
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../../../final-code-main(7)/final-code-main/icons/next.png</normaloff>../../../final-code-main(7)/final-code-main/icons/next.png</iconset>
+                   <normaloff>../icons/next.png</normaloff>../icons/next.png
+                </iconset>
               </property>
               <property name="iconSize">
                <size>
