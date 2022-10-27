@@ -286,7 +286,8 @@ class Worker2(QObject):
                 unvalid_emails.append(cnt)
                 continue
         if unvalid_emails:
-            color_invalid_email(my_file_name, unvalid_emails)
+            pass
+            
         else:
             mp_day = {
                 0: "الأثنين",
@@ -568,10 +569,16 @@ class invScreen2(QWidget):
 
     def msg2(self):
         if unvalid_emails:
-            QMessageBox.about(self, "",
-                              "برجاء مراجعة عناوين البريد الإلكتروني الغير صحيحة <br> في ملف الإكسيل الذي  أدخلته الخاص ببيانات الملاحظين <br> فقد تم تظليل عناوين البريد الإلكتروني الغير صالحة باللون الأحمر <br> قم بتصحيح هذه البيانات و أعد الإرسال مرة أخرى <br> تنبيه: يجب أن يكون البريد الإلكتروني على هذا الشكل: <br> example@feng.bu.edu.eg                    ")
+            try:
+                QMessageBox.about(self, "تحذير", "لاتغلق ملف الإكسيل الذي يظهر الآن قبل ظهور رسالة التأكيد<br>فقد يلحق الضرر بالعملية التي تجريها الآن أو يؤدي إلى نتائج غير مرغوب فبها.")
+                color_invalid_email(my_file_name, unvalid_emails)
+                QMessageBox.about(self, "رسالة تأكيد",
+                              "برجاء مراجعة عناوين البريد الإلكتروني الغير صحيحة<br>في ملف الإكسيل الذي  أدخلته الخاص ببيانات الملاحظين<br>فقد تم تظليل عناوين البريد الإلكتروني الغير صالحة باللون الأحمر<br>قم بتصحيح هذه البيانات و أعد الإرسال مرة أخرى<br>تنبيه: يجب أن يكون البريد الإلكتروني على هذا الشكل:<br>example@feng.bu.edu.eg")
+            except:
+                pass
         else:
             QMessageBox.about(self, "", "تم الارسال                   ")
+            
         self.print_2.setText("ارسال ايميل للكل")
         self.print.setEnabled(True)
         self.print_2.setEnabled(True)
